@@ -38,7 +38,7 @@
 
 // export default SplashScreen;
 
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -46,18 +46,19 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-// import image from '../assets/images/eczema.png';
+import { Ionicons, FontAwesome, MaterialIcons } from '@expo/vector-icons'; // Icon libraries
 
 export default function App() {
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.welcomeText}>Welcome to EczApp!</Text>
+        {/* Back Arrow */}
+        <TouchableOpacity style={styles.backArrow} onPress={() => console.log('Back pressed')}>
+        <Ionicons name="chevron-back" size={24} color="#85D3C0" />
+      </TouchableOpacity>
 
-      {/* Logo Image */}
-      {/* <Image
-        source={require('../assets/images/eczema.png')} 
-        style={styles.logo}
-      /> */}
+      {/* <Text style={styles.welcomeText}>Welcome to EczApp!</Text> */}
 
       <View style={styles.rotatedBox}></View>
       <Text style={styles.logInText}>Log In</Text>
@@ -73,12 +74,24 @@ export default function App() {
         placeholderTextColor="black"
       />
       <Text style={styles.labelText}>Password</Text>
-      <TextInput
-        style={styles.inputBox}
-        placeholder="*************"
-        placeholderTextColor="black"
-        secureTextEntry={true}
-      />
+      <View style={styles.passwordContainer}>
+        <TextInput
+          style={styles.inputBox}
+          placeholder="*************"
+          placeholderTextColor="black"
+          secureTextEntry={!passwordVisible} // Toggle visibility
+        />
+        <TouchableOpacity
+          onPress={() => setPasswordVisible(!passwordVisible)}
+          style={styles.eyeIcon}
+        >
+          <Ionicons
+            name={passwordVisible ? "eye-off" : "eye"}
+            size={24}
+            color="black"
+          />
+        </TouchableOpacity>
+      </View>
       <TouchableOpacity>
         <Text style={styles.forgotPasswordText}>Forget Password</Text>
       </TouchableOpacity>
@@ -116,24 +129,24 @@ const styles = StyleSheet.create({
     backgroundColor: "", // Background color
     padding: 20,
   },
+  backArrow: {
+    // position: 'absolute',
+    top: 25,
+    right: 145,
+  },
   welcomeText: {
     color: "#85D3C0",
     fontSize: 20,
     marginBottom: 20,
   },
-  logo: {
-    width: 100, // Adjust the size according to your design
-    height: 100, // Adjust the size according to your design
-    marginBottom: 20,
-  },
-  rotatedBox: {
-    width: 14,
-    height: 8,
-    transform: [{ rotate: "-90deg" }],
-    borderWidth: 2,
-    borderColor: "#85D3C0",
-    marginBottom: 20,
-  },
+  // rotatedBox: {
+  //   width: 14,
+  //   height: 8,
+  //   transform: [{ rotate: "-90deg" }],
+  //   borderWidth: 2,
+  //   borderColor: "#85D3C0",
+  //   marginBottom: 20,
+  // },
   logInText: {
     width: 121,
     textAlign: "center",
@@ -145,7 +158,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   welcomeLabelText: {
-    width: 121,
+    width: 300,
     color: "#85D3C0",
     fontSize: 24,
     fontFamily: "League Spartan",
@@ -156,18 +169,18 @@ const styles = StyleSheet.create({
   descriptionText: {
     width: 299,
     color: "#070707",
-    fontSize: 12,
+    fontSize: 11.5,
     fontFamily: "League Spartan",
     fontWeight: "300",
-    textAlign: "center",
+    textAlign: "left",
     marginBottom: 20,
   },
   labelText: {
-    width: 214,
+    width: 300,
     color: "black",
     fontSize: 20,
     fontFamily: "League Spartan",
-    fontWeight: "500",
+    fontWeight: "bold",
     textTransform: "capitalize",
     marginBottom: 5,
   },
@@ -181,8 +194,21 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: "League Spartan",
   },
+  passwordContainer: {
+    width: 299,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: "#F3F3F3",
+    borderRadius: 13,
+  },
+  eyeIcon: {
+    position: 'absolute',
+    right: 10,
+    padding: 10,
+    top: -1,
+  },
   forgotPasswordText: {
-    width: 185,
+    width: 280,
     textAlign: "right",
     color: "#5A5858",
     fontSize: 12,
