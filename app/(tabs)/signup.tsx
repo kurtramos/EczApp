@@ -1,283 +1,392 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  Alert,
+  Modal,
+} from 'react-native';
+import { Ionicons, FontAwesome, MaterialIcons } from '@expo/vector-icons';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { useRouter } from 'expo-router'; 
 
 const SignUpScreen = () => {
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [mobileNumber, setMobileNumber] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState(new Date());
+  const [tempDate, setTempDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const router = useRouter();
+
+  // Error Handling
+  const handleNameChange = (value, setName) => {
+    const alphabetRegex = /^[A-Za-z\s]+$/;
+    if (value === '' || alphabetRegex.test(value)) {
+      setName(value);
+    } else {
+      Alert.alert('Invalid Input', 'Name must contain only alphabetic characters.');
+    }
+  };
+
+  const handleMobileNumberChange = (value) => {
+    const numericRegex = /^[0-9]*$/;
+    if (numericRegex.test(value) && value.length <= 10) {
+      setMobileNumber(value);
+    } else if (value.length > 10) {
+      Alert.alert('Invalid Input', 'Mobile number must be up to 10 digits only.');
+    }
+  };
+
+  const onDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || tempDate;
+    setTempDate(currentDate);
+  };
+
+  const confirmDateSelection = () => {
+    setDateOfBirth(tempDate);
+    setShowDatePicker(false);
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>New Account</Text>
-      <View style={styles.verticalLine} />
-      <Text style={styles.label}>First name</Text>
-      <Text style={styles.label}>Password</Text>
-      <View style={styles.inputField} />
-      <Text style={styles.placeholder}>example name</Text>
-      <Text style={styles.label}>Email</Text>
-      <Text style={styles.placeholder}>example@example.com</Text>
-      <Text style={styles.label}>Mobile Number</Text>
-      <Text style={styles.placeholder}>9123456789</Text>
-      <View style={styles.termsContainer}>
-        <Text style={styles.termsText}>By continuing, you agree to{'\n'}</Text>
-        <Text style={styles.termsLink}>Terms of Use</Text>
-        <Text style={styles.termsText}> and </Text>
-        <Text style={styles.termsLink}>Privacy Policy.</Text>
-      </View>
-      <View style={styles.signUpButtonContainer}>
-        <View style={styles.signUpButton} />
-        <Text style={styles.signUpButtonText}>Sign Up</Text>
-        <View style={styles.socialButtonsContainer}>
-          {/* Example social button */}
-          <View style={styles.socialButton} />
-          <View style={styles.socialButton} />
-          <View style={styles.socialButton} />
-          <View style={styles.smallButton} />
-          <View style={styles.smallButton} />
-          <View style={styles.mediumButton}>
-            <View style={styles.mediumButtonInner} />
-            <View style={styles.mediumButtonLine} />
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.container}>
+        {/* Back Arrow */}
+        <TouchableOpacity style={styles.backArrow} onPress={() => router.push('/.')}>
+          <Ionicons name="chevron-back" size={24} color="#85D3C0" />
+        </TouchableOpacity>
+
+        <Text style={styles.title}>New Account</Text>
+
+        {/* First Name */}
+        <Text style={styles.label}>First name</Text>
+        <TextInput
+          style={styles.inputField}
+          placeholder="example name"
+          placeholderTextColor="#bcbcbc"
+          value={firstName}
+          onChangeText={(value) => handleNameChange(value, setFirstName)}
+        />
+
+        {/* Last Name */}
+        <Text style={styles.label}>Last name</Text>
+        <TextInput
+          style={styles.inputField}
+          placeholder="lastname"
+          placeholderTextColor="#bcbcbc"
+          value={lastName}
+          onChangeText={(value) => handleNameChange(value, setLastName)}
+        />
+
+        {/* Password */}
+        <Text style={styles.label}>Password</Text>
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={styles.passwordInput}
+            placeholder="*************"
+            placeholderTextColor="#bcbcbc"
+            secureTextEntry={!passwordVisible}
+          />
+          <TouchableOpacity
+            onPress={() => setPasswordVisible(!passwordVisible)}
+            style={styles.eyeIcon}
+          >
+            <Ionicons
+              name={passwordVisible ? "eye" : "eye-off"}
+              size={24}
+              color="black"
+            />
+          </TouchableOpacity>
+        </View>
+
+        {/* Confirm Password */}
+        <Text style={styles.label}>Confirm Password</Text>
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={styles.passwordInput}
+            placeholder="*************"
+            placeholderTextColor="#bcbcbc"
+            secureTextEntry={!confirmPasswordVisible}
+          />
+          <TouchableOpacity
+            onPress={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
+            style={styles.eyeIcon}
+          >
+            <Ionicons
+              name={confirmPasswordVisible ? "eye" : "eye-off"}
+              size={24}
+              color="black"
+            />
+          </TouchableOpacity>
+        </View>
+
+        {/* Email */}
+        <Text style={styles.label}>Email</Text>
+        <TextInput
+          style={styles.inputField}
+          placeholder="example@example.com"
+          placeholderTextColor="#bcbcbc"
+        />
+
+        {/* Mobile Number */}
+        <Text style={styles.label}>Mobile Number</Text>
+        <View style={styles.mobileNumberContainer}>
+          <View style={styles.countryCodeContainer}>
+            <Text style={styles.countryCode}>+63</Text>
+          </View>
+          <TextInput
+            style={styles.mobileInput}
+            placeholder="9123456789"
+            placeholderTextColor="#bcbcbc"
+            value={mobileNumber}
+            onChangeText={handleMobileNumberChange}
+            keyboardType="numeric"
+          />
+        </View>
+
+        {/* Date of Birth */}
+        <Text style={styles.label}>Date Of Birth</Text>
+        <TouchableOpacity
+          style={styles.inputField}
+          onPress={() => setShowDatePicker(true)}
+        >
+          <Text style={styles.dateOfBirthText}>
+            {dateOfBirth.toLocaleDateString()}
+          </Text>
+        </TouchableOpacity>
+
+        {/* Date Picker Modal */}
+        <Modal visible={showDatePicker} transparent={true} animationType="slide">
+          <View style={styles.modalContainer}>
+            <View style={styles.datePickerContainer}>
+              <DateTimePicker
+                value={tempDate}
+                mode="date"
+                display="default"
+                onChange={onDateChange}
+                maximumDate={new Date()} // Prevent future dates
+              />
+              <TouchableOpacity
+                style={styles.confirmButton}
+                onPress={confirmDateSelection}
+              >
+                <Text style={styles.confirmButtonText}>Confirm</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+
+        {/* Terms and Privacy */}
+        <View style={styles.termsContainer}>
+          <Text style={styles.termsText}>
+            By continuing, you agree to{' '}
+            <Text style={styles.termsLink}>Terms of Use</Text> and{' '}
+            <Text style={styles.termsLink}>Privacy Policy.</Text>
+          </Text>
+        </View>
+
+        {/* Sign Up Button */}
+        <TouchableOpacity style={styles.signUpButton}>
+          <Text style={styles.signUpButtonText}>Sign Up</Text>
+        </TouchableOpacity>
+
+        {/* or sign up with */}
+        <Text style={styles.orSignUpText}>or sign up with</Text>
+
+        {/* Social Login Buttons */}
+        <View style={styles.socialIconsContainer}>
+          <View style={styles.circle}>
+            <FontAwesome name="google" size={24} color="#85D3C0" />
+          </View>
+          <View style={styles.circle}>
+            <FontAwesome name="facebook" size={24} color="#85D3C0" />
+          </View>
+          <View style={styles.circle}>
+            <MaterialIcons name="fingerprint" size={24} color="#85D3C0" />
           </View>
         </View>
-        <Text style={styles.orSignUpText}>or sign up with</Text>
+
+        {/* Already have an account */}
         <View style={styles.loginTextContainer}>
           <Text style={styles.loginText}>already have an account? </Text>
           <Text style={styles.loginLink}>Log in</Text>
         </View>
       </View>
-      <View style={styles.extraFieldsContainer}>
-        <View style={styles.extraField} />
-        <Text style={styles.extraFieldLabel}>*************</Text>
-        <Text style={styles.extraLabel}>Date of birth</Text>
-        <Text style={styles.extraPlaceholder}>DD / MM / YYYY</Text>
-        <Text style={styles.extraLabel}>Last name</Text>
-        <View style={styles.extraField} />
-        <Text style={styles.extraFieldLabel}>lastname</Text>
-        <View style={styles.extraField} />
-        <View style={styles.extraField} />
-        <View style={styles.extraField} />
-        <View style={styles.extraField} />
-        <View style={styles.countryCodeContainer}>
-          <View style={styles.countryCodeField} />
-          <Text style={styles.countryCode}>+63</Text>
-          <View style={styles.countryCodeField} />
-          <View style={styles.iconContainer}>
-            <View style={styles.iconInner} />
-          </View>
-        </View>
-        <Text style={styles.confirmPasswordLabel}>Confirm Password</Text>
-        <View style={styles.inputField} />
-        <View style={styles.extraField} />
-        <Text style={styles.extraFieldLabel}>*************</Text>
-      </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+  },
   container: {
     padding: 20,
+    flex: 1,
+    backgroundColor: 'white',
+    alignItems: 'center',
+  },
+  backArrow: {
+    position: 'absolute',
+    top: 50,
+    left: 20,
   },
   title: {
-    width: 235,
-    height: 14,
     textAlign: 'center',
     color: '#85D3C0',
     fontSize: 24,
-    fontFamily: 'League Spartan',
     fontWeight: '600',
-    textTransform: 'capitalize',
-  },
-  verticalLine: {
-    width: 14,
-    height: 8,
-    backgroundColor: '#85D3C0',
-    borderWidth: 2,
-    borderColor: '#85D3C0',
-    transform: [{ rotate: '-90deg' }],
-    borderTopColor: 'transparent',
-    borderLeftColor: 'transparent',
+    marginTop: 30,  // Add marginTop to give more space
+    marginVertical: 10,
   },
   label: {
-    width: 214,
-    height: 14,
     color: 'black',
-    fontSize: 19,
-    fontFamily: 'League Spartan',
-    fontWeight: '500',
-    textTransform: 'capitalize',
-  },
-  placeholder: {
-    width: 219,
-    height: 14,
-    color: 'black',
-    fontSize: 15,
-    fontFamily: 'League Spartan',
-    fontWeight: '400',
-    textTransform: 'lowercase',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginTop: 10,
+    width: '100%',
   },
   inputField: {
-    width: 299,
-    height: 34,
+    width: '100%',
+    height: 45,
     backgroundColor: '#F3F3F3',
     borderRadius: 13,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    fontSize: 16,
+    justifyContent: 'center',
   },
-  termsContainer: {
-    width: 273,
-    height: 28,
-    textAlign: 'center',
+  dateOfBirthText: {
+    color: '#bcbcbc',
+    fontSize: 16,
   },
-  termsText: {
-    color: '#070707',
-    fontSize: 12,
-    fontFamily: 'League Spartan',
-    fontWeight: '300',
-  },
-  termsLink: {
-    color: '#85D3C0',
-    fontSize: 12,
-    fontFamily: 'League Spartan',
-    fontWeight: '500',
-  },
-  signUpButtonContainer: {
-    width: 273,
-    height: 160,
-    position: 'relative',
-  },
-  signUpButton: {
-    width: 207,
-    height: 45,
-    position: 'absolute',
-    backgroundColor: '#85D3C0',
-    borderRadius: 30,
-    left: 33,
-    top: 0,
-  },
-  signUpButtonText: {
-    width: 162,
-    height: 14,
-    position: 'absolute',
-    textAlign: 'center',
-    color: 'white',
-    fontSize: 24,
-    fontFamily: 'League Spartan',
-    fontWeight: '500',
-    textTransform: 'capitalize',
-    left: 56,
-    top: 15,
-  },
-  socialButtonsContainer: {
-    width: 138,
-    height: 40,
-    position: 'absolute',
-    left: 68,
-    top: 83,
-  },
-  socialButton: {
-    width: 40,
-    height: 40,
-    backgroundColor: '#C3EFE5',
-    borderRadius: 9999,
-    position: 'absolute',
-  },
-  smallButton: {
-    width: 22,
-    height: 23,
-    borderWidth: 2,
-    borderColor: '#85D3C0',
-    position: 'absolute',
-  },
-  mediumButton: {
-    width: 24,
-    height: 24,
-    position: 'absolute',
-  },
-  mediumButtonInner: {
-    width: 24,
-    height: 24,
-    backgroundColor: '#C3EFE5',
-    borderRadius: 9999,
-    borderWidth: 2,
-    borderColor: '#85D3C0',
-  },
-  mediumButtonLine: {
-    width: 8,
-    height: 17,
-    borderWidth: 2,
-    borderColor: '#85D3C0',
-    position: 'absolute',
-    left: 8,
-    top: 7,
-  },
-  orSignUpText: {
-    width: 273,
-    height: 10,
-    textAlign: 'center',
-    color: '#070707',
-    fontSize: 12,
-    fontFamily: 'League Spartan',
-    fontWeight: '300',
-  },
-  loginTextContainer: {
-    width: 273,
-    height: 28,
-    textAlign: 'center',
-  },
-  loginText: {
-    color: '#070707',
-    fontSize: 12,
-    fontFamily: 'League Spartan',
-    fontWeight: '300',
-  },
-  loginLink: {
-    color: '#85D3C0',
-    fontSize: 12,
-    fontFamily: 'League Spartan',
-    fontWeight: '500',
-  },
-  extraFieldsContainer: {
-    marginTop: 20,
-  },
-  extraField: {
-    width: 299,
-    height: 34,
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#F3F3F3',
     borderRadius: 13,
     marginBottom: 10,
   },
-  extraFieldLabel: {
-    width: 133,
-    height: 14,
-    color: 'black',
-    fontSize: 15,
-    fontFamily: 'League Spartan',
-    fontWeight: '400',
-    textTransform: 'capitalize',
+  passwordInput: {
+    flex: 1,
+    height: 45,
+    paddingHorizontal: 10,
+    fontSize: 16,
   },
-  extraLabel: {
-    width: 131,
-    height: 14,
-    color: 'black',
-    fontSize: 19,
-    fontFamily: 'League Spartan',
-    fontWeight: '500',
-    textTransform: 'capitalize',
+  eyeIcon: {
+    paddingRight: 10,
   },
-  extraPlaceholder: {
-    width: 144,
-    height: 14,
-    color: 'black',
-    fontSize: 15,
-    fontFamily: 'League Spartan',
-    fontWeight: '400',
-    textTransform: 'capitalize',
-  },
-  countryCodeContainer: {
+  mobileNumberContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  countryCodeField: {
-    width: 46,
-    height: 28,
-    backgroundColor: '#D9D9D9',
+    backgroundColor: '#F3F3F3',
     borderRadius: 13,
-    marginTop: 10,
+    marginBottom: 10,
+  },
+  countryCodeContainer: {
+    justifyContent: 'center',
+    paddingHorizontal: 10,
+    height: 45,
+    backgroundColor: '#F3F3F3',
+  },
+  countryCode: {
+    fontSize: 16,
+    color: 'black',
+  },
+  mobileInput: {
+    flex: 1,
+    height: 45,
+    paddingHorizontal: 10,
+    fontSize: 16,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  datePickerContainer: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginHorizontal: 30,
+  },
+  confirmButton: {
+    backgroundColor: '#85D3C0',
+    borderRadius: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    marginTop: 20,
+  },
+  confirmButtonText: {
+    color: 'white',
+    fontSize: 18,
+  },
+  termsContainer: {
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  termsText: {
+    fontSize: 12,
+    color: '#070707',
+    textAlign: 'center',
+  },
+  termsLink: {
+    color: '#85D3C0',
+    fontWeight: '500',
+  },
+  signUpButton: {
+    width: '100%',
+    height: 45,
+    backgroundColor: '#85D3C0',
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  signUpButtonText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: '600',
+  },
+  orSignUpText: {
+    fontSize: 12,
+    color: '#5A5858',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  socialIconsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: 138,
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
+  circle: {
+    width: 40,
+    height: 40,
+    backgroundColor: '#C3EFE5',
+    borderRadius: 9999,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loginTextContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  loginText: {
+    color: '#5A5858',
+    fontSize: 12,
+  },
+  loginLink: {
+    color: '#85D3C0',
+    fontSize: 12,
+    fontWeight: '500',
   },
 });
 
