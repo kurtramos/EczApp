@@ -56,7 +56,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       {/* Back Arrow */}
-      <TouchableOpacity style={styles.backArrow} onPress={() => router.push('/.')}>
+      <TouchableOpacity style={styles.backArrow} onPress={() => router.push('/Homescreen')}>
         <Ionicons name="chevron-back" size={24} color="#85D3C0" />
       </TouchableOpacity>
 
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
     marginRight: 10, // Margin for better positioning
   },
   logInButton: {
-    width: "85%", // Shorten the button as per the design
+    width: "50%", // Shorten the button as per the design
     height: 45,
     backgroundColor: "#85D3C0",
     borderRadius: 30,

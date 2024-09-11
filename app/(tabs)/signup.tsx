@@ -57,7 +57,7 @@ const SignUpScreen = () => {
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
         {/* Back Arrow */}
-        <TouchableOpacity style={styles.backArrow} onPress={() => router.push('/.')}>
+        <TouchableOpacity style={styles.backArrow} onPress={() => router.push('/Homescreen')}>
           <Ionicons name="chevron-back" size={24} color="#85D3C0" />
         </TouchableOpacity>
 
@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   signUpButton: {
-    width: '100%',
+    width: '50%',
     height: 45,
     backgroundColor: '#85D3C0',
     borderRadius: 30,
