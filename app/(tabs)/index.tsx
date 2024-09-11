@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useRouter } from 'expo-router'; // useRouter from expo-router
 
 export default function HomeScreen() {
@@ -7,18 +7,11 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Cross and Leaf Logo */}
-      <View style={styles.logoContainer}>
-        <View style={styles.logo}>
-          <View style={styles.verticalBar} />
-          <View style={styles.horizontalBar} />
-          <View style={styles.leafOne} />
-          <View style={styles.leafTwoWhite} />
-          <View style={styles.leafTwoColored} />
-          <View style={styles.leafThreeWhite} />
-          <View style={styles.leafThreeColored} />
-        </View>
-      </View>
+      {/* Logo Image */}
+      <Image
+        source={require('../../assets/logos/EczemaCareLogoG.png')} // Ensure this path is correct
+        style={styles.logo}
+      />
 
       {/* App Title */}
       <Text style={styles.appTitle}>Eczema</Text>
@@ -49,77 +42,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
   },
-  logoContainer: {
+  logo: {
     width: 138,
     height: 138,
     marginBottom: 20,
-  },
-  logo: {
-    position: 'relative',
-  },
-  verticalBar: {
-    width: 47.77,
-    height: 138,
-    position: 'absolute',
-    backgroundColor: '#85D3C0',
-    borderRadius: 32.54,
-    left: 45.65,
-    top: 0,
-  },
-  horizontalBar: {
-    width: 46.71,
-    height: 138,
-    position: 'absolute',
-    transform: [{ rotate: '90deg' }],
-    backgroundColor: '#85D3C0',
-    borderRadius: 31.82,
-    left: 138,
-    top: 45.65,
-  },
-  leafOne: {
-    width: 73.34,
-    height: 11.04,
-    position: 'absolute',
-    transform: [{ rotate: '44.93deg' }],
-    backgroundColor: 'white',
-    left: 47.08,
-    top: 40.34,
-  },
-  leafTwoWhite: {
-    width: 31.46,
-    height: 50.53,
-    position: 'absolute',
-    transform: [{ rotate: '35.54deg' }],
-    backgroundColor: 'white',
-    left: 77.48,
-    top: 6.04,
-  },
-  leafTwoColored: {
-    width: 28.60,
-    height: 50.53,
-    position: 'absolute',
-    transform: [{ rotate: '35.54deg' }],
-    backgroundColor: '#85D3C0',
-    left: 77.48,
-    top: 6.04,
-  },
-  leafThreeWhite: {
-    width: 51.46,
-    height: 37.43,
-    position: 'absolute',
-    transform: [{ rotate: '-137.93deg' }],
-    backgroundColor: 'white',
-    left: 43.55,
-    top: 102.46,
-  },
-  leafThreeColored: {
-    width: 51.49,
-    height: 36.07,
-    position: 'absolute',
-    transform: [{ rotate: '-137.93deg' }],
-    backgroundColor: '#85D3C0',
-    left: 43.44,
-    top: 102.59,
+    resizeMode: 'contain', // Ensures the image scales properly
   },
   appTitle: {
     fontSize: 48,
