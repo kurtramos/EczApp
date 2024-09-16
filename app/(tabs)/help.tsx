@@ -1,9 +1,17 @@
 import React from 'react';
 import { ScrollView, Text, StyleSheet, View } from 'react-native';
+import BottomNav from '../components/BottomNav';
+import { TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router'; 
 
 const PrivacyPolicy = () => {
+  const router = useRouter();
   return (
     <View style={styles.container}>
+ <TouchableOpacity style={styles.backArrow} onPress={() => router.push('/home')} >
+      <Ionicons name="chevron-back" size={24} color="white" />
+    </TouchableOpacity>
       <ScrollView style={styles.scrollView}>
       <View style={styles.squareBackground}>
           <Text style={styles.heading}>Help</Text>
@@ -19,6 +27,7 @@ const PrivacyPolicy = () => {
         </Text>
         
       </ScrollView>
+      <BottomNav/>
     </View>
   );
 };
@@ -27,10 +36,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f4f4f4',
-    padding: 20,
+
   },
   scrollView: {
     flex: 1,
+    padding: 20,
+  },
+  backArrow: {
+    position: 'absolute',
+    top: 50,
+    left: 20,
+    zIndex: 1,
   },
   squareBackground: {
     backgroundColor: '#85D3C0', 
@@ -60,8 +76,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: 'white', 
     fontWeight: 'bold',
-    textAlign: 'center',
-    justifyContent: 'center', 
+    textAlign: 'left',
   },
 
   subheading: {

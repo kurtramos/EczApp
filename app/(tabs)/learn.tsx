@@ -1,9 +1,15 @@
 import React from 'react';
 import { ScrollView, Text, StyleSheet, View } from 'react-native';
+import BottomNav from '../components/BottomNav';
+import BackArrow from '../components/BackArrow';
+import { useRouter } from 'expo-router'; 
+
 
 const PrivacyPolicy = () => {
+  const router = useRouter();
   return (
     <View style={styles.container}>
+      <BackArrow onPress={() => router.push('/home')} />
       <ScrollView style={styles.scrollView}>
           <Text style={styles.heading}>LEARN</Text>
           
@@ -13,6 +19,7 @@ const PrivacyPolicy = () => {
         </Text>
         </View>
       </ScrollView>
+      <BottomNav/>
     </View>
   );
 };
@@ -21,10 +28,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f4f4f4',
-    padding: 20,
+  
   },
   scrollView: {
     flex: 1,
+      padding: 20,
   },
   squareBackground: {
     backgroundColor: '#C3EFE5', 
@@ -42,7 +50,8 @@ const styles = StyleSheet.create({
     color: '#85D3C0', 
     fontWeight: 'bold',
     textAlign: 'left',
-    marginTop: 20, 
+    marginTop: 25, 
+    marginLeft: 40,
   },
   
   paragraph: {

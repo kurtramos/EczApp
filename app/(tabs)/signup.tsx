@@ -12,6 +12,8 @@ import {
 import { Ionicons, FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRouter } from 'expo-router'; 
+import BackArrow from '../components/BackArrow';
+
 
 const SignUpScreen = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -56,10 +58,7 @@ const SignUpScreen = () => {
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
-        {/* Back Arrow */}
-        <TouchableOpacity style={styles.backArrow} onPress={() => router.push('/Homescreen')}>
-          <Ionicons name="chevron-back" size={24} color="#85D3C0" />
-        </TouchableOpacity>
+      <BackArrow onPress={() => router.push('/Homescreen')} />
 
         <Text style={styles.title}>New Account</Text>
 
@@ -191,7 +190,7 @@ const SignUpScreen = () => {
         </View>
 
         {/* Sign Up Button */}
-        <TouchableOpacity style={styles.signUpButton}>
+        <TouchableOpacity style={styles.signUpButton} onPress={() => router.push('/login')}>
           <Text style={styles.signUpButtonText}>Sign Up</Text>
         </TouchableOpacity>
 
@@ -214,7 +213,7 @@ const SignUpScreen = () => {
         {/* Already have an account */}
         <View style={styles.loginTextContainer}>
           <Text style={styles.loginText}>already have an account? </Text>
-          <Text style={styles.loginLink}>Log in</Text>
+          <Text style={styles.loginLink}>Log in</Text> 
         </View>
       </View>
     </ScrollView>

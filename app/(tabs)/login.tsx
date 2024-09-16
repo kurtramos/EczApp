@@ -48,6 +48,8 @@ import {
 } from "react-native";
 import { Ionicons, FontAwesome, MaterialIcons } from '@expo/vector-icons'; // Icon libraries
 import { useRouter } from 'expo-router'; 
+import BackArrow from '../components/BackArrow';
+
 
 export default function App() {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -55,10 +57,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      {/* Back Arrow */}
-      <TouchableOpacity style={styles.backArrow} onPress={() => router.push('/Homescreen')}>
-        <Ionicons name="chevron-back" size={24} color="#85D3C0" />
-      </TouchableOpacity>
+      <BackArrow onPress={() => router.push('/Homescreen')} />
 
       <Text style={styles.logInText}>Log In</Text>
 
@@ -105,7 +104,7 @@ export default function App() {
       </View>
 
       {/* Log In Button */}
-      <TouchableOpacity style={styles.logInButton}>
+      <TouchableOpacity style={styles.logInButton} onPress={() => router.push('/home')}>
         <Text style={styles.logInButtonText}>Log In</Text>
       </TouchableOpacity>
 
