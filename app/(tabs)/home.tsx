@@ -28,10 +28,10 @@ export default function HomeScreen() {
             <Text style={styles.userName}>John Doe</Text>
           </View>
           <View style={styles.iconContainer}>
-            <TouchableOpacity style={styles.iconCircle}>
+            <TouchableOpacity style={styles.iconCircle} onPress={() => router.push('/notification')}>
               <Icon name="bell" size={20} color="#5A5858" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.iconCircle}>
+            <TouchableOpacity style={styles.iconCircle} onPress={() => router.push('/settings')}>
               <Icon name="cog" size={20} color="#5A5858" />
             </TouchableOpacity>
           </View>

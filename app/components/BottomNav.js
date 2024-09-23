@@ -2,24 +2,26 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useRouter } from 'expo-router'; 
 
 const BottomNav = () => {
+  const router = useRouter();
   return (
     <View style={styles.bottomNav}>
       <TouchableOpacity style={styles.navItem}>
-        <Icon name="home" size={24} color="#5D9386" />
+        <Icon name="home" size={24} color="#5D9386" onPress={() => router.push('/home')}/>
       </TouchableOpacity>
       <TouchableOpacity style={styles.navItem}>
-        <Icon name="clipboard" size={24} color="white" />
+        <Icon name="clipboard" size={24} color="white" onPress={() => router.push('/aboutus')}/>
       </TouchableOpacity>
       <TouchableOpacity style={styles.navItem}>
-        <Icon name="camera" size={24} color="white" />
+        <Icon name="camera" size={24} color="white" onPress={() => router.push('/learn')}/>
       </TouchableOpacity>
       <TouchableOpacity style={styles.navItem}>
-        <Icon name="heartbeat" size={24} color="white" />
+        <Icon name="heartbeat" size={24} color="white" onPress={() => router.push('/faqs')}/>
       </TouchableOpacity>
       <TouchableOpacity style={styles.navItem}>
-        <Icon name="user" size={24} color="white" />
+        <Icon name="user" size={24} color="white" onPress={() => router.push('/myaccount')}/>
       </TouchableOpacity>
     </View>
   );
