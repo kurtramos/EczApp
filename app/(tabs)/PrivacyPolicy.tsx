@@ -1,9 +1,14 @@
 import React from 'react';
 import { ScrollView, Text, StyleSheet, View } from 'react-native';
+import BackArrow from '../components/BackArrow';
+import { useRouter } from 'expo-router'; 
 
 const PrivacyPolicy = () => {
+  const router = useRouter();
   return (
+    
     <View style={styles.container}>
+      <BackArrow onPress={() => router.push('/myaccount')} />
       <ScrollView style={styles.scrollView}>
         <Text style={styles.heading}>Privacy Policy</Text>
         <Text style={styles.paragraph}>
@@ -42,6 +47,7 @@ const styles = StyleSheet.create({
     color: '#85D3C0',
     fontWeight: 'bold',
     marginBottom: 20,
+    marginTop: 30,
     textAlign: 'center',
   },
   subHeading: {

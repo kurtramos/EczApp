@@ -6,31 +6,31 @@ import { useRouter } from 'expo-router';
 import BottomNav from '../components/BottomNav';
 
 const MyAccountScreen = () => {
-    const router = useRouter();
+  const router = useRouter();
   return (
-    <View style={styles.container}>
-    <BackArrow onPress={() => router.push('/home')} />
-      <ScrollView style={styles.scrollView}>
-        <Text style={styles.title}>My Account</Text>
-        
-        <AccountOption icon="person" title="Profile" />
-        <AccountOption icon="record-voice-over" title="My Record" />
-        <AccountOption icon="settings" title="Settings" />
-        <AccountOption icon="lock" title="Privacy Policy" />
-        <AccountOption icon="exit-to-app" title="Logout" />
-      </ScrollView>
-      <BottomNav />
-    </View>
+      <View style={styles.container}>
+          <BackArrow onPress={() => router.push('/home')} />
+          <ScrollView style={styles.scrollView}>
+              <Text style={styles.title}>My Account</Text>
+              
+              <AccountOption icon="person" title="Profile" onPress={() => router.push('/profile')} />
+              <AccountOption icon="record-voice-over" title="My Record" onPress={() => router.push('/myRecord')} />
+              <AccountOption icon="settings" title="Settings" onPress={() => router.push('/settings')} />
+              <AccountOption icon="lock" title="Privacy Policy" onPress={() => router.push('/PrivacyPolicy')} />
+              <AccountOption icon="exit-to-app" title="Logout" onPress={() => router.push('/')} />
+          </ScrollView>
+          <BottomNav />
+      </View>
   );
 };
 
-const AccountOption = ({ icon, title }) => {
+const AccountOption = ({ icon, title, onPress }) => {
   return (
-    <TouchableOpacity style={styles.option}>
-      <Icon name={icon} size={24} color="#85D3C0" style={styles.icon} />
-      <Text style={styles.optionText}>{title}</Text>
-      <Icon name="chevron-right" size={24} color="#85D3C0" />
-    </TouchableOpacity>
+      <TouchableOpacity style={styles.option} onPress={onPress}>
+          <Icon name={icon} size={24} color="#85D3C0" style={styles.icon} />
+          <Text style={styles.optionText}>{title}</Text>
+          <Icon name="chevron-right" size={24} color="#85D3C0" />
+      </TouchableOpacity>
   );
 };
 

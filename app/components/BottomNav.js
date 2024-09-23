@@ -12,13 +12,13 @@ const BottomNav = () => {
         <Icon name="home" size={24} color="#5D9386" onPress={() => router.push('/home')}/>
       </TouchableOpacity>
       <TouchableOpacity style={styles.navItem}>
-        <Icon name="clipboard" size={24} color="white" onPress={() => router.push('/aboutus')}/>
+        <Icon name="clipboard" size={24} color="white" onPress={() => router.push('/poemsurvey')}/>
       </TouchableOpacity>
       <TouchableOpacity style={styles.navItem}>
-        <Icon name="camera" size={24} color="white" onPress={() => router.push('/learn')}/>
+        <Icon name="camera" size={24} color="white" onPress={() => router.push('/camera')}/>
       </TouchableOpacity>
       <TouchableOpacity style={styles.navItem}>
-        <Icon name="heartbeat" size={24} color="white" onPress={() => router.push('/faqs')}/>
+        <Icon name="heartbeat" size={24} color="white" onPress={() => router.push('/tracker')}/>
       </TouchableOpacity>
       <TouchableOpacity style={styles.navItem}>
         <Icon name="user" size={24} color="white" onPress={() => router.push('/myaccount')}/>

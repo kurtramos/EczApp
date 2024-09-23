@@ -25,7 +25,7 @@ export default function HomeScreen() {
           />
           <View style={styles.greeting}>
             <Text style={styles.welcomeText}>Hi, Welcome Back</Text>
-            <Text style={styles.userName}>John Doe</Text>
+            <Text style={styles.userName}>Kurt Ramos</Text>
           </View>
           <View style={styles.iconContainer}>
             <TouchableOpacity style={styles.iconCircle} onPress={() => router.push('/notification')}>

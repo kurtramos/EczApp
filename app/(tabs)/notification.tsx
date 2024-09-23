@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   header: {
-    flexDirection: 'row',
+    // flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
   },
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'left',
     marginTop: 25, 
-    marginLeft: 40,
+    // marginLeft: 40,
   },
   section: {
     marginBottom: 20,
