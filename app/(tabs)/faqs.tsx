@@ -15,9 +15,28 @@ const PrivacyPolicy = () => {
           <Text style={styles.heading}>FAQs</Text>
           
         <View style={styles.squareBackground}>
+        <Text style={styles.subheading}>What is Eczema?</Text>
         <Text style={styles.paragraph}>
-          * insert frequently asked questions about eczema *
+        Eczema, also known as atopic dermatitis, is a chronic skin condition that causes the skin to become itchy, inflamed, and dry. It often appears as red patches, which may sometimes ooze or become scaly.
         </Text>
+
+        <Text style={styles.subheading}>Is eczema common among Filipinos?</Text>
+        <Text style={styles.paragraph}>
+        Eczema is relatively common among Filipinos, especially due to the country's tropical climate, which can trigger flare-ups from heat, humidity, or environmental allergens.        </Text>
+
+        <Text style={styles.subheading}>What are the common triggers of eczema in Filipinos?</Text>
+        <Text style={styles.paragraph}>
+        Common triggers include: {"\n"}
+
+      - Heat and humidity{"\n"}
+      - Sweat{"\n"}
+      - Certain fabrics (like wool or synthetic materials){"\n"}
+      - Harsh soaps or detergents{"\n"}
+      - Stress{"\n"}
+      - Food allergens like seafood{"\n"}
+      - Environmental allergens such as dust mites, pollen, and mold {"\n"} 
+      </Text>
+
         </View>
       </ScrollView>
 
@@ -52,6 +71,7 @@ const styles = StyleSheet.create({
     marginBottom: 20, 
     marginTop: 50, 
     alignSelf: 'stretch', 
+    padding: 30,
   },
   heading: {
     fontSize: 24,
@@ -61,13 +81,20 @@ const styles = StyleSheet.create({
     marginTop: 25, 
     marginLeft: 40,
   },
+
+  subheading: {
+    fontSize: 25,
+    color: '#85D3C0', 
+    fontWeight: 'bold',
+    textAlign: 'left', 
+  },
   
   paragraph: {
     fontSize: 16,
     lineHeight: 22,
     textAlign: 'justify',
     marginBottom: 20,
-    marginTop: 50, 
+    marginTop: 30, 
   },
 });
 
