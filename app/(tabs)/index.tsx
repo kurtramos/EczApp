@@ -1,12 +1,22 @@
-import React from 'react';
-import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, Dimensions, Image } from 'react-native';
 import { useRouter } from 'expo-router'; // useRouter from expo-router
-
 
 const { width, height } = Dimensions.get('window');
 
-export default function FirstScreen() {
+export default function SplashScreen() {
   const router = useRouter(); // use useRouter for navigation
+  
+  useEffect(() => {
+    // Set a timer to automatically navigate after 3 seconds
+    const timer = setTimeout(() => {
+      router.push('/WelcomeLanguage');
+    }, 1200); // 3000ms = 3 seconds
+
+    // Clear the timer if the component is unmounted
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <View style={styles.container}>
       <Image
@@ -16,9 +26,6 @@ export default function FirstScreen() {
 
       <Text style={styles.titleText}>Eczema</Text>
       <Text style={styles.subtitleText}>Care</Text>
-      <TouchableOpacity style={styles.nextButton} onPress={() => router.push('/WelcomeLanguage')}>
-          <Text style={styles.nextButtonText}>Next</Text>
-        </TouchableOpacity>
     </View>
   );
 }
@@ -52,21 +59,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 30, 
   },
-    nextButton: {
-    width: '50%',
-    height: 45,
-    top: 100,
-    backgroundColor: '#85D3C0',
-    borderRadius: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  nextButtonText: {
-    color: 'white',
-    fontSize: 24,
-    fontFamily: 'League Spartan',
-    fontWeight: '500',
-    textTransform: 'capitalize',
-  },
 });
-
