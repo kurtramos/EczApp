@@ -5,8 +5,16 @@ import BackArrow from '../components/BackArrow';
 import { useRouter } from 'expo-router'; 
 import BottomNav from '../components/BottomNav';
 
+// Define the props interface for AccountOption
+interface AccountOptionProps {
+  icon: string; // The name of the icon from MaterialIcons
+  title: string; // The title text
+  onPress: () => void; // Function to be called on press
+}
+
 const MyAccountScreen = () => {
   const router = useRouter();
+  
   return (
       <View style={styles.container}>
           <BackArrow onPress={() => router.push('/home')} />
@@ -19,12 +27,13 @@ const MyAccountScreen = () => {
               <AccountOption icon="lock" title="Privacy Policy" onPress={() => router.push('/PrivacyPolicy')} />
               <AccountOption icon="exit-to-app" title="Logout" onPress={() => router.push('/')} />
           </ScrollView>
-          <BottomNav />
+
       </View>
   );
 };
 
-const AccountOption = ({ icon, title, onPress }) => {
+// Define the AccountOption component
+const AccountOption: React.FC<AccountOptionProps> = ({ icon, title, onPress }) => {
   return (
       <TouchableOpacity style={styles.option} onPress={onPress}>
           <Icon name={icon} size={24} color="#85D3C0" style={styles.icon} />

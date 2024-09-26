@@ -1,8 +1,12 @@
 import React from 'react';
 import { View, Text, ScrollView, StyleSheet, Dimensions } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
+import BackArrow from '../components/BackArrow';
+import BottomNav from '../components/BottomNav'; // Ensure this import is present
+import { useRouter } from 'expo-router'; 
 
 const MyRecordScreen = () => {
+  const router = useRouter();
   const screenWidth = Dimensions.get('window').width;
 
   const data = {
@@ -10,7 +14,7 @@ const MyRecordScreen = () => {
     datasets: [
       {
         data: [5, 6, 7, 8, 6, 7, 8, 9, 10],
-        color: (opacity = 1) => `rgba(133, 211, 192, ${opacity})`,
+        color: (opacity = 1) => `rgba(133, 211, 192, ${opacity})`, // Line color
         strokeWidth: 2
       }
     ]
@@ -19,38 +23,45 @@ const MyRecordScreen = () => {
   const chartConfig = {
     backgroundGradientFrom: "#fff",
     backgroundGradientTo: "#fff",
-    color: (opacity = 1) => `rgba(133, 211, 192, ${opacity})`,
-    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+    color: (opacity = 1) => `rgba(133, 211, 192, ${opacity})`, // Text color
+    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`, // Label color
     style: {
       borderRadius: 16
     },
     propsForDots: {
       r: "6",
       strokeWidth: "2",
-      stroke: "#ffa726"
+      stroke: "#ffa726" // Color of the dots
     }
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.header}>My Record</Text>
-      <Text style={styles.name}>John Doe</Text>
-      <Text style={styles.age}>Age: 20</Text>
-      <Text style={styles.sectionTitle}>Personal Information</Text>
-      <View style={styles.infoContainer}>
-        {/* Placeholder views for personal information */}
-        <View style={styles.infoBlock}></View>
-        <View style={styles.infoBlock}></View>
-      </View>
-      <LineChart
-        data={data}
-        width={screenWidth - 32} // width adjusted for padding
-        height={220}
-        chartConfig={chartConfig}
-        bezier
-        style={styles.chart}
-      />
-    </ScrollView>
+    <View style={styles.container}>
+           <BackArrow onPress={() => router.push('/settings')} />
+      <ScrollView>
+        <Text style={styles.header}>My Record</Text>
+        <Text style={styles.name}>John Doe</Text>
+        <Text style={styles.age}>Age: 20</Text>
+        <Text style={styles.sectionTitle}>Personal Information</Text>
+        <View style={styles.infoContainer}>
+          <View style={styles.infoBlock}></View>
+          <View style={styles.infoBlock}></View>
+        </View>
+        <LineChart
+          data={data}
+          width={screenWidth - 32}
+          height={220}
+          chartConfig={chartConfig}
+          bezier
+          style={styles.chart}
+        />
+        <Text style={styles.sectionTitle}>Medications & Treatment</Text>
+        <View style={styles.treatmentContainer}>
+          {/* Placeholder or dynamic content for medications and treatments */}
+        </View>
+      </ScrollView>
+      <BottomNav /> {/* Ensure BottomNav is correctly placed */}
+    </View>
   );
 };
 
@@ -99,6 +110,13 @@ const styles = StyleSheet.create({
   chart: {
     marginVertical: 8,
     borderRadius: 16
+  },
+  treatmentContainer: {
+    backgroundColor: '#D9D9D9',
+    height: 400, // adjust this value as needed
+    marginVertical: 10,
+    borderRadius: 10,
+    padding: 10
   }
 });
 

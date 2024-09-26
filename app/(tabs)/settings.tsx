@@ -18,7 +18,7 @@ const SettingsScreen = () => {
               <SettingOption icon="lock" title="Change Password" onPress={() => router.push('/changepassword')} />
               <SettingOption icon="delete" title="Delete Account" onPress={() => router.push('/deleteaccount')} />
           </ScrollView>
-          {/* <BottomNav /> */}
+
       </View>
   );
 };

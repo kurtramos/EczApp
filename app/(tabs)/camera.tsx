@@ -1,19 +1,20 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-// import Icon from 'react-native-vector-icons/MaterialIcons';
 import BackArrow from '../components/BackArrow'; // If you have a custom BackArrow component
 import BottomNav from '../components/BottomNav';
+import { useRouter } from 'expo-router'; 
+
 
 const screenWidth = Dimensions.get('window').width;
-
+const router = useRouter();
 const CameraScreen = () => {
     const navigation = useNavigation();
 
     return (
         <View style={styles.container}>
-            <BackArrow onPress={() => navigation.goBack()} />
-            <ScrollView>
+       <BackArrow onPress={() => router.push('/home')} />
+            <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <Text style={styles.header}>CAMERA</Text>
                 <Text style={styles.description}>
                     Image recognition explanation and instructions *
@@ -23,7 +24,8 @@ const CameraScreen = () => {
                     <View style={styles.infoBlock}></View>
                     <View style={styles.infoBlock}></View>
                 </View>
-                <TouchableOpacity style={styles.button} onPress={() => console.log('Proceed')}>
+                <TouchableOpacity style={styles.button} onPress={() => router.push('/camerascreen')} >
+                {/* onPress={() => console.log('Proceed')} */}
                     <Text style={styles.buttonText}>Proceed</Text>
                 </TouchableOpacity>
             </ScrollView>
@@ -37,6 +39,10 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         padding: 10
+    },
+    scrollContainer: {
+        alignItems: 'center',
+        paddingBottom: 20, // Add bottom padding to avoid content being cut off
     },
     header: {
         fontSize: 32,
@@ -70,7 +76,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30,
         width: screenWidth - 60,
         alignItems: 'center',
-        marginTop: 10
+        marginTop: 20 // Adjusting margin to create more space above the button
     },
     buttonText: {
         color: 'white',
