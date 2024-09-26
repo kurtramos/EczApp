@@ -14,7 +14,7 @@ const MyAccountScreen = () => {
               <Text style={styles.title}>My Account</Text>
               
               <AccountOption icon="person" title="Profile" onPress={() => router.push('/profile')} />
-              <AccountOption icon="record-voice-over" title="My Record" onPress={() => router.push('/myRecord')} />
+              <AccountOption icon="record-voice-over" title="My Record" onPress={() => router.push('/myrecord')} />
               <AccountOption icon="settings" title="Settings" onPress={() => router.push('/settings')} />
               <AccountOption icon="lock" title="Privacy Policy" onPress={() => router.push('/PrivacyPolicy')} />
               <AccountOption icon="exit-to-app" title="Logout" onPress={() => router.push('/')} />

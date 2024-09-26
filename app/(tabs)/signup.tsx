@@ -267,6 +267,7 @@ const styles = StyleSheet.create({
   passwordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    width: '100%', //for flexible screen sizes
     backgroundColor: '#F3F3F3',
     borderRadius: 13,
     marginBottom: 10,
@@ -284,6 +285,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F3F3F3',
+    width: '100%', //for flexible screen sizes
     borderRadius: 13,
     marginBottom: 10,
   },
