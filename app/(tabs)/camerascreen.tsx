@@ -11,21 +11,21 @@ const screenWidth = Dimensions.get('window').width;
 const CameraScreen = () => {
     const router = useRouter();
 
-    // Function to open the camera
-    const openCamera = async () => {
-        // Request camera permission
-        const permission = await ImagePicker.requestCameraPermissionsAsync();
-        if (permission.granted) {
-            // Launch camera
-            const result = await ImagePicker.launchCameraAsync();
-            if (!result.cancelled) {
-                // Handle the captured image
-                console.log(result.uri); // You can store or display the image as needed
-            }
-        } else {
-            console.log("Camera permission not granted");
-        }
-    };
+    // // Function to open the camera
+    // const openCamera = async () => {
+    //     // Request camera permission
+    //     const permission = await ImagePicker.requestCameraPermissionsAsync();
+    //     if (permission.granted) {
+    //         // Launch camera
+    //         const result = await ImagePicker.launchCameraAsync();
+    //         if (!result.cancelled) {
+    //             // Handle the captured image
+    //             console.log(result.uri); // You can store or display the image as needed
+    //         }
+    //     } else {
+    //         console.log("Camera permission not granted");
+    //     }
+    // };
 
     return (
         <View style={styles.container}>
@@ -33,7 +33,8 @@ const CameraScreen = () => {
             <View style={styles.header}>
                 <Text style={styles.headerText}>CAMERA</Text>
             </View>
-            <TouchableOpacity style={styles.cameraPlaceholder} onPress={openCamera}>
+            <TouchableOpacity style={styles.cameraPlaceholder} onPress={() => router.push('/cameraapp')} // Navigate to cameraapp.tsx
+            >
                 <Text style={styles.placeholderText}>*text*</Text>
             </TouchableOpacity>
             <View style={styles.buttonContainer}>
