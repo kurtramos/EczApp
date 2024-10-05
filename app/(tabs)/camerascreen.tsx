@@ -1,5 +1,5 @@
 import React, { useState } from 'react'; 
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'; 
 import BackArrow from '../components/BackArrow'; 
 import BottomNav from '../components/BottomNav'; 
@@ -10,39 +10,57 @@ const screenWidth = Dimensions.get('window').width;
 
 const CameraScreen = () => {
     const router = useRouter();
+    const [imageUri, setImageUri] = useState(null); // State to store the selected image URI
 
-    // // Function to open the camera
-    // const openCamera = async () => {
-    //     // Request camera permission
-    //     const permission = await ImagePicker.requestCameraPermissionsAsync();
-    //     if (permission.granted) {
-    //         // Launch camera
-    //         const result = await ImagePicker.launchCameraAsync();
-    //         if (!result.cancelled) {
-    //             // Handle the captured image
-    //             console.log(result.uri); // You can store or display the image as needed
-    //         }
-    //     } else {
-    //         console.log("Camera permission not granted");
-    //     }
-    // };
+    // Function to open the camera
+    const openCamera = async () => {
+        const permission = await ImagePicker.requestCameraPermissionsAsync();
+        if (permission.granted) {
+            const result = await ImagePicker.launchCameraAsync();
+            if (!result.cancelled) {
+                console.log(result.uri);
+                setImageUri(result.uri); // Set the captured image URI
+            }
+        } else {
+            console.log("Camera permission not granted");
+        }
+    };
+
+    // Function to open the image gallery
+    const openImageGallery = async () => {
+        const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (permission.granted) {
+            const result = await ImagePicker.launchImageLibraryAsync();
+            if (!result.cancelled) {
+                console.log(result.uri);
+                setImageUri(result.uri); // Set the selected image URI
+            }
+        } else {
+            console.log("Media library permission not granted");
+        }
+    };
 
     return (
         <View style={styles.container}>
-            <BackArrow onPress={() => router.push('/home')} />
+            <BackArrow onPress={() => router.push('/camera')} />
             <View style={styles.header}>
                 <Text style={styles.headerText}>CAMERA</Text>
             </View>
-            <TouchableOpacity style={styles.cameraPlaceholder} onPress={() => router.push('/cameraapp')} // Navigate to cameraapp.tsx
-            >
-                <Text style={styles.placeholderText}>*text*</Text>
+            <TouchableOpacity style={styles.cameraPlaceholder} onPress={() => router.push('/cameraapp')}>
+                <Text style={styles.placeholderText}>CLICK TO OPEN CAMERA</Text>
             </TouchableOpacity>
+            {imageUri && (
+                <View style={styles.imagePreview}>
+                    <Text style={styles.previewText}>Selected Image:</Text>
+                    <Image source={{ uri: imageUri }} style={styles.image} />
+                </View>
+            )}
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.actionButton}>
+                <TouchableOpacity style={styles.actionButton} onPress={openCamera}>
                     <Text style={styles.buttonText}>Retake</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.actionButton}>
-                    <Text style={styles.buttonText}>Capture</Text>
+                <TouchableOpacity style={styles.actionButton} onPress={openImageGallery}>
+                    <Text style={styles.buttonText}>Image Upload</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.actionButton}>
                     <Text style={styles.buttonText}>Save</Text>
@@ -51,13 +69,6 @@ const CameraScreen = () => {
             <TouchableOpacity style={styles.galleryButton}>
                 <Text style={styles.galleryText}>Gallery</Text>
             </TouchableOpacity>
-            <View style={styles.bottomNav}>
-                <Icon name="home" size={24} color="#5D9386" />
-                <Icon name="folder" size={24} color="#5D9386" />
-                <Icon name="camera" size={24} color="#5D9386" />
-                <Icon name="monitor-heart" size={24} color="#5D9386" />
-                <Icon name="person" size={24} color="#5D9386" />
-            </View>
             <BottomNav />
         </View>
     );
@@ -67,17 +78,21 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-   
-        overflow: 'hidden',
         alignItems: 'center',
-        paddingTop: 40,
+        paddingTop: 20,
+    },
+        header: {
+        fontSize: 32,
+        color: '#85D3C0',
+        fontWeight: '600',
+        textAlign: 'center',
+        marginVertical: 20
     },
     headerText: {
         fontSize: 32,
         color: '#85D3C0',
         fontWeight: '600',
         textAlign: 'center',
-        flex: 1,
         marginTop: 3,
     },
     cameraPlaceholder: {
@@ -92,6 +107,20 @@ const styles = StyleSheet.create({
     placeholderText: {
         color: 'white',
         fontSize: 18,
+    },
+    imagePreview: {
+        marginTop: 20,
+        alignItems: 'center',
+    },
+    previewText: {
+        fontSize: 16,
+        color: '#5D9386',
+    },
+    image: {
+        width: 200,
+        height: 200,
+        borderRadius: 10,
+        marginTop: 10,
     },
     buttonContainer: {
         flexDirection: 'row',

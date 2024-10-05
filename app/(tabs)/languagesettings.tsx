@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Modal } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useRouter } from 'expo-router'; // useRouter from expo-router
+import { useFonts } from 'expo-font';
+import BackArrow from '../components/BackArrow';
 
 const { width, height } = Dimensions.get('window');
 
@@ -14,8 +16,9 @@ const LanguageSelector = () => {
 
   return (
     <View style={styles.container}>
+    <BackArrow onPress={() => router.push('/settings')} />
       <View style={styles.selectorContainer}>
-        <Text style={styles.welcomeText}>Welcome</Text>
+        <Text style={styles.welcomeText}>Change Language Settings</Text>
         
         <TouchableOpacity
           style={styles.languageBox}

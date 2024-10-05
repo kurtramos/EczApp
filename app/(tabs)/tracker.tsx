@@ -7,7 +7,7 @@ import { useRouter } from 'expo-router';
 import BottomNav from '../components/BottomNav';
 
 
-  const router = useRouter();
+
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -28,6 +28,7 @@ const chartConfig = {
 };
 
 const TrackerScreen = () => {
+  const router = useRouter();
   return (
     <View style={styles.container}>
                   <BackArrow onPress={() => router.push('/home')} />
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: '#fff',
-    paddingVertical: 20,
+    paddingVertical: 45,
   },
   header: {
     fontSize: 24,

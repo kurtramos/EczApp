@@ -114,6 +114,8 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: 'white',
+      // alignItems: 'center',
+      paddingTop: 20,
     },
     scrollViewContent: {
       paddingBottom: 80, // Adjust this value to fit the height of your BottomNav

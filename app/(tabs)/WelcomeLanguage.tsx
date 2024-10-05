@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Modal } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useRouter } from 'expo-router'; // useRouter from expo-router
+import { useFonts } from 'expo-font';
 
 const { width, height } = Dimensions.get('window');
 
