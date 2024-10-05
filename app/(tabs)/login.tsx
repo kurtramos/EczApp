@@ -45,15 +45,38 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from "react-native";
-import { Ionicons, FontAwesome, MaterialIcons } from '@expo/vector-icons'; // Icon libraries
+import { Ionicons, FontAwesome, MaterialIcons } from '@expo/vector-icons'; 
 import { useRouter } from 'expo-router'; 
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from '../firebaseConfig'; // Import your Firebase config
 import BackArrow from '../components/BackArrow';
-
 
 export default function App() {
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const router = useRouter();
+
+  // Handle login with Firebase
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Please enter both email and password.');
+      return;
+    }
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      // Handle successful login, navigate to the home page
+      Alert.alert('Success', 'Logged in successfully!');
+      router.push('/home');
+    } catch (error) {
+      // Handle error cases, e.g., incorrect password, email not registered
+      Alert.alert('Login Error', error.message);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -61,7 +84,6 @@ export default function App() {
 
       <Text style={styles.logInText}>Log In</Text>
 
-      {/* Welcome label and description aligned left */}
       <Text style={styles.welcomeLabelText}>Welcome</Text>
       <Text style={styles.descriptionText}>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -73,18 +95,21 @@ export default function App() {
         style={styles.inputBox}
         placeholder="example@example.com"
         placeholderTextColor="#bcbcbc"
+        value={email}
+        onChangeText={setEmail} // Set email value
       />
 
       <Text style={styles.labelText}>Password</Text>
-      
-      {/* Password field with Forget Password */}
+
       <View style={styles.passwordWrapper}>
         <View style={styles.passwordContainer}>
           <TextInput
-            style={styles.passwordInputBox} // Adjust the width for the password input box
+            style={styles.passwordInputBox}
             placeholder="*************"
             placeholderTextColor="#bcbcbc"
-            secureTextEntry={!passwordVisible} // Toggle visibility
+            secureTextEntry={!passwordVisible}
+            value={password}
+            onChangeText={setPassword} // Set password value
           />
           <TouchableOpacity
             onPress={() => setPasswordVisible(!passwordVisible)}
@@ -97,18 +122,15 @@ export default function App() {
             />
           </TouchableOpacity>
         </View>
-        {/* Forget Password aligned right under the password field */}
         <TouchableOpacity style={styles.forgotPasswordWrapper}>
           <Text style={styles.forgotPasswordText}>Forget Password</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Log In Button */}
-      <TouchableOpacity style={styles.logInButton} onPress={() => router.push('/home')}>
+      <TouchableOpacity style={styles.logInButton} onPress={handleLogin}>
         <Text style={styles.logInButtonText}>Log In</Text>
       </TouchableOpacity>
 
-      {/* New Section: Social Login Icons */}
       <Text style={styles.orSignUpText}>or sign up with</Text>
       <View style={styles.socialIconsContainer}>
         <View style={styles.circle}>
@@ -124,7 +146,7 @@ export default function App() {
 
       <View style={styles.signUpTextContainer}>
         <Text style={styles.noAccountText}>Don’t have an account? </Text>
-        <Text style={styles.signUpText}>Sign Up</Text>
+        <Text style={styles.signUpText} onPress={() => router.push('/signup')}>Sign Up</Text>
       </View>
     </View>
   );

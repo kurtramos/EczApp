@@ -14,12 +14,17 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRouter } from 'expo-router'; 
 import BackArrow from '../components/BackArrow';
 
+// Firebase imports
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 
 const SignUpScreen = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState(''); // Added email state
+  const [password, setPassword] = useState(''); // Added password state
+  const [confirmPassword, setConfirmPassword] = useState(''); // Added confirm password state
   const [mobileNumber, setMobileNumber] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState(new Date());
   const [tempDate, setTempDate] = useState(new Date());
@@ -27,7 +32,7 @@ const SignUpScreen = () => {
   const router = useRouter();
 
   // Error Handling
-  const handleNameChange = (value, setName) => {
+  const handleNameChange = (value: string, setName: { (value: React.SetStateAction<string>): void; (value: React.SetStateAction<string>): void; (arg0: any): void; }) => {
     const alphabetRegex = /^[A-Za-z\s]+$/;
     if (value === '' || alphabetRegex.test(value)) {
       setName(value);
@@ -36,7 +41,7 @@ const SignUpScreen = () => {
     }
   };
 
-  const handleMobileNumberChange = (value) => {
+  const handleMobileNumberChange = (value: any[] | React.SetStateAction<string>) => {
     const numericRegex = /^[0-9]*$/;
     if (numericRegex.test(value) && value.length <= 10) {
       setMobileNumber(value);
@@ -45,7 +50,7 @@ const SignUpScreen = () => {
     }
   };
 
-  const onDateChange = (event, selectedDate) => {
+  const onDateChange = (event: any, selectedDate: Date) => {
     const currentDate = selectedDate || tempDate;
     setTempDate(currentDate);
   };
@@ -55,10 +60,33 @@ const SignUpScreen = () => {
     setShowDatePicker(false);
   };
 
+  // Firebase Sign-up Logic
+  const handleSignUp = async () => {
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Passwords do not match!');
+      return;
+    }
+    if (!email || !password) {
+      Alert.alert('Error', 'Please fill all the fields!');
+      return;
+    }
+  
+    try {
+      const auth = getAuth();
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      Alert.alert('Success', 'Account created successfully!');
+      // You can navigate to another screen or clear form fields here
+      router.push('/login'); // Redirect to login screen after sign-up
+    } catch (error) {
+      const errorMessage = error.message || "An unknown error occurred"; // Safely access error.message
+      Alert.alert('Sign-Up Error', errorMessage);
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
-      <BackArrow onPress={() => router.push('/Homescreen')} />
+        <BackArrow onPress={() => router.push('/Homescreen')} />
 
         <Text style={styles.title}>New Account</Text>
 
@@ -82,6 +110,16 @@ const SignUpScreen = () => {
           onChangeText={(value) => handleNameChange(value, setLastName)}
         />
 
+        {/* Email */}
+        <Text style={styles.label}>Email</Text>
+        <TextInput
+          style={styles.inputField}
+          placeholder="example@example.com"
+          placeholderTextColor="#bcbcbc"
+          value={email}
+          onChangeText={setEmail} // Set email value
+        />
+
         {/* Password */}
         <Text style={styles.label}>Password</Text>
         <View style={styles.passwordContainer}>
@@ -90,6 +128,8 @@ const SignUpScreen = () => {
             placeholder="*************"
             placeholderTextColor="#bcbcbc"
             secureTextEntry={!passwordVisible}
+            value={password} // Set password value
+            onChangeText={setPassword}
           />
           <TouchableOpacity
             onPress={() => setPasswordVisible(!passwordVisible)}
@@ -111,6 +151,8 @@ const SignUpScreen = () => {
             placeholder="*************"
             placeholderTextColor="#bcbcbc"
             secureTextEntry={!confirmPasswordVisible}
+            value={confirmPassword} // Set confirm password value
+            onChangeText={setConfirmPassword}
           />
           <TouchableOpacity
             onPress={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
@@ -123,14 +165,6 @@ const SignUpScreen = () => {
             />
           </TouchableOpacity>
         </View>
-
-        {/* Email */}
-        <Text style={styles.label}>Email</Text>
-        <TextInput
-          style={styles.inputField}
-          placeholder="example@example.com"
-          placeholderTextColor="#bcbcbc"
-        />
 
         {/* Mobile Number */}
         <Text style={styles.label}>Mobile Number</Text>
@@ -180,41 +214,10 @@ const SignUpScreen = () => {
           </View>
         </Modal>
 
-        {/* Terms and Privacy */}
-        <View style={styles.termsContainer}>
-          <Text style={styles.termsText}>
-            By continuing, you agree to{' '}
-            <Text style={styles.termsLink}>Terms of Use</Text> and{' '}
-            <Text style={styles.termsLink}>Privacy Policy.</Text>
-          </Text>
-        </View>
-
         {/* Sign Up Button */}
-        <TouchableOpacity style={styles.signUpButton} onPress={() => router.push('/login')}>
+        <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp}>
           <Text style={styles.signUpButtonText}>Sign Up</Text>
         </TouchableOpacity>
-
-        {/* or sign up with */}
-        <Text style={styles.orSignUpText}>or sign up with</Text>
-
-        {/* Social Login Buttons */}
-        <View style={styles.socialIconsContainer}>
-          <View style={styles.circle}>
-            <FontAwesome name="google" size={24} color="#85D3C0" />
-          </View>
-          <View style={styles.circle}>
-            <FontAwesome name="facebook" size={24} color="#85D3C0" />
-          </View>
-          <View style={styles.circle}>
-            <MaterialIcons name="fingerprint" size={24} color="#85D3C0" />
-          </View>
-        </View>
-
-        {/* Already have an account */}
-        <View style={styles.loginTextContainer}>
-          <Text style={styles.loginText}>already have an account? </Text>
-          <Text style={styles.loginLink}>Log in</Text> 
-        </View>
       </View>
     </ScrollView>
   );
