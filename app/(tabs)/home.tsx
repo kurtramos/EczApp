@@ -9,11 +9,33 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'; // Or another icon library
+import { useState, useEffect } from 'react';
 import { useRouter } from 'expo-router'; 
 import BottomNav from '../components/BottomNav';
+import { getAuth } from 'firebase/auth';
+// import { getFirestore, doc, getDoc } from 'firebase/firestore'; // If using Firestore
+
 
 export default function HomeScreen() {
-    const router = useRouter();
+  const router = useRouter();
+  const [userEmail, setUserEmail] = useState(''); 
+  const [profileImage, setProfileImage] = useState('');
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const auth = getAuth();
+      const user = auth.currentUser;
+  
+      if (user) {
+        setUserEmail(user.email ?? 'Unknown Email'); 
+        setProfileImage(user.photoURL || 'https://via.placeholder.com/72x72');
+      }
+    };
+  
+    fetchUserData();
+  }, []);
+  
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
@@ -21,11 +43,11 @@ export default function HomeScreen() {
         <View style={styles.header}>
           <Image
             style={styles.profileImage}
-            source={{ uri: 'https://via.placeholder.com/72x72' }}
+        source={{ uri: profileImage || 'https://via.placeholder.com/72x72' }}
           />
           <View style={styles.greeting}>
-            <Text style={styles.welcomeText}>Hi, Welcome Back</Text>
-            <Text style={styles.userName}>Kurt Ramos</Text>
+          <Text style={styles.welcomeText}>Hi, Welcome Back</Text>
+            <Text style={styles.welcomeText}>{userEmail || 'Guest'}</Text>
           </View>
           <View style={styles.iconContainer}>
             <TouchableOpacity style={styles.iconCircle} onPress={() => router.push('/notification')}>
