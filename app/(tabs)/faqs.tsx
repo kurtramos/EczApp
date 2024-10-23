@@ -10,9 +10,9 @@ const PrivacyPolicy = () => {
     
     <View style={styles.container}>
        <BackArrow onPress={() => router.push('/home')} />
-
+       <Text style={styles.heading}>FAQs</Text>
       <ScrollView style={styles.scrollView}>
-          <Text style={styles.heading}>FAQs</Text>
+
           
         <View style={styles.squareBackground}>
         <Text style={styles.subheading}>What is Eczema?</Text>
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center', 
     alignItems: 'center', 
     marginBottom: 20, 
-    marginTop: 50, 
+    marginTop: 20, 
     alignSelf: 'stretch', 
     padding: 30,
   },
@@ -78,8 +78,8 @@ const styles = StyleSheet.create({
     color: '#85D3C0', 
     fontWeight: 'bold',
     textAlign: 'left',
-    marginTop: 25, 
-    marginLeft: 40,
+    marginTop: 48, 
+    marginLeft: 60,
   },
 
   subheading: {

@@ -9,8 +9,9 @@ const PrivacyPolicy = () => {
   return (
     <View style={styles.container}>
       <BackArrow onPress={() => router.push('/home')} />
+      <Text style={styles.heading}>ABOUT US</Text>
       <ScrollView style={styles.scrollView}>
-          <Text style={styles.heading}>ABOUT US</Text>
+
           
         <View style={styles.squareBackground}>
         <Text style={styles.paragraph}>
@@ -48,8 +49,8 @@ const styles = StyleSheet.create({
     color: '#85D3C0', 
     fontWeight: 'bold',
     textAlign: 'left',
-    marginTop: 25, 
-    marginLeft: 40,
+    marginTop: 48, 
+    marginLeft: 60,
   },
   
   paragraph: {
