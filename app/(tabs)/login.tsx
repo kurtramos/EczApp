@@ -131,7 +131,7 @@ export default function App() {
         <Text style={styles.logInButtonText}>Log In</Text>
       </TouchableOpacity>
 
-      <Text style={styles.orSignUpText}>or sign up with</Text>
+      <Text style={styles.orSignUpText}>or log in with</Text>
       <View style={styles.socialIconsContainer}>
         <View style={styles.circle}>
           <FontAwesome name="google" size={24} color="#85D3C0" />
