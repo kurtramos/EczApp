@@ -82,7 +82,7 @@ const Treatment = () => {
 
   return (
     <View style={styles.container}>
-      <BackArrow onPress={() => router.push("/home")} />
+      <BackArrow onPress={() => router.push("/tracker")} />
       <Text style={styles.heading}>TREATMENT</Text>
       <ScrollView style={styles.scrollView}>
         <View style={styles.squareBackground}>
