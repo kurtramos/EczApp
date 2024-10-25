@@ -120,9 +120,9 @@ export default function HomeScreen() {
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.infoCard} onPress={() => router.push('/aboutus')}>
-          <Text style={styles.infoTitle}>About Us</Text>
+          <Text style={styles.infoTitle}>Doctors</Text>
           <Text style={styles.infoText}>
-            WANT TO KNOW ABOUT US?
+            Learn more about the doctors.
           </Text>
         </TouchableOpacity>
       </ScrollView>
