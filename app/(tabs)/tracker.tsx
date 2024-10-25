@@ -45,11 +45,7 @@ const TrackerScreen = () => {
           userEmail,
           "POEMScores"
         );
-        const scoresQuery = query(
-          scoresRef,
-          orderBy("timestamp", "desc"),
-          limit(10)
-        );
+        const scoresQuery = query(scoresRef, orderBy("timestamp", "desc"));
 
         try {
           const querySnapshot = await getDocs(scoresQuery);
