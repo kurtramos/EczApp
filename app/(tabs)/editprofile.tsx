@@ -1,8 +1,18 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
 import { useRouter } from "expo-router"; // Expo Router
+import { useFocusEffect } from "expo-router";
 import BackArrow from "../components/BackArrow";
-
+import { getAuth } from "firebase/auth";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { firestore } from "../firebaseConfig";
 
 const EditProfile = () => {
   const router = useRouter(); // For navigation
@@ -12,12 +22,55 @@ const EditProfile = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
 
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchUserData = async () => {
+        const auth = getAuth();
+        const user = auth.currentUser;
+
+        if (user) {
+          const userDocRef = doc(firestore, "users", user.email ?? "");
+          const userDocSnap = await getDoc(userDocRef);
+
+          if (userDocSnap.exists()) {
+            const userData = userDocSnap.data();
+            setFirstName(userData.firstName ?? "No First Name Available");
+            setLastName(userData.lastName ?? "No Last Name Available");
+            setPhoneNumber(
+              userData.mobileNumber ?? "No Phone Number Available"
+            );
+            setEmail(userData.email ?? user?.email);
+          } else {
+            console.log("No user data found in Firestore.");
+          }
+        }
+      };
+
+      fetchUserData();
+    }, [])
+  );
   // Function to handle saving profile updates
-  const handleSave = () => {
-    // Add your logic here to save the updated profile details to your database or server
-    // For now, we'll just show an alert to confirm the "save"
-    Alert.alert("Profile Saved", `Name: ${firstName} ${lastName}\nPhone: ${phoneNumber}\nEmail: ${email}`);
-    // After saving, navigate back to the profile screen
+  const handleSave = async () => {
+    try {
+      const user = getAuth().currentUser;
+
+      // Update details in firestore
+      const docRef = doc(firestore, "users", user?.email ?? "");
+      await setDoc(docRef, {
+        lastName: lastName,
+        firstName: firstName,
+        mobileNumber: phoneNumber,
+      });
+
+      Alert.alert(
+        "Profile Saved",
+        `Name: ${firstName} ${lastName}\nPhone: ${phoneNumber}\nEmail: ${email}`
+      );
+    } catch (error) {
+      console.error("Error saving profile: ", error);
+      alert("Failed to save profile.");
+    }
+
     router.push("/myaccount");
   };
 
@@ -55,7 +108,7 @@ const EditProfile = () => {
         style={styles.input}
         placeholder="Email"
         value={email}
-        onChangeText={setEmail}
+        // onChangeText={setEmail}
         keyboardType="email-address" // Ensure correct keyboard type for email
       />
 
