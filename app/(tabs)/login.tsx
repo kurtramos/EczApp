@@ -53,56 +53,30 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../firebaseConfig'; // Import your Firebase config
 import BackArrow from '../components/BackArrow';
 
-import useGoogleLogin from './auth/googleLogin';
-
-
-import { Button } from 'react-native';
-
 export default function App() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
-  const { promptAsync } = useGoogleLogin();
 
   // Handle login with Firebase
-const handleLogin = async () => {
-  if (!email || !password) {
-    Alert.alert('Error', 'Please enter both email and password.');
-    return;
-  }
-
-  try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
-    Alert.alert('Success', 'Logged in successfully!');
-    router.push('/home'); // Ensure '/home' is a valid route
-  } catch (error) {
-    // Customize error handling here
-    let errorMessage = error.message;
-    if (error.code === 'auth/wrong-password') {
-      errorMessage = 'The password you entered is incorrect. Please try again.';
-    } else if (error.code === 'auth/user-not-found') {
-      errorMessage = 'No account found with this email. Please sign up first.';
-    } else if (error.code === 'auth/invalid-email') {
-      errorMessage = 'The email address is not valid. Please check and try again.';
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Please enter both email and password.');
+      return;
     }
-    Alert.alert('Login Error', errorMessage);
-  }
-};
-const handleForgotPassword = async () => {
-  if (!email) {
-    Alert.alert('Error', 'Please enter your email address to reset the password.');
-    return;
-  }
-  try {
-    await sendPasswordResetEmail(auth, email);
-    Alert.alert('Success', 'Password reset email sent!');
-  } catch (error) {
-    Alert.alert('Error', error.message);
-  }
-};
 
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      // Handle successful login, navigate to the home page
+      Alert.alert('Success', 'Logged in successfully!');
+      router.push('/home');
+    } catch (error) {
+      // Handle error cases, e.g., incorrect password, email not registered
+      Alert.alert('Login Error', error.message);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -148,10 +122,9 @@ const handleForgotPassword = async () => {
             />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.forgotPasswordWrapper} onPress={handleForgotPassword}>
-  <Text style={styles.forgotPasswordText}>Forget Password</Text>
-</TouchableOpacity>
-
+        <TouchableOpacity style={styles.forgotPasswordWrapper}>
+          <Text style={styles.forgotPasswordText}>Forget Password</Text>
+        </TouchableOpacity>
       </View>
 
       <TouchableOpacity style={styles.logInButton} onPress={handleLogin}>
@@ -160,10 +133,9 @@ const handleForgotPassword = async () => {
 
       <Text style={styles.orSignUpText}>or log in with</Text>
       <View style={styles.socialIconsContainer}>
-      <TouchableOpacity style={styles.circle} onPress={() => promptAsync()}>
-  <FontAwesome name="google" size={24} color="#85D3C0" />
-</TouchableOpacity>
-
+        <View style={styles.circle}>
+          <FontAwesome name="google" size={24} color="#85D3C0" />
+        </View>
         <View style={styles.circle}>
           <FontAwesome name="facebook" size={24} color="#85D3C0" />
         </View>
@@ -280,12 +252,11 @@ const styles = StyleSheet.create({
   },
   socialIconsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly', // Use space-evenly to distribute buttons
-    width: '80%', // Adjust the width for more spacing between icons
+    justifyContent: 'space-between',
+    width: 138,
     alignItems: 'center',
     marginVertical: 20,
   },
-  
   circle: {
     width: 40,
     height: 40,
@@ -313,5 +284,4 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "500",
   },
-  
 });

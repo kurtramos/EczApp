@@ -19,6 +19,10 @@ const POEMScreen = () => {
     question1: null,
     question2: null,
     question3: null,
+    question4: null,
+    question5: null,
+    question6: null,
+    question7: null,
   });
 
   const selectOption = (question, option) => {
@@ -26,15 +30,27 @@ const POEMScreen = () => {
   };
 
   useEffect(() => {
-    console.log(response);
-    if (response.question1 && response.question2 && response.question3) {
+    // Save upon answering all questions
+    if (
+      response.question1 &&
+      response.question2 &&
+      response.question3 &&
+      response.question4 &&
+      response.question5 &&
+      response.question6 &&
+      response.question7
+    ) {
       handleSave();
 
-      // clear responses
+      // Clear responses
       setResponse({
         question1: null,
         question2: null,
         question3: null,
+        question4: null,
+        question5: null,
+        question6: null,
+        question7: null,
       });
     }
   }, [selectOption]);
@@ -52,7 +68,8 @@ const POEMScreen = () => {
     console.log(`Logged in as: ${userEmail}`);
 
     const totalScore = calculateScore();
-    const timestamp = new Date().toISOString();
+    const timestamp = new Date();
+    const timestampString = timestamp.toISOString();
 
     try {
       const docRef = doc(
@@ -60,7 +77,7 @@ const POEMScreen = () => {
         "users",
         userEmail,
         "POEMScores",
-        timestamp
+        timestampString
       );
 
       console.log(
@@ -87,10 +104,10 @@ const POEMScreen = () => {
   const calculateScore = () => {
     const scoreMapping = {
       "0": 0,
-      "1-2": 2,
-      "3-4": 4,
-      "5-6": 6,
-      "7": 7,
+      "1-2": 1,
+      "3-4": 2,
+      "5-6": 3,
+      "7": 4,
     };
 
     const totalScore = Object.values(response).reduce((acc, curr) => {
@@ -174,6 +191,87 @@ const POEMScreen = () => {
             ))}
           </View>
         </View>
+        <View style={styles.questionContainer}>
+          <Text style={styles.question}>
+            Over the last week, on how many days has your/your child’s skin been
+            weeping or oozing clear fluid because of the eczema?
+          </Text>
+          <View style={styles.optionsContainer}>
+            {["0", "1-2", "3-4", "5-6", "7"].map((option, index) => (
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.option,
+                  response.question4 === option && styles.selectedOption,
+                ]}
+                onPress={() => selectOption("question4", option)}
+              >
+                <Text style={styles.optionText}>{option}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+        <View style={styles.questionContainer}>
+          <Text style={styles.question}>
+            Over the last week, on how many days has your/your child’s skin been
+            cracked because of the eczema?
+          </Text>
+          <View style={styles.optionsContainer}>
+            {["0", "1-2", "3-4", "5-6", "7"].map((option, index) => (
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.option,
+                  response.question5 === option && styles.selectedOption,
+                ]}
+                onPress={() => selectOption("question5", option)}
+              >
+                <Text style={styles.optionText}>{option}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+        <View style={styles.questionContainer}>
+          <Text style={styles.question}>
+            Over the last week, on how many days has your /your child’s skin
+            been flaking off because of the eczema?
+          </Text>
+          <View style={styles.optionsContainer}>
+            {["0", "1-2", "3-4", "5-6", "7"].map((option, index) => (
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.option,
+                  response.question6 === option && styles.selectedOption,
+                ]}
+                onPress={() => selectOption("question6", option)}
+              >
+                <Text style={styles.optionText}>{option}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+        <View style={styles.questionContainer}>
+          <Text style={styles.question}>
+            Over the last week, on how many days has your/your child’s skin felt
+            dry or rough because of the eczema?
+          </Text>
+          <View style={styles.optionsContainer}>
+            {["0", "1-2", "3-4", "5-6", "7"].map((option, index) => (
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.option,
+                  response.question7 === option && styles.selectedOption,
+                ]}
+                onPress={() => selectOption("question7", option)}
+              >
+                <Text style={styles.optionText}>{option}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+        <View style={styles.poemEnd}></View>
       </ScrollView>
       <BottomNav />
     </View>
@@ -231,6 +329,9 @@ const styles = StyleSheet.create({
   optionText: {
     fontSize: 13,
     textAlign: "center",
+  },
+  poemEnd: {
+    padding: 50,
   },
   footer: {
     height: 50,

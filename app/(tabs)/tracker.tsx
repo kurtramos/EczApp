@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 import BackArrow from "../components/BackArrow";
 import { useRouter } from "expo-router";
+import { useFocusEffect } from "expo-router";
 import BottomNav from "../components/BottomNav";
 import { firestore } from "../firebaseConfig";
 import { getAuth } from "firebase/auth";
@@ -26,48 +27,57 @@ const TrackerScreen = () => {
   const [scores, setScores] = useState<number[]>([]);
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchScores = async () => {
-      const user = getAuth().currentUser;
-      const userEmail = user?.email;
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchScores = async () => {
+        const user = getAuth().currentUser;
+        const userEmail = user?.email;
 
-      if (!userEmail) {
-        console.error("No user is currently logged in.");
-        alert("No user is currently logged in.");
-        return;
-      }
+        if (!userEmail) {
+          console.error("No user is currently logged in.");
+          alert("No user is currently logged in.");
+          return;
+        }
 
-      const scoresRef = collection(firestore, "users", userEmail, "POEMScores");
-      const scoresQuery = query(
-        scoresRef,
-        orderBy("timestamp", "desc"),
-        limit(10)
-      );
+        const scoresRef = collection(
+          firestore,
+          "users",
+          userEmail,
+          "POEMScores"
+        );
+        const scoresQuery = query(
+          scoresRef,
+          orderBy("timestamp", "desc"),
+          limit(10)
+        );
 
-      try {
-        const querySnapshot = await getDocs(scoresQuery);
-        const fetchedScores: number[] = [];
-        querySnapshot.forEach((doc) => {
-          const data = doc.data() as ScoreData;
-          fetchedScores.push(data.totalScore);
-        });
+        try {
+          const querySnapshot = await getDocs(scoresQuery);
+          const fetchedScores: number[] = [];
+          querySnapshot.forEach((doc) => {
+            const data = doc.data() as ScoreData;
+            fetchedScores.push(data.totalScore);
+          });
 
-        // Sort descending and update state
-        setScores(fetchedScores.reverse());
-        console.log(scores);
-      } catch (error) {
-        console.error("Error fetching scores: ", error);
-      }
-    };
+          // Sort descending and update state
+          setScores(fetchedScores.reverse());
+        } catch (error) {
+          console.error("Error fetching scores: ", error);
+        }
+      };
 
-    fetchScores();
-  }, []);
+      fetchScores();
+    }, [])
+  );
 
   const chartData = {
-    labels: scores.map((_, index) => (index + 1).toString()),
+    labels:
+      scores.length > 0
+        ? scores.map((_, index) => (index + 1).toString())
+        : ["0"],
     datasets: [
       {
-        data: scores,
+        data: scores.length > 0 ? scores : [0], // Default to 0
         strokeWidth: 2,
       },
     ],
