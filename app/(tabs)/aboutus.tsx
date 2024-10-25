@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { ScrollView, Text, StyleSheet, View, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { ScrollView, Text, StyleSheet, View, Image, TextInput, TouchableOpacity, Dimensions, Linking } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 import ImageView from 'react-native-image-viewing';
 import BottomNav from '../components/BottomNav';
 import BackArrow from '../components/BackArrow';
+import allergists from '../components/allergistspt1';
 import { useRouter } from 'expo-router';
 
 const windowWidth = Dimensions.get('window').width;
@@ -25,6 +26,23 @@ const Doctors = () => {
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Filtering the list of doctors based on the search query
+  const filteredDoctors = allergists.filter((doctor) => {
+    const searchLower = searchQuery.toLowerCase();
+  
+    return (
+      (doctor.name && doctor.name.toLowerCase().includes(searchLower)) ||
+      (doctor.city && doctor.city.toLowerCase().includes(searchLower)) ||
+      (doctor.hospital && doctor.hospital.toLowerCase().includes(searchLower)) ||
+      (doctor.schedule && doctor.schedule.toLowerCase().includes(searchLower)) ||
+      (doctor.unit && doctor.unit.toLowerCase().includes(searchLower)) || // Optional chaining for unit
+      (doctor.contact && doctor.contact.toLowerCase().includes(searchLower)) || // Contact treated as string
+      (doctor.platforms && doctor.platforms.some(platform => platform.toLowerCase().includes(searchLower))) // Filters by platforms
+    );
+  });
+  
 
   const renderItem = ({ item, index }) => (
     <TouchableOpacity onPress={() => {
@@ -40,12 +58,21 @@ const Doctors = () => {
       <BackArrow onPress={() => router.push('/home')} />
       <Text style={styles.heading}>Doctors</Text>
       <Text style={styles.subheading}>FIND AN ALLERGY/IMMUNOLOGY SPECIALIST</Text>
+
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
+        {/* Informational Text */}
+        <View style={styles.infoSection}>
+          <Text style={styles.infoText}>
+            Allergy and Immunology specialists are experts in diagnosing and treating allergic diseases and immune system disorders. These may include asthma, food allergies, eczema, allergic rhinitis, and autoimmune conditions.
+          </Text>
+        </View>
+
+        {/* Carousel */}
         <View style={styles.carouselContainer}>
           <Carousel
             loop
             width={windowWidth * 0.9}
-            height={windowHeight * 0.35}  // Adjusted to move up closer to subheading
+            height={windowHeight * 0.35} // Adjusted for visibility
             autoPlay={true}
             data={doctorsImages}
             scrollAnimationDuration={2000}
@@ -53,12 +80,54 @@ const Doctors = () => {
           />
         </View>
 
-        {/* Square Background moved down */}
-        <View style={styles.squareBackground}>
-          <Text style={styles.paragraph}>
-            * insert information about the doctors here *
+        {/* Source Information */}
+        <View style={styles.infoSection}>
+          <Text style={styles.psaaiSource}>
+            PSAAI is a globally recognized organization of moral and ethical physicians with a passion for excellence in the field of Allergy and Immunology. It is committed to dedicated service, continuing education, training, and research, with the ultimate goal of providing the best healthcare for all people.
           </Text>
+          <Text style={styles.scrollDown}>Scroll down to know more about the doctors.</Text>
         </View>
+
+        {/* Search Bar */}
+        <TextInput
+          style={styles.searchBar}
+          placeholder="Search for a doctor, city, hospital, unit, contact, or platform..."
+          value={searchQuery}
+          onChangeText={(text) => setSearchQuery(text)}
+        />
+
+        {/* Doctor Details */}
+        <View style={styles.squareBackground}>
+          <ScrollView>
+            {filteredDoctors.length > 0 ? (
+              filteredDoctors.map((doctor, index) => (
+                <View key={index} style={styles.doctorCard}>
+                  <Text style={styles.city}>{doctor.city.toUpperCase()}</Text>
+                  <Text style={styles.doctorName}>{doctor.name}</Text>
+                  <Text style={styles.doctorDetails}>{doctor.hospital}</Text>
+                  {doctor.unit && <Text style={styles.doctorDetails}>{doctor.unit}</Text>}
+                  <Text style={styles.doctorDetails}>{doctor.schedule}</Text>
+                  <Text style={styles.doctorDetails}>Contact: {doctor.contact}</Text>
+                  {doctor.platforms && doctor.platforms.length > 0 && (
+                    <Text style={styles.doctorDetails}>Platforms: {doctor.platforms.join(', ')}</Text>
+                  )}
+                </View>
+              ))
+            ) : (
+              <Text style={styles.noResults}>No doctors found matching your search.</Text>
+            )}
+          </ScrollView>
+        </View>
+
+        {/* Doctor List Source */}
+        <Text style={styles.doctorSource}>
+          The doctor list is sourced from{' '}
+          <Text 
+            style={styles.linkText}
+            onPress={() => Linking.openURL('https://psaai.org/find-an-allergist/')}>
+            https://psaai.org/find-an-allergist/
+          </Text>.
+        </Text>
       </ScrollView>
 
       <ImageView
@@ -83,50 +152,115 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 20,
-    paddingBottom: 100,  // Added padding to make sure everything scrolls smoothly
+    paddingBottom: 100,
+  },
+  searchBar: {
+    backgroundColor: '#ffffff',
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 20,
+    elevation: 3,
+    fontSize: 16,
+    marginTop: -10, // added margin to give space between carousel and search bar
   },
   squareBackground: {
-    backgroundColor: '#C3EFE5', 
-    width: '100%', 
-    height: 300,  // Adjusted height for better fit
-    borderRadius: 20, 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    marginBottom: 20, 
-    marginTop: 10, 
-    alignSelf: 'stretch', 
+    backgroundColor: '#C3EFE5',
+    width: '100%',
+    height: 300, 
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+    marginTop: 10,
+    alignSelf: 'stretch',
+    padding: 20,
   },
   heading: {
     fontSize: 24,
-    color: '#85D3C0', 
+    color: '#85D3C0',
     fontWeight: 'bold',
     textAlign: 'left',
-    marginTop: 48, 
+    marginTop: 48,
     marginLeft: 60,
   },
   subheading: {
     fontSize: 20,
-    marginTop: 20,  // Reduced space between the subheading and the carousel
-    color: '#85D3C0', 
+    marginTop: 20,
+    color: '#85D3C0',
     fontWeight: 'bold',
-    textAlign: 'center', 
+    textAlign: 'center',
   },
-  paragraph: {
-    fontSize: 16,
-    lineHeight: 22,
+  infoSection: {
+    marginTop: -10,
+    marginBottom: 15,
+  },
+  infoText: {
+    fontSize: 13,
+    lineHeight: 24,
     textAlign: 'justify',
+    marginBottom: 15,
+  },
+  psaaiSource: {
+    fontSize: 13,
+    lineHeight: 24,
+    textAlign: 'justify',
+    marginBottom: 10,
+  },
+  scrollDown: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: '#85D3C0',
+    marginTop: 0,
     marginBottom: 20,
-    marginTop: 50, 
+  },
+  doctorCard: {
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 15,
+    width: '100%',
+  },
+  city: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#FFA500',
+    marginBottom: 5,
+  },
+  doctorName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  doctorDetails: {
+    fontSize: 14,
+    color: '#5A5858',
+    marginTop: 5,
+  },
+  noResults: {
+    fontSize: 16,
+    color: '#FF0000',
+    marginTop: 10,
+  },
+  doctorSource: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: '#5A5858',
+    textAlign: 'center',
+    marginBottom: 10, // spacing for readability
   },
   carouselContainer: {
-    marginTop: -20,  // Reduced top margin to move carousel closer to the subheading
-    marginBottom: 20,
-    alignItems: 'center',  // Center the carousel
+    marginTop: -60,
+    marginBottom: -20, // reduced space to accommodate the search bar below
+    alignItems: 'center',
   },
   imageStyle: {
-    width: windowWidth * 0.9,  // Fit the screen width while maintaining aspect ratio
-    height: windowHeight * 0.35, // Adjust height for good visibility
+    width: windowWidth * 0.9,
+    height: windowHeight * 0.35,
     borderRadius: 15,
+  },
+  linkText: {
+    color: '#1E90FF',
   },
 });
 

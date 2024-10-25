@@ -113,16 +113,16 @@ export default function HomeScreen() {
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.infoCard} onPress={() => router.push('/faqs')}>
-          <Text style={styles.infoTitle}>FAQs</Text>
+          <Text style={styles.infoTitle}>HOW TO USE</Text>
           <Text style={styles.infoText}>
-            QUESTIONS ABOUT ECZEMA?
+            CURIOUS ON HOW TO USE THE APP?
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.infoCard} onPress={() => router.push('/aboutus')}>
           <Text style={styles.infoTitle}>Doctors</Text>
           <Text style={styles.infoText}>
-            Learn more about the doctors.
+            LEARN MORE ABOUT THE DOCTORS.
           </Text>
         </TouchableOpacity>
       </ScrollView>
