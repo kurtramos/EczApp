@@ -8,6 +8,7 @@ import {
   Alert,
 } from "react-native";
 import { useRouter } from "expo-router"; // Expo Router
+import { useFocusEffect } from "expo-router";
 import BackArrow from "../components/BackArrow";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -21,42 +22,44 @@ const EditProfile = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const auth = getAuth();
-      const user = auth.currentUser;
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchUserData = async () => {
+        const auth = getAuth();
+        const user = auth.currentUser;
 
-      if (user) {
-        setEmail(user.email ?? "No Email Available");
+        if (user) {
+          const userDocRef = doc(firestore, "users", user.email ?? "");
+          const userDocSnap = await getDoc(userDocRef);
 
-        const userDocRef = doc(firestore, "users", user.email ?? "");
-        const userDocSnap = await getDoc(userDocRef);
-
-        if (userDocSnap.exists()) {
-          const userData = userDocSnap.data();
-          setFirstName(userData.firstName ?? "No First Name Available");
-          setLastName(userData.lastName ?? "No Last Name Available");
-          setPhoneNumber(userData.mobileNumber ?? "No Phone Number Available");
-        } else {
-          console.log("No user data found in Firestore.");
+          if (userDocSnap.exists()) {
+            const userData = userDocSnap.data();
+            setFirstName(userData.firstName ?? "No First Name Available");
+            setLastName(userData.lastName ?? "No Last Name Available");
+            setPhoneNumber(
+              userData.mobileNumber ?? "No Phone Number Available"
+            );
+            setEmail(userData.email ?? user?.email);
+          } else {
+            console.log("No user data found in Firestore.");
+          }
         }
-      }
-    };
+      };
 
-    fetchUserData();
-  }, []);
-
+      fetchUserData();
+    }, [])
+  );
   // Function to handle saving profile updates
   const handleSave = async () => {
     try {
       const user = getAuth().currentUser;
-      const docRef = doc(firestore, "users", user?.email ?? "");
 
+      // Update details in firestore
+      const docRef = doc(firestore, "users", user?.email ?? "");
       await setDoc(docRef, {
         lastName: lastName,
         firstName: firstName,
         mobileNumber: phoneNumber,
-        email: email,
       });
 
       Alert.alert(
@@ -105,7 +108,7 @@ const EditProfile = () => {
         style={styles.input}
         placeholder="Email"
         value={email}
-        onChangeText={setEmail}
+        // onChangeText={setEmail}
         keyboardType="email-address" // Ensure correct keyboard type for email
       />
 
