@@ -98,7 +98,12 @@ const TrackerScreen = () => {
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>POEM Score</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          router.push("/treatment");
+        }}
+      >
         <Text style={styles.buttonText}>Treatment</Text>
       </TouchableOpacity>
       <BottomNav />
