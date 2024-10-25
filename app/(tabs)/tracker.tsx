@@ -93,6 +93,7 @@ const TrackerScreen = () => {
         height={220}
         chartConfig={chartConfig}
         style={styles.chart}
+        fromZero={true}
       />
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>POEM Score</Text>

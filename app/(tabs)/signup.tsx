@@ -18,23 +18,25 @@ import BackArrow from "../components/BackArrow";
 
 // Firebase imports
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { firestore } from "../firebaseConfig";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
 
 const SignUpScreen = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState(""); 
-  const [password, setPassword] = useState(""); 
-  const [confirmPassword, setConfirmPassword] = useState(""); 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState(new Date());
   const [tempDate, setTempDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [termsAccepted, setTermsAccepted] = useState(false); 
-  const [showTermsModal, setShowTermsModal] = useState(false); 
-  const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false); 
-  const scrollViewRef = useRef(null); 
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
+  const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
+  const scrollViewRef = useRef(null);
   const router = useRouter();
 
   const handleNameChange = (
@@ -82,7 +84,7 @@ const SignUpScreen = () => {
 
   const handleScroll = (event) => {
     const { contentOffset, layoutMeasurement, contentSize } = event.nativeEvent;
-    if (contentOffset.y + layoutMeasurement.height >= contentSize.height) {
+    if (contentOffset.y + layoutMeasurement.height >= contentSize.height - 50) {
       setHasScrolledToBottom(true);
     }
   };
@@ -90,7 +92,7 @@ const SignUpScreen = () => {
   const closeTermsModal = () => {
     if (hasScrolledToBottom) {
       setShowTermsModal(false);
-      setTermsAccepted(true); 
+      setTermsAccepted(true);
     } else {
       Alert.alert("Please scroll to the bottom to accept the terms.");
     }
@@ -110,7 +112,10 @@ const SignUpScreen = () => {
       return;
     }
     if (!termsAccepted) {
-      Alert.alert("Error", "You must accept the Terms of Use & Privacy Policy.");
+      Alert.alert(
+        "Error",
+        "You must accept the Terms of Use & Privacy Policy."
+      );
       return;
     }
 
@@ -121,8 +126,19 @@ const SignUpScreen = () => {
         email,
         password
       );
+
+      // Add user details to db
+      const docRef = doc(firestore, "users", email);
+      await setDoc(docRef, {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        mobileNumber: mobileNumber,
+        dateOfBirth: dateOfBirth.toISOString(),
+      });
+
       Alert.alert("Success", "Account created successfully!");
-      router.push("/login"); 
+      router.push("/login");
     } catch (error) {
       const errorMessage = error.message || "An unknown error occurred";
       Alert.alert("Sign-Up Error", errorMessage);
@@ -244,7 +260,7 @@ const SignUpScreen = () => {
                 mode="date"
                 display="default"
                 onChange={onDateChange}
-                maximumDate={new Date()} 
+                maximumDate={new Date()}
               />
               <TouchableOpacity
                 style={styles.confirmButton}
@@ -259,7 +275,7 @@ const SignUpScreen = () => {
         {/* Terms of Use with Checkbox */}
         <View style={styles.checkboxContainer}>
           <TouchableOpacity
-            onPress={handleCheckboxPress} 
+            onPress={handleCheckboxPress}
             style={styles.checkbox}
           >
             {termsAccepted && (
@@ -268,11 +284,17 @@ const SignUpScreen = () => {
           </TouchableOpacity>
           <Text style={styles.termsText}>
             By continuing, you agree to{" "}
-            <Text style={styles.linkText} onPress={() => setShowTermsModal(true)}>
+            <Text
+              style={styles.linkText}
+              onPress={() => setShowTermsModal(true)}
+            >
               Terms of Use
             </Text>{" "}
             and{" "}
-            <Text style={styles.linkText} onPress={() => setShowTermsModal(true)}>
+            <Text
+              style={styles.linkText}
+              onPress={() => setShowTermsModal(true)}
+            >
               Privacy Policy.
             </Text>
           </Text>
@@ -298,7 +320,6 @@ const SignUpScreen = () => {
           <View style={styles.circle}>
             <MaterialIcons name="fingerprint" size={24} color="#85D3C0" />
           </View>
-          
         </View>
 
         <View style={styles.loginTextContainer}>
@@ -309,96 +330,172 @@ const SignUpScreen = () => {
         </View>
 
         {/* Terms of Use Modal */}
-        <Modal visible={showTermsModal} transparent={true} animationType="slide">
-        <View style={styles.fullScreenModalContainer}>
-          {/* <ScrollView style={styles.modalContainer}> */}
-          <ScrollView 
-  contentContainerStyle={styles.modalContentContainer}
-  onScroll={handleScroll}
-  scrollEventThrottle={16}
->
+        <Modal
+          visible={showTermsModal}
+          transparent={true}
+          animationType="slide"
+        >
+          <View style={styles.fullScreenModalContainer}>
+            {/* <ScrollView style={styles.modalContainer}> */}
+            <ScrollView
+              contentContainerStyle={styles.modalContentContainer}
+              onScroll={handleScroll}
+              scrollEventThrottle={16}
+            >
+              <View style={styles.modalContent}>
+                <Text style={styles.modalTitle}>EczemaCare</Text>
+                <Text style={styles.modalSubtitle}>
+                  Terms and Conditions Update
+                </Text>
 
-            <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>EczemaCare</Text>
-              <Text style={styles.modalSubtitle}>Terms and Conditions Update</Text>
-
-              {/* Illustration (replace source with actual image) */}
-              <Image
-                        source={require('../../assets/logos/EczemaCareLogoG.png')} // Ensure this path is correct
-                style={styles.illustration}
-              />
-
-               {/* Insert Terms and Conditions Below */}
-      <Text style={styles.termsText}>
-        EczemaCare - Terms and Conditions {"\n"}{"\n"}
-        Last Updated: October 23, 2024 {"\n"}{"\n"}
-        Welcome to EczemaCare, a mobile health application designed to help users manage Atopic Dermatitis (eczema) by tracking symptoms, medication, and treatments. These Terms and Conditions ("Agreement") govern your use of the EczemaCare application ("App"). By creating an account and using the App, you agree to be bound by this Agreement. If you do not agree, please discontinue use of the App. {"\n"}{"\n"}
-        1. Acceptance of Terms {"\n"}
-        By accessing or using the EczemaCare App, you agree to the terms and conditions outlined in this Agreement. You must read and agree to these terms before using the App. If you do not agree, you must not use the App. {"\n"}{"\n"}
-        2. Personal Information Collection {"\n"}
-        EczemaCare collects personal and health-related information to provide a personalized experience for users. By using the App, you consent to the collection, processing, and storage of the following types of data: {"\n"}
-        - Personal Identifiable Information (PII): Name, email, age, and other contact information provided during account creation. {"\n"}
-        - Health-related Information: Information about your symptoms, treatments, medication usage, medical history, and related health data that you voluntarily enter into the App. {"\n"}{"\n"}
-        All personal information will be handled in compliance with applicable data protection regulations, including, but not limited to, the General Data Protection Regulation (GDPR) and the Data Privacy Act of 2012 (Republic Act No. 10173) in the Philippines. {"\n"}{"\n"}
-        3. Data Usage {"\n"}
-        The personal and health-related information collected will be used for: {"\n"}
-        - Personalizing your experience with the App. {"\n"}
-        - Providing reports and insights about your condition. {"\n"}
-        - Assisting healthcare professionals, if authorized by the user, in tracking and managing your eczema. {"\n"}
-        - Improving the functionality and effectiveness of the App. {"\n"}{"\n"}
-        4. Data Privacy and Security {"\n"}
-        We are committed to ensuring the security and confidentiality of your personal data. EczemaCare implements industry-standard security measures to protect your information from unauthorized access, disclosure, or misuse. {"\n"}{"\n"}
-        Your information will only be shared with third parties in the following cases: {"\n"}
-        - With your explicit consent to share information with healthcare providers or caregivers. {"\n"}
-        - When required by law, such as in response to a legal request by authorities. {"\n"}{"\n"}
-        5. User Responsibilities {"\n"}
-        As a user, you agree to: {"\n"}
-        - Provide accurate and complete information when registering and inputting data into the App. {"\n"}
-        - Use the App for its intended purpose of managing and tracking Atopic Dermatitis-related information. {"\n"}
-        - Protect your login credentials and notify us immediately if you suspect unauthorized use of your account. {"\n"}{"\n"}
-        6. Health Disclaimer {"\n"}
-        The information provided by EczemaCare is for general informational and self-management purposes only. It is not intended to replace or substitute professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare professional before making any medical decisions. {"\n"}{"\n"}
-        EczemaCare does not offer any guarantees regarding the accuracy, completeness, or effectiveness of the health information provided through the App. Use of the App is at your own risk. {"\n"}{"\n"}
-        7. Changes to Terms and Conditions {"\n"}
-        We reserve the right to modify or update these Terms and Conditions at any time. If changes are made, you will be notified through the App or via email. Continued use of the App after modifications are made constitutes your acceptance of the updated Terms and Conditions. {"\n"}{"\n"}
-        8. Termination {"\n"}
-        EczemaCare reserves the right to terminate your access to the App if you violate any terms outlined in this Agreement. You may also discontinue your use of the App at any time by deleting your account and uninstalling the App. {"\n"}{"\n"}
-        9. Governing Law {"\n"}
-        These Terms and Conditions are governed by the laws of the Philippines and are subject to the jurisdiction of Philippine courts. {"\n"}{"\n"}
-        10. Contact Information {"\n"}
-        If you have any questions or concerns regarding these Terms and Conditions, or how your personal data is handled, you may contact us at: {"\n"}{"\n"}
-        EczemaCare Support Team {"\n"}
-        Email: support@eczemacare.com {"\n"}
-        Address: Manila, Philippines {"\n"}{"\n"}
-        By clicking "I Accept" or proceeding with the use of the EczemaCare App, you acknowledge that you have read, understood, and agree to these Terms and Conditions.{"\n"}
-
-      </Text>
-              
-
-              {/* Checkbox with Terms Agreement */}
-              <View style={styles.checkboxContainer}>
-                <Switch
-                  value={termsAccepted}
-                  onValueChange={(value) => setTermsAccepted(value)}
-                  trackColor={{ false: "#D3D3D3", true: "#85D3C0" }}
-                  thumbColor={termsAccepted ? "#FFFFFF" : "#f4f3f4"}
+                {/* Illustration (replace source with actual image) */}
+                <Image
+                  source={require("../../assets/logos/EczemaCareLogoG.png")} // Ensure this path is correct
+                  style={styles.illustration}
                 />
-                <Text style={styles.checkboxLabel}>I have read and agree to the Terms</Text>
-              </View>
 
-              {/* Continue Button */}
-              <TouchableOpacity
-                style={[styles.continueButton, { opacity: termsAccepted ? 1 : 0.6 }]}
-                onPress={closeTermsModal}
-                disabled={!termsAccepted}
-              >
-                <Text style={styles.continueButtonText}>I Accept</Text>
-                <Ionicons name="arrow-forward-outline" size={20} color="white" />
-              </TouchableOpacity>
-            </View>
-      
+                {/* Insert Terms and Conditions Below */}
+                <Text style={styles.termsText}>
+                  EczemaCare - Terms and Conditions {"\n"}
+                  {"\n"}
+                  Last Updated: October 23, 2024 {"\n"}
+                  {"\n"}
+                  Welcome to EczemaCare, a mobile health application designed to
+                  help users manage Atopic Dermatitis (eczema) by tracking
+                  symptoms, medication, and treatments. These Terms and
+                  Conditions ("Agreement") govern your use of the EczemaCare
+                  application ("App"). By creating an account and using the App,
+                  you agree to be bound by this Agreement. If you do not agree,
+                  please discontinue use of the App. {"\n"}
+                  {"\n"}
+                  1. Acceptance of Terms {"\n"}
+                  By accessing or using the EczemaCare App, you agree to the
+                  terms and conditions outlined in this Agreement. You must read
+                  and agree to these terms before using the App. If you do not
+                  agree, you must not use the App. {"\n"}
+                  {"\n"}
+                  2. Personal Information Collection {"\n"}
+                  EczemaCare collects personal and health-related information to
+                  provide a personalized experience for users. By using the App,
+                  you consent to the collection, processing, and storage of the
+                  following types of data: {"\n"}- Personal Identifiable
+                  Information (PII): Name, email, age, and other contact
+                  information provided during account creation. {"\n"}-
+                  Health-related Information: Information about your symptoms,
+                  treatments, medication usage, medical history, and related
+                  health data that you voluntarily enter into the App. {"\n"}
+                  {"\n"}
+                  All personal information will be handled in compliance with
+                  applicable data protection regulations, including, but not
+                  limited to, the General Data Protection Regulation (GDPR) and
+                  the Data Privacy Act of 2012 (Republic Act No. 10173) in the
+                  Philippines. {"\n"}
+                  {"\n"}
+                  3. Data Usage {"\n"}
+                  The personal and health-related information collected will be
+                  used for: {"\n"}- Personalizing your experience with the App.{" "}
+                  {"\n"}- Providing reports and insights about your condition.{" "}
+                  {"\n"}- Assisting healthcare professionals, if authorized by
+                  the user, in tracking and managing your eczema. {"\n"}-
+                  Improving the functionality and effectiveness of the App.{" "}
+                  {"\n"}
+                  {"\n"}
+                  4. Data Privacy and Security {"\n"}
+                  We are committed to ensuring the security and confidentiality
+                  of your personal data. EczemaCare implements industry-standard
+                  security measures to protect your information from
+                  unauthorized access, disclosure, or misuse. {"\n"}
+                  {"\n"}
+                  Your information will only be shared with third parties in the
+                  following cases: {"\n"}- With your explicit consent to share
+                  information with healthcare providers or caregivers. {"\n"}-
+                  When required by law, such as in response to a legal request
+                  by authorities. {"\n"}
+                  {"\n"}
+                  5. User Responsibilities {"\n"}
+                  As a user, you agree to: {"\n"}- Provide accurate and complete
+                  information when registering and inputting data into the App.{" "}
+                  {"\n"}- Use the App for its intended purpose of managing and
+                  tracking Atopic Dermatitis-related information. {"\n"}-
+                  Protect your login credentials and notify us immediately if
+                  you suspect unauthorized use of your account. {"\n"}
+                  {"\n"}
+                  6. Health Disclaimer {"\n"}
+                  The information provided by EczemaCare is for general
+                  informational and self-management purposes only. It is not
+                  intended to replace or substitute professional medical advice,
+                  diagnosis, or treatment. Always consult a qualified healthcare
+                  professional before making any medical decisions. {"\n"}
+                  {"\n"}
+                  EczemaCare does not offer any guarantees regarding the
+                  accuracy, completeness, or effectiveness of the health
+                  information provided through the App. Use of the App is at
+                  your own risk. {"\n"}
+                  {"\n"}
+                  7. Changes to Terms and Conditions {"\n"}
+                  We reserve the right to modify or update these Terms and
+                  Conditions at any time. If changes are made, you will be
+                  notified through the App or via email. Continued use of the
+                  App after modifications are made constitutes your acceptance
+                  of the updated Terms and Conditions. {"\n"}
+                  {"\n"}
+                  8. Termination {"\n"}
+                  EczemaCare reserves the right to terminate your access to the
+                  App if you violate any terms outlined in this Agreement. You
+                  may also discontinue your use of the App at any time by
+                  deleting your account and uninstalling the App. {"\n"}
+                  {"\n"}
+                  9. Governing Law {"\n"}
+                  These Terms and Conditions are governed by the laws of the
+                  Philippines and are subject to the jurisdiction of Philippine
+                  courts. {"\n"}
+                  {"\n"}
+                  10. Contact Information {"\n"}
+                  If you have any questions or concerns regarding these Terms
+                  and Conditions, or how your personal data is handled, you may
+                  contact us at: {"\n"}
+                  {"\n"}
+                  EczemaCare Support Team {"\n"}
+                  Email: support@eczemacare.com {"\n"}
+                  Address: Manila, Philippines {"\n"}
+                  {"\n"}
+                  By clicking "I Accept" or proceeding with the use of the
+                  EczemaCare App, you acknowledge that you have read,
+                  understood, and agree to these Terms and Conditions.{"\n"}
+                </Text>
+
+                {/* Checkbox with Terms Agreement */}
+                <View style={styles.checkboxContainer}>
+                  <Switch
+                    value={termsAccepted}
+                    onValueChange={(value) => setTermsAccepted(value)}
+                    trackColor={{ false: "#D3D3D3", true: "#85D3C0" }}
+                    thumbColor={termsAccepted ? "#FFFFFF" : "#f4f3f4"}
+                  />
+                  <Text style={styles.checkboxLabel}>
+                    I have read and agree to the Terms
+                  </Text>
+                </View>
+
+                {/* Continue Button */}
+                <TouchableOpacity
+                  style={[
+                    styles.continueButton,
+                    { opacity: termsAccepted ? 1 : 0.6 },
+                  ]}
+                  onPress={closeTermsModal}
+                  disabled={!termsAccepted}
+                >
+                  <Text style={styles.continueButtonText}>I Accept</Text>
+                  <Ionicons
+                    name="arrow-forward-outline"
+                    size={20}
+                    color="white"
+                  />
+                </TouchableOpacity>
+              </View>
             </ScrollView>
-            </View>
+          </View>
         </Modal>
       </View>
     </ScrollView>
@@ -411,11 +508,11 @@ const styles = StyleSheet.create({
   },
   fullScreenModalContainer: {
     flex: 1,
-    backgroundColor: 'white',
-    paddingTop: 50,  // Optional, you can adjust padding to make space for title bar, etc.
+    backgroundColor: "white",
+    paddingTop: 50, // Optional, you can adjust padding to make space for title bar, etc.
   },
   modalContentContainer: {
-    padding: 1,  // Adjust as needed
+    padding: 1, // Adjust as needed
   },
   container: {
     padding: 20,
@@ -428,7 +525,7 @@ const styles = StyleSheet.create({
     color: "#85D3C0",
     fontSize: 24,
     fontWeight: "600",
-    marginTop: 30, 
+    marginTop: 30,
     marginVertical: 10,
   },
   label: {
@@ -455,7 +552,7 @@ const styles = StyleSheet.create({
   passwordContainer: {
     flexDirection: "row",
     alignItems: "center",
-    width: "100%", 
+    width: "100%",
     backgroundColor: "#F3F3F3",
     borderRadius: 13,
     marginBottom: 10,
@@ -532,16 +629,16 @@ const styles = StyleSheet.create({
   },
   termsText: {
     fontSize: 12,
-    color: '#070707',
-    fontFamily: 'League Spartan',
-    fontWeight: '300',
-    textAlign: 'justify',
+    color: "#070707",
+    fontFamily: "League Spartan",
+    fontWeight: "300",
+    textAlign: "justify",
     lineHeight: 14,
   },
   linkText: {
-    color: '#85D3C0',
-    fontWeight: '500',
-    fontFamily: 'League Spartan',
+    color: "#85D3C0",
+    fontWeight: "500",
+    fontFamily: "League Spartan",
   },
   updateText: {
     fontSize: 14,
