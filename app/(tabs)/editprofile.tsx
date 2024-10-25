@@ -11,7 +11,7 @@ import { useRouter } from "expo-router"; // Expo Router
 import { useFocusEffect } from "expo-router";
 import BackArrow from "../components/BackArrow";
 import { getAuth } from "firebase/auth";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { firestore } from "../firebaseConfig";
 
 const EditProfile = () => {
@@ -56,7 +56,7 @@ const EditProfile = () => {
 
       // Update details in firestore
       const docRef = doc(firestore, "users", user?.email ?? "");
-      await setDoc(docRef, {
+      await updateDoc(docRef, {
         lastName: lastName,
         firstName: firstName,
         mobileNumber: phoneNumber,
