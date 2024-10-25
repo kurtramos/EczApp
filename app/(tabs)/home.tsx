@@ -139,12 +139,11 @@ export default function HomeScreen() {
           <Text style={styles.infoText}>LEARN ABOUT ECZEMA.</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.infoCard}
-          onPress={() => router.push("/faqs")}
-        >
+        <TouchableOpacity style={styles.infoCard} onPress={() => router.push('/faqs')}>
           <Text style={styles.infoTitle}>FAQs</Text>
-          <Text style={styles.infoText}>QUESTIONS ABOUT ECZEMA?</Text>
+          <Text style={styles.infoText}>
+            QUESTIONS ABOUT ECZEMA?
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -152,7 +151,9 @@ export default function HomeScreen() {
           onPress={() => router.push("/aboutus")}
         >
           <Text style={styles.infoTitle}>Doctors</Text>
-          <Text style={styles.infoText}>Learn more about the doctors.</Text>
+          <Text style={styles.infoText}>
+            Learn more about the doctors.
+          </Text>
         </TouchableOpacity>
       </ScrollView>
 
