@@ -74,11 +74,7 @@ const SignUpScreen = () => {
 
   const onDateChange = (event: any, selectedDate: Date) => {
     const currentDate = selectedDate || tempDate;
-    setTempDate(currentDate);
-  };
-
-  const confirmDateSelection = () => {
-    setDateOfBirth(tempDate);
+    setDateOfBirth(currentDate);
     setShowDatePicker(false);
   };
 
@@ -134,7 +130,7 @@ const SignUpScreen = () => {
         lastName: lastName,
         email: email,
         mobileNumber: mobileNumber,
-        dateOfBirth: dateOfBirth.toISOString(),
+        dateOfBirth: dateOfBirth,
       });
 
       Alert.alert("Success", "Account created successfully!");
@@ -262,12 +258,6 @@ const SignUpScreen = () => {
                 onChange={onDateChange}
                 maximumDate={new Date()}
               />
-              <TouchableOpacity
-                style={styles.confirmButton}
-                onPress={confirmDateSelection}
-              >
-                <Text style={styles.confirmButtonText}>Confirm</Text>
-              </TouchableOpacity>
             </View>
           </View>
         </Modal>
@@ -584,6 +574,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "black",
   },
+  datepickerContainer: {
+    zIndex: 10,
+  },
   mobileInput: {
     flex: 1,
     height: 45,
@@ -594,6 +587,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     backgroundColor: "rgba(0,0,0,0.5)",
+    zIndex: 1,
   },
   modalContent: {
     backgroundColor: "white",
