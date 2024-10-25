@@ -124,9 +124,9 @@ export default function HomeScreen() {
         {/* Appointment Section */}
         <View style={styles.appointmentCard}>
           <Text style={styles.appointmentTime}>11 Wednesday - Today</Text>
-          <Text style={styles.doctorName}>Dr. Olivia Turner, M.D.</Text>
+          <Text style={styles.doctorName}>Dr. Malizza Custodio, M.D.</Text>
           <Text style={styles.appointmentDetails}>
-            Treatment and prevention of skin and photodermatitis.
+            Treatment and prevention of Atopic Dermatitis.
           </Text>
         </View>
 
@@ -136,13 +136,13 @@ export default function HomeScreen() {
           onPress={() => router.push("/learn")}
         >
           <Text style={styles.infoTitle}>LEARN</Text>
-          <Text style={styles.infoText}>LEARN ABOUT ECZEMA.</Text>
+          <Text style={styles.infoText}>Learn about eczema.</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.infoCard} onPress={() => router.push('/faqs')}>
-          <Text style={styles.infoTitle}>FAQs</Text>
+          <Text style={styles.infoTitle}>HOW TO USE</Text>
           <Text style={styles.infoText}>
-            QUESTIONS ABOUT ECZEMA?
+            How to use certain features and navigate the app.
           </Text>
         </TouchableOpacity>
 
@@ -150,14 +150,14 @@ export default function HomeScreen() {
           style={styles.infoCard}
           onPress={() => router.push("/aboutus")}
         >
-          <Text style={styles.infoTitle}>Doctors</Text>
+          <Text style={styles.infoTitle}>DOCTORS</Text>
           <Text style={styles.infoText}>
             Learn more about the doctors.
           </Text>
         </TouchableOpacity>
       </ScrollView>
 
-      <BottomNav />
+      <BottomNav/>
     </View>
   );
 }

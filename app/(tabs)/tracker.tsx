@@ -91,16 +91,14 @@ const TrackerScreen = () => {
         style={styles.chart}
         fromZero={true}
       />
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>POEM Score</Text>
-      </TouchableOpacity>
+      
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
           router.push("/treatment");
         }}
       >
-        <Text style={styles.buttonText}>Treatment</Text>
+        <Text style={styles.buttonText}>POEM Score & Treatment</Text>
       </TouchableOpacity>
       <BottomNav />
     </View>

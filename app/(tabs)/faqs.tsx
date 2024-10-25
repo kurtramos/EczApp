@@ -4,7 +4,7 @@ import BottomNav from '../components/BottomNav';
 import BackArrow from '../components/BackArrow';
 import { useRouter } from 'expo-router';
 
-const FAQ = () => {
+const HowToUse = () => {
   const router = useRouter();
   const [activeSection, setActiveSection] = useState(null);
 
@@ -16,7 +16,7 @@ const FAQ = () => {
   return (
     <View style={styles.container}>
       <BackArrow onPress={() => router.push('/home')} />
-      <Text style={styles.heading}>FAQs</Text>
+      <Text style={styles.heading}>How to Use</Text>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <View style={styles.squareBackground}>
           {/* Image */}
@@ -170,4 +170,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FAQ;
+export default HowToUse;

@@ -11,7 +11,7 @@ export default function SplashScreen() {
   useEffect(() => {
     // Set a timer to automatically navigate after 3 seconds
     const timer = setTimeout(() => {
-      router.push('/WelcomeLanguage');
+      router.push('/login');
     }, 1200); // 3000ms = 3 seconds
 
     // Clear the timer if the component is unmounted
