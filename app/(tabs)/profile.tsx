@@ -6,16 +6,21 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native"; // For navigation
-import Icon from "react-native-vector-icons/MaterialIcons"; // Ensure you have this package installed
-import BackArrow from "../components/BackArrow";
 import { useRouter } from "expo-router";
-import BottomNav from "../components/BottomNav";
+import BackArrow from "../components/BackArrow";
 import { getAuth } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore"; // Firestore methods
+import { db } from "../firebaseConfig"; // Import your Firebase configuration
 
 const ProfileScreen = () => {
   const router = useRouter();
+
+  // States for profile fields
   const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+
   useEffect(() => {
     const fetchUserData = async () => {
       const auth = getAuth();
@@ -23,6 +28,20 @@ const ProfileScreen = () => {
 
       if (user) {
         setEmail(user.email ?? "No Email Available");
+
+        // Fetch additional user data from Firestore
+        const userDocRef = doc(db, "users", user.uid); // Assuming "users" is the Firestore collection
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+          // Set First Name, Last Name, and Phone Number from Firestore data
+          setFirstName(userData.firstName ?? "No First Name Available");
+          setLastName(userData.lastName ?? "No Last Name Available");
+          setPhoneNumber(userData.phoneNumber ?? "No Phone Number Available");
+        } else {
+          console.log("No user data found in Firestore.");
+        }
       }
     };
 
@@ -39,17 +58,17 @@ const ProfileScreen = () => {
 
         <View style={styles.field}>
           <Text style={styles.label}>First Name</Text>
-          <Text style={styles.value}>John</Text>
+          <Text style={styles.value}>{firstName}</Text>
         </View>
 
         <View style={styles.field}>
           <Text style={styles.label}>Last Name</Text>
-          <Text style={styles.value}>Doe</Text>
+          <Text style={styles.value}>{lastName}</Text>
         </View>
 
         <View style={styles.field}>
           <Text style={styles.label}>Phone Number</Text>
-          <Text style={styles.value}>+123 567 89000</Text>
+          <Text style={styles.value}>{phoneNumber}</Text>
         </View>
 
         <View style={styles.field}>
@@ -57,12 +76,8 @@ const ProfileScreen = () => {
           <Text style={styles.value}>{email}</Text>
         </View>
 
-        <View style={styles.field}>
-          <Text style={styles.label}>Date of Birth</Text>
-          <Text style={styles.value}>01 / 28 / 2002</Text>
-        </View>
-
-        <TouchableOpacity style={styles.button}>
+        {/* Navigate to EditProfile when the button is pressed */}
+        <TouchableOpacity style={styles.button} onPress={() => router.push("/editprofile")}>
           <Text style={styles.buttonText}>Edit Profile</Text>
         </TouchableOpacity>
       </ScrollView>
@@ -77,16 +92,9 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   header: {
-    // flexDirection: 'row',
     alignItems: "center",
-    // padding: 20,
   },
   headerTitle: {
-    // fontSize: 24,
-    // color: '#85D3C0',
-    // fontWeight: '600',
-    // textAlign: 'center',
-    // flex: 1,
     fontSize: 24,
     color: "#85D3C0",
     fontWeight: "600",

@@ -32,6 +32,9 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "googleClientId": "53407213745-imhm40io7284jck0bh3iu9asmfh8vmpm.apps.googleusercontent.com" 
     }
   }
 }
