@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
@@ -7,34 +7,47 @@ import {
   ScrollView,
   TextInput,
   TouchableOpacity,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome'; // Or another icon library
-import { useState, useEffect } from 'react';
-import { useRouter } from 'expo-router'; 
-import BottomNav from '../components/BottomNav';
-import { getAuth } from 'firebase/auth';
-// import { getFirestore, doc, getDoc } from 'firebase/firestore'; // If using Firestore
-
+} from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome"; // Or another icon library
+import { useState, useEffect } from "react";
+import { useRouter } from "expo-router";
+import { useFocusEffect } from "expo-router";
+import BottomNav from "../components/BottomNav";
+import { getAuth } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { firestore } from "../firebaseConfig";
 
 export default function HomeScreen() {
   const router = useRouter();
-  const [userEmail, setUserEmail] = useState(''); 
-  const [profileImage, setProfileImage] = useState('');
+  const [userEmail, setUserEmail] = useState("");
+  const [profileImage, setProfileImage] = useState("");
+  const [fullName, setFullName] = useState("");
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const auth = getAuth();
-      const user = auth.currentUser;
-  
-      if (user) {
-        setUserEmail(user.email ?? 'Unknown Email'); 
-        setProfileImage(user.photoURL || 'https://via.placeholder.com/72x72');
-      }
-    };
-  
-    fetchUserData();
-  }, []);
-  
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchUserData = async () => {
+        const auth = getAuth();
+        const user = auth.currentUser;
+
+        if (user) {
+          setUserEmail(user.email ?? "Unknown Email");
+          setProfileImage(user.photoURL || "https://via.placeholder.com/72x72");
+
+          const userDocRef = doc(firestore, "users", user.email ?? "");
+          const userDocSnap = await getDoc(userDocRef);
+
+          if (userDocSnap.exists()) {
+            const userData = userDocSnap.data();
+            setFullName(userData.firstName + " " + userData.lastName);
+          } else {
+            console.log("No user data found in Firestore.");
+          }
+        }
+      };
+
+      fetchUserData();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -43,17 +56,25 @@ export default function HomeScreen() {
         <View style={styles.header}>
           <Image
             style={styles.profileImage}
-        source={{ uri: profileImage || 'https://via.placeholder.com/72x72' }}
+            source={{
+              uri: profileImage || "https://via.placeholder.com/72x72",
+            }}
           />
           <View style={styles.greeting}>
-          <Text style={styles.welcomeText}>Hi, Welcome Back</Text>
-            <Text style={styles.welcomeText}>{userEmail || 'Guest'}</Text>
+            <Text style={styles.welcomeText}>Hi, Welcome Back</Text>
+            <Text style={styles.welcomeText}>{fullName || "Guest"}</Text>
           </View>
           <View style={styles.iconContainer}>
-            <TouchableOpacity style={styles.iconCircle} onPress={() => router.push('/notification')}>
+            <TouchableOpacity
+              style={styles.iconCircle}
+              onPress={() => router.push("/notification")}
+            >
               <Icon name="bell" size={20} color="#5A5858" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.iconCircle} onPress={() => router.push('/settings')}>
+            <TouchableOpacity
+              style={styles.iconCircle}
+              onPress={() => router.push("/settings")}
+            >
               <Icon name="cog" size={20} color="#5A5858" />
             </TouchableOpacity>
           </View>
@@ -61,7 +82,12 @@ export default function HomeScreen() {
 
         {/* Search Bar */}
         <View style={styles.searchBar}>
-          <Icon name="search" size={15} color="#5A5858" style={styles.searchIcon} />
+          <Icon
+            name="search"
+            size={15}
+            color="#5A5858"
+            style={styles.searchIcon}
+          />
           <TextInput style={styles.searchInput} placeholder="Search..." />
         </View>
 
@@ -105,25 +131,28 @@ export default function HomeScreen() {
         </View>
 
         {/* Sections for Learn, FAQs, About Us */}
-        <TouchableOpacity style={styles.infoCard} onPress={() => router.push('/learn')}>
+        <TouchableOpacity
+          style={styles.infoCard}
+          onPress={() => router.push("/learn")}
+        >
           <Text style={styles.infoTitle}>LEARN</Text>
-          <Text style={styles.infoText}>
-            LEARN ABOUT ECZEMA.
-          </Text>
+          <Text style={styles.infoText}>LEARN ABOUT ECZEMA.</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.infoCard} onPress={() => router.push('/faqs')}>
+        <TouchableOpacity
+          style={styles.infoCard}
+          onPress={() => router.push("/faqs")}
+        >
           <Text style={styles.infoTitle}>FAQs</Text>
-          <Text style={styles.infoText}>
-            QUESTIONS ABOUT ECZEMA?
-          </Text>
+          <Text style={styles.infoText}>QUESTIONS ABOUT ECZEMA?</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.infoCard} onPress={() => router.push('/aboutus')}>
+        <TouchableOpacity
+          style={styles.infoCard}
+          onPress={() => router.push("/aboutus")}
+        >
           <Text style={styles.infoTitle}>Doctors</Text>
-          <Text style={styles.infoText}>
-            Learn more about the doctors.
-          </Text>
+          <Text style={styles.infoText}>Learn more about the doctors.</Text>
         </TouchableOpacity>
       </ScrollView>
 
@@ -133,137 +162,137 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: 'white',
-      // alignItems: 'center',
-      paddingTop: 20,
-    },
-    scrollViewContent: {
-      paddingBottom: 80, // Adjust this value to fit the height of your BottomNav
-    },
-    header: {
-      flexDirection: 'row',
-      padding: 20,
-      alignItems: 'center',
-    },
-    profileImage: {
-      width: 72,
-      height: 72,
-      borderRadius: 36,
-    },
-    greeting: {
-      marginLeft: 20,
-    },
-    welcomeText: {
-      fontSize: 14,
-      color: '#85D3C0',
-      fontWeight: '700',
-    },
-    userName: {
-      fontSize: 14,
-      fontWeight: '400',
-      color: '#303030',
-    },
-    iconContainer: {
-      marginLeft: 'auto',
-      flexDirection: 'row',
-    },
-    iconCircle: {
-      width: 27,
-      height: 27,
-      backgroundColor: '#C3EFE5',
-      borderRadius: 9999,
-      marginLeft: 10,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    searchBar: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      backgroundColor: '#F3F3F3',
-      borderRadius: 23,
-      padding: 10,
-      marginHorizontal: 20,
-      marginTop: 10,
-    },
-    searchIcon: {
-      marginRight: 10,
-    },
-    searchInput: {
-      flex: 1,
-      fontSize: 14,
-      color: '#303030',
-    },
-    calendarContainer: {
-      flexDirection: 'row',
-      paddingHorizontal: 20,
-      marginVertical: 20,
-    },
-    calendarItem: {
-      marginRight: 10,
-      alignItems: 'center',
-    },
-    calendarDay: {
-      fontSize: 24,
-      color: '#303030',
-      fontWeight: '500',
-    },
-    calendarLabel: {
-      fontSize: 12,
-      color: '#303030',
-      fontWeight: '300',
-    },
-    selectedDay: {
-      backgroundColor: '#85D3C0',
-      borderRadius: 18,
-      paddingHorizontal: 10,
-      paddingVertical: 5,
-    },
-    calendarDaySelected: {
-      color: 'white',
-    },
-    calendarLabelSelected: {
-      color: 'white',
-    },
-    appointmentCard: {
-      backgroundColor: '#C3EFE5',
-      padding: 20,
-      marginHorizontal: 20,
-      borderRadius: 17,
-    },
-    appointmentTime: {
-      fontSize: 12,
-      color: '#5A5858',
-      fontWeight: '300',
-    },
-    doctorName: {
-      fontSize: 14,
-      fontWeight: '500',
-      color: '#303030',
-      marginTop: 10,
-    },
-    appointmentDetails: {
-      fontSize: 12,
-      fontWeight: '300',
-      color: '#5A5858',
-      marginTop: 5,
-    },
-    infoCard: {
-      backgroundColor: '#C3EFE5',
-      padding: 20,
-      marginHorizontal: 20,
-      marginTop: 20,
-      borderRadius: 17,
-    },
-    infoTitle: {
-      fontSize: 32,
-      fontWeight: '600',
-      color: '#5D9386',
-    },
-    infoText: {
-      fontSize: 12,
-      fontWeight: '300',
-      color: '#5A5858',
-    },
-  });
+  container: {
+    flex: 1,
+    backgroundColor: "white",
+    // alignItems: 'center',
+    paddingTop: 20,
+  },
+  scrollViewContent: {
+    paddingBottom: 80, // Adjust this value to fit the height of your BottomNav
+  },
+  header: {
+    flexDirection: "row",
+    padding: 20,
+    alignItems: "center",
+  },
+  profileImage: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+  },
+  greeting: {
+    marginLeft: 20,
+  },
+  welcomeText: {
+    fontSize: 14,
+    color: "#85D3C0",
+    fontWeight: "700",
+  },
+  userName: {
+    fontSize: 14,
+    fontWeight: "400",
+    color: "#303030",
+  },
+  iconContainer: {
+    marginLeft: "auto",
+    flexDirection: "row",
+  },
+  iconCircle: {
+    width: 27,
+    height: 27,
+    backgroundColor: "#C3EFE5",
+    borderRadius: 9999,
+    marginLeft: 10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  searchBar: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F3F3F3",
+    borderRadius: 23,
+    padding: 10,
+    marginHorizontal: 20,
+    marginTop: 10,
+  },
+  searchIcon: {
+    marginRight: 10,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 14,
+    color: "#303030",
+  },
+  calendarContainer: {
+    flexDirection: "row",
+    paddingHorizontal: 20,
+    marginVertical: 20,
+  },
+  calendarItem: {
+    marginRight: 10,
+    alignItems: "center",
+  },
+  calendarDay: {
+    fontSize: 24,
+    color: "#303030",
+    fontWeight: "500",
+  },
+  calendarLabel: {
+    fontSize: 12,
+    color: "#303030",
+    fontWeight: "300",
+  },
+  selectedDay: {
+    backgroundColor: "#85D3C0",
+    borderRadius: 18,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  calendarDaySelected: {
+    color: "white",
+  },
+  calendarLabelSelected: {
+    color: "white",
+  },
+  appointmentCard: {
+    backgroundColor: "#C3EFE5",
+    padding: 20,
+    marginHorizontal: 20,
+    borderRadius: 17,
+  },
+  appointmentTime: {
+    fontSize: 12,
+    color: "#5A5858",
+    fontWeight: "300",
+  },
+  doctorName: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: "#303030",
+    marginTop: 10,
+  },
+  appointmentDetails: {
+    fontSize: 12,
+    fontWeight: "300",
+    color: "#5A5858",
+    marginTop: 5,
+  },
+  infoCard: {
+    backgroundColor: "#C3EFE5",
+    padding: 20,
+    marginHorizontal: 20,
+    marginTop: 20,
+    borderRadius: 17,
+  },
+  infoTitle: {
+    fontSize: 32,
+    fontWeight: "600",
+    color: "#5D9386",
+  },
+  infoText: {
+    fontSize: 12,
+    fontWeight: "300",
+    color: "#5A5858",
+  },
+});

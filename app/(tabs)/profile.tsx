@@ -7,10 +7,11 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useRouter } from "expo-router";
+import { useFocusEffect } from "expo-router";
 import BackArrow from "../components/BackArrow";
 import { getAuth } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore"; // Firestore methods
-import { db } from "../firebaseConfig"; // Import your Firebase configuration
+import { doc, getDoc } from "firebase/firestore";
+import { firestore } from "../firebaseConfig";
 
 const ProfileScreen = () => {
   const router = useRouter();
@@ -21,32 +22,33 @@ const ProfileScreen = () => {
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const auth = getAuth();
-      const user = auth.currentUser;
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchUserData = async () => {
+        const auth = getAuth();
+        const user = auth.currentUser;
 
-      if (user) {
-        setEmail(user.email ?? "No Email Available");
+        if (user) {
+          const userDocRef = doc(firestore, "users", user.email ?? "");
+          const userDocSnap = await getDoc(userDocRef);
 
-        // Fetch additional user data from Firestore
-        const userDocRef = doc(db, "users", user.uid); // Assuming "users" is the Firestore collection
-        const userDocSnap = await getDoc(userDocRef);
-
-        if (userDocSnap.exists()) {
-          const userData = userDocSnap.data();
-          // Set First Name, Last Name, and Phone Number from Firestore data
-          setFirstName(userData.firstName ?? "No First Name Available");
-          setLastName(userData.lastName ?? "No Last Name Available");
-          setPhoneNumber(userData.phoneNumber ?? "No Phone Number Available");
-        } else {
-          console.log("No user data found in Firestore.");
+          if (userDocSnap.exists()) {
+            const userData = userDocSnap.data();
+            setFirstName(userData.firstName ?? "No First Name Available");
+            setLastName(userData.lastName ?? "No Last Name Available");
+            setPhoneNumber(
+              userData.mobileNumber ?? "No Phone Number Available"
+            );
+            setEmail(userData.email ?? user?.email);
+          } else {
+            console.log("No user data found in Firestore.");
+          }
         }
-      }
-    };
+      };
 
-    fetchUserData();
-  }, []);
+      fetchUserData();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -77,7 +79,10 @@ const ProfileScreen = () => {
         </View>
 
         {/* Navigate to EditProfile when the button is pressed */}
-        <TouchableOpacity style={styles.button} onPress={() => router.push("/editprofile")}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => router.push("/editprofile")}
+        >
           <Text style={styles.buttonText}>Edit Profile</Text>
         </TouchableOpacity>
       </ScrollView>
