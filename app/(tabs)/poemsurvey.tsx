@@ -95,11 +95,7 @@ const POEMScreen = () => {
       console.log("Responses saved successfully!");
       alert("Responses saved successfully!");
 
-      if (totalScore >= 3) {
-        router.push("/treatment");
-      } else {
-        router.push("/tracker");
-      }
+      router.push("/treatment");
     } catch (error) {
       console.error("Error saving responses: ", error);
       alert("Failed to save responses.");
