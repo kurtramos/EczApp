@@ -47,40 +47,63 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import { Ionicons, FontAwesome, MaterialIcons } from '@expo/vector-icons'; 
-import { useRouter } from 'expo-router'; 
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from '../firebaseConfig'; // Import your Firebase config
-import BackArrow from '../components/BackArrow';
+import { Ionicons, FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import { signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { auth } from "../firebaseConfig"; // Import your Firebase config
+import BackArrow from "../components/BackArrow";
 
 export default function App() {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const router = useRouter();
 
   // Handle login with Firebase
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert('Error', 'Please enter both email and password.');
+      Alert.alert("Error", "Please enter both email and password.");
       return;
     }
 
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+
+      // Check if email is verified
+      if (!user.emailVerified) {
+        Alert.alert(
+          "Email Not Verified",
+          "Please verify your email before logging in. Check your email inbox for the verification link.",
+          [
+            {
+              text: "Resend Verification Email",
+              onPress: async () => {
+                try {
+                  await sendEmailVerification(user); // Use sendEmailVerification function here
+                  Alert.alert("Verification Email Sent", "Please check your email.");
+                } catch (error) {
+                  Alert.alert("Error", error.message);
+                }
+              },
+            },
+            { text: "OK" },
+          ]
+        );
+        return;
+      }
+
       // Handle successful login, navigate to the home page
-      Alert.alert('Success', 'Logged in successfully!');
-      router.push('/home');
+      Alert.alert("Success", "Logged in successfully!");
+      router.push("/home");
     } catch (error) {
-      // Handle error cases, e.g., incorrect password, email not registered
-      Alert.alert('Login Error', error.message);
+      Alert.alert("Login Error", error.message);
     }
   };
 
   return (
     <View style={styles.container}>
-      <BackArrow onPress={() => router.push('/Homescreen')} />
+      <BackArrow onPress={() => router.push("/Homescreen")} />
 
       <Text style={styles.logInText}>Log In</Text>
 
@@ -146,7 +169,9 @@ export default function App() {
 
       <View style={styles.signUpTextContainer}>
         <Text style={styles.noAccountText}>Don’t have an account? </Text>
-        <Text style={styles.signUpText} onPress={() => router.push('/signup')}>Sign Up</Text>
+        <Text style={styles.signUpText} onPress={() => router.push("/signup")}>
+          Sign Up
+        </Text>
       </View>
     </View>
   );
@@ -161,7 +186,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   backArrow: {
-    position: 'absolute',
+    position: "absolute",
     top: 50,
     left: 20,
   },
@@ -176,14 +201,14 @@ const styles = StyleSheet.create({
     color: "#85D3C0",
     fontWeight: "600",
     marginBottom: 10,
-    alignSelf: 'flex-start', // Align Welcome label to the left
+    alignSelf: "flex-start", // Align Welcome label to the left
   },
   descriptionText: {
     fontSize: 12,
     color: "#5A5858",
     textAlign: "left", // Align description to the left
     width: 300,
-    alignSelf: 'flex-start', // Align with Welcome label
+    alignSelf: "flex-start", // Align with Welcome label
     marginBottom: 20,
   },
   labelText: {
@@ -208,8 +233,8 @@ const styles = StyleSheet.create({
   },
   passwordContainer: {
     width: "100%",
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: "#F3F3F3",
     borderRadius: 13,
   },
@@ -223,12 +248,12 @@ const styles = StyleSheet.create({
     color: "black",
   },
   eyeIcon: {
-    position: 'absolute',
+    position: "absolute",
     right: 10,
     padding: 10,
   },
   forgotPasswordWrapper: {
-    alignItems: 'flex-end', // Align Forget Password to the right
+    alignItems: "flex-end", // Align Forget Password to the right
     marginTop: 5,
   },
   forgotPasswordText: {
@@ -251,10 +276,10 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   socialIconsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     width: 138,
-    alignItems: 'center',
+    alignItems: "center",
     marginVertical: 20,
   },
   circle: {
@@ -262,8 +287,8 @@ const styles = StyleSheet.create({
     height: 40,
     backgroundColor: "#C3EFE5",
     borderRadius: 9999,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   orSignUpText: {
     fontSize: 12,

@@ -17,7 +17,7 @@ import { useRouter } from "expo-router";
 import BackArrow from "../components/BackArrow";
 
 // Firebase imports
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification  } from "firebase/auth";
 import { firestore } from "../firebaseConfig";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 
@@ -122,6 +122,14 @@ const SignUpScreen = () => {
         email,
         password
       );
+
+      const user = userCredential.user;
+
+      // Send email verification
+      await sendEmailVerification(user);
+      Alert.alert("Verification Email Sent", "Please check your email to verify your account.");
+
+      // Add user details to Firestore
 
       // Add user details to db
       const docRef = doc(firestore, "users", email);

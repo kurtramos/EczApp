@@ -1,20 +1,34 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons'; // Make sure this package is installed
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import BackArrow from '../components/BackArrow';
 import { useRouter } from 'expo-router'; 
 import BottomNav from '../components/BottomNav';
+import { auth } from '../firebaseConfig';
+import { signOut } from "firebase/auth";
 
-// Define the props interface for AccountOption
-interface AccountOptionProps {
-  icon: string; // The name of the icon from MaterialIcons
-  title: string; // The title text
-  onPress: () => void; // Function to be called on press
-}
+
+// // Define the props interface for AccountOption
+// interface AccountOptionProps {
+//   icon: string; // The name of the icon from MaterialIcons
+//   title: string; // The title text
+//   onPress: () => void; // Function to be called on press
+// }
 
 const MyAccountScreen = () => {
   const router = useRouter();
-  
+
+ const handleLogout = () => {
+    console.log("Logout button pressed");
+    signOut(auth)
+      .then(() => {
+        Alert.alert("Logged Out", "You have been successfully logged out.");
+        router.replace('/Homescreen'); // Redirect to the Home screen
+      })
+      .catch((error) => {
+        Alert.alert("Logout Error", error.message);
+      });
+  };
   return (
       <View style={styles.container}>
           <BackArrow onPress={() => router.push('/home')} />
@@ -25,7 +39,7 @@ const MyAccountScreen = () => {
               <AccountOption icon="record-voice-over" title="My Record" onPress={() => router.push('/myrecord')} />
               <AccountOption icon="settings" title="Settings" onPress={() => router.push('/settings')} />
               <AccountOption icon="lock" title="Privacy Policy" onPress={() => router.push('/PrivacyPolicy')} />
-              <AccountOption icon="exit-to-app" title="Logout" onPress={() => router.push('/')} />
+              <AccountOption icon="exit-to-app" title="Logout" onPress={handleLogout} />
           </ScrollView>
 
       </View>

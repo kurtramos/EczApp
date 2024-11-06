@@ -1,10 +1,14 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useRouter } from 'expo-router'; // useRouter from expo-router
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebaseConfig";
+
 
 export default function HomeScreen() {
   const router = useRouter(); // use useRouter for navigation
 
+  
   return (
     <View style={styles.container}>
       {/* Logo Image */}
