@@ -1,43 +1,3 @@
-// import React from "react";
-// import { View, Image, Text, StyleSheet, Dimensions } from "react-native";
-
-// const SplashScreen = () => {
-//   return (
-//     <View style={styles.container}>
-//       <Image
-//         source={require("../assets/images/react-logo.png")} // This is the correct way to include an image
-//         style={styles.logo}
-//       />
-//       <Text style={styles.text}>Eczema Care</Text>
-//     </View>
-//   );
-// };
-
-// const { height } = Dimensions.get("window");
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: "center",
-//     alignItems: "center",
-//     backgroundColor: "#4eb5a6",
-//     paddingBottom: height * 0.1,
-//   },
-//   logo: {
-//     width: 100, // Adjust according to your design
-//     height: 100, // Adjust according to your design
-//     marginBottom: 20,
-//   },
-//   text: {
-//     fontSize: 24,
-//     color: "#FFFFFF",
-//     fontFamily: "Inter, sans-serif", // Ensure this font is available
-//     fontWeight: "300",
-//   },
-// });
-
-// export default SplashScreen;
-
 import React, { useState } from "react";
 import {
   View,
@@ -46,17 +6,22 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  Modal,
 } from "react-native";
 import { Ionicons, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
-import { auth } from "../firebaseConfig"; // Import your Firebase config
+import { signInWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, getAuth } from "firebase/auth";
+import { auth } from "../firebaseConfig"; 
 import BackArrow from "../components/BackArrow";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { firestore } from "../firebaseConfig"; 
 
 export default function App() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isForgotPasswordVisible, setForgotPasswordVisible] = useState(false);
+  const [emailForReset, setEmailForReset] = useState("");
   const router = useRouter();
 
   // Handle login with Firebase
@@ -71,7 +36,7 @@ export default function App() {
       const user = userCredential.user;
 
       // Check if email is verified
-      if (!user.emailVerified) {
+      if (!user.emailVerified) {  
         Alert.alert(
           "Email Not Verified",
           "Please verify your email before logging in. Check your email inbox for the verification link.",
@@ -80,7 +45,7 @@ export default function App() {
               text: "Resend Verification Email",
               onPress: async () => {
                 try {
-                  await sendEmailVerification(user); // Use sendEmailVerification function here
+                  await sendEmailVerification(user);
                   Alert.alert("Verification Email Sent", "Please check your email.");
                 } catch (error) {
                   Alert.alert("Error", error.message);
@@ -93,11 +58,38 @@ export default function App() {
         return;
       }
 
-      // Handle successful login, navigate to the home page
+      // Update Firestore to mark user as verified if necessary
+      const userDocRef = doc(firestore, "users", user.email);
+      const userDocSnap = await getDoc(userDocRef);
+
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        if (!userData.isVerified) {
+          await updateDoc(userDocRef, { isVerified: true });
+          console.log("Updated isVerified to true in Firestore");
+        }
+      }
+
       Alert.alert("Success", "Logged in successfully!");
       router.push("/home");
     } catch (error) {
       Alert.alert("Login Error", error.message);
+    }
+  };
+
+  // Handle Password Reset
+  const handleForgotPassword = async () => {
+    if (!emailForReset) {
+      Alert.alert("Enter Email", "Please enter your email address to reset your password.");
+      return;
+    }
+
+    try {
+      await sendPasswordResetEmail(getAuth(), emailForReset);
+      Alert.alert("Password Reset Email Sent", "Please check your email to reset your password.");
+      setForgotPasswordVisible(false);
+    } catch (error) {
+      Alert.alert("Error", error.message);
     }
   };
 
@@ -109,21 +101,23 @@ export default function App() {
 
       <Text style={styles.welcomeLabelText}>Welcome</Text>
       <Text style={styles.descriptionText}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua.
+        EczemaCare App helps you monitor and manage your eczema symptoms.
+        Proceed to login and start tracking today.
       </Text>
 
-      <Text style={styles.labelText}>Email or Mobile Number</Text>
+      <Text style={styles.labelText}>Email</Text>
       <TextInput
         style={styles.inputBox}
         placeholder="example@example.com"
         placeholderTextColor="#bcbcbc"
         value={email}
-        onChangeText={setEmail} // Set email value
+        onChangeText={(value) => {
+          setEmail(value);
+          setEmailForReset(value);
+        }}
       />
 
       <Text style={styles.labelText}>Password</Text>
-
       <View style={styles.passwordWrapper}>
         <View style={styles.passwordContainer}>
           <TextInput
@@ -132,21 +126,20 @@ export default function App() {
             placeholderTextColor="#bcbcbc"
             secureTextEntry={!passwordVisible}
             value={password}
-            onChangeText={setPassword} // Set password value
+            onChangeText={setPassword}
           />
           <TouchableOpacity
             onPress={() => setPasswordVisible(!passwordVisible)}
             style={styles.eyeIcon}
           >
-            <Ionicons
-              name={passwordVisible ? "eye" : "eye-off"}
-              size={24}
-              color="black"
-            />
+            <Ionicons name={passwordVisible ? "eye" : "eye-off"} size={24} color="black" />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.forgotPasswordWrapper}>
-          <Text style={styles.forgotPasswordText}>Forget Password</Text>
+        <TouchableOpacity
+          style={styles.forgotPasswordWrapper}
+          onPress={() => setForgotPasswordVisible(true)}
+        >
+          <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
         </TouchableOpacity>
       </View>
 
@@ -173,6 +166,33 @@ export default function App() {
           Sign Up
         </Text>
       </View>
+
+      {/* Forgot Password Modal */}
+      <Modal
+        visible={isForgotPasswordVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setForgotPasswordVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Reset Password</Text>
+            <TextInput
+              style={styles.modalInput}
+              placeholder="Enter your email"
+              placeholderTextColor="#bcbcbc"
+              value={emailForReset}
+              onChangeText={setEmailForReset}
+            />
+            <TouchableOpacity style={styles.resetButton} onPress={handleForgotPassword}>
+              <Text style={styles.resetButtonText}>Reset Password</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setForgotPasswordVisible(false)}>
+              <Text style={styles.cancelText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -182,7 +202,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "white", // Background color
+    backgroundColor: "white",
     padding: 20,
   },
   backArrow: {
@@ -201,14 +221,14 @@ const styles = StyleSheet.create({
     color: "#85D3C0",
     fontWeight: "600",
     marginBottom: 10,
-    alignSelf: "flex-start", // Align Welcome label to the left
+    alignSelf: "flex-start",
   },
   descriptionText: {
     fontSize: 12,
     color: "#5A5858",
-    textAlign: "left", // Align description to the left
+    textAlign: "left",
     width: 300,
-    alignSelf: "flex-start", // Align with Welcome label
+    alignSelf: "flex-start",
     marginBottom: 20,
   },
   labelText: {
@@ -229,7 +249,7 @@ const styles = StyleSheet.create({
     color: "black",
   },
   passwordWrapper: {
-    width: "100%", // Full width for the wrapper
+    width: "100%",
   },
   passwordContainer: {
     width: "100%",
@@ -239,7 +259,7 @@ const styles = StyleSheet.create({
     borderRadius: 13,
   },
   passwordInputBox: {
-    width: "85%", // Adjust width to match the design
+    width: "85%",
     height: 45,
     backgroundColor: "#F3F3F3",
     borderRadius: 13,
@@ -253,16 +273,17 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   forgotPasswordWrapper: {
-    alignItems: "flex-end", // Align Forget Password to the right
+    alignItems: "flex-end",
     marginTop: 5,
   },
   forgotPasswordText: {
     color: "#5A5858",
     fontSize: 12,
-    marginRight: 10, // Margin for better positioning
+    marginRight: 10,
+    textDecorationLine: "underline",
   },
   logInButton: {
-    width: "50%", // Shorten the button as per the design
+    width: "50%",
     height: 45,
     backgroundColor: "#85D3C0",
     borderRadius: 30,
@@ -308,5 +329,51 @@ const styles = StyleSheet.create({
     color: "#85D3C0",
     fontSize: 12,
     fontWeight: "500",
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContent: {
+    width: 300,
+    padding: 20,
+    backgroundColor: "white",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 20,
+    color: "#85D3C0",
+    marginBottom: 20,
+  },
+  modalInput: {
+    width: "100%",
+    height: 45,
+    backgroundColor: "#F3F3F3",
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+    fontSize: 16,
+    color: "black",
+  },
+  resetButton: {
+    width: "100%",
+    height: 45,
+    backgroundColor: "#85D3C0",
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  resetButtonText: {
+    color: "white",
+    fontSize: 16,
+  },
+  cancelText: {
+    color: "#85D3C0",
+    fontSize: 14,
+    marginTop: 10,
+    textDecorationLine: "underline",
   },
 });

@@ -139,6 +139,7 @@ const SignUpScreen = () => {
         email: email,
         mobileNumber: mobileNumber,
         dateOfBirth: dateOfBirth,
+        isVerified: false, // New field to track email verification status
       });
 
       Alert.alert("Success", "Account created successfully!");

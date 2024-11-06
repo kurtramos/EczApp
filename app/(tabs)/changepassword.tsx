@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // Make sure you have this icon library
-import { useNavigation } from '@react-navigation/native'; // For navigation
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Alert } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { getAuth, EmailAuthProvider, reauthenticateWithCredential, updatePassword, signOut } from 'firebase/auth';
 import BackArrow from '../components/BackArrow';
-import { useRouter } from 'expo-router'; 
 
 const ChangePasswordScreen = () => {
     const router = useRouter();
@@ -11,8 +11,47 @@ const ChangePasswordScreen = () => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [currentPasswordVisible, setCurrentPasswordVisible] = useState(false);
-    const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
-    const navigation = useNavigation();
+    const [newPasswordVisible, setNewPasswordVisible] = useState(false);
+    const auth = getAuth();
+
+    // Handle Password Change
+    const handleChangePassword = async () => {
+        if (newPassword !== confirmPassword) {
+            Alert.alert("Error", "New passwords do not match!");
+            return;
+        }
+
+        if (currentPassword === newPassword) {
+            Alert.alert("Error", "New password cannot be the same as the current password.");
+            return;
+        }
+
+        if (!currentPassword || !newPassword || !confirmPassword) {
+            Alert.alert("Error", "Please fill in all fields.");
+            return;
+        }
+
+        const user = auth.currentUser;
+        if (user && user.email) {
+            const credential = EmailAuthProvider.credential(user.email, currentPassword);
+            
+            try {
+                // Reauthenticate user
+                await reauthenticateWithCredential(user, credential);
+                
+                // Update password
+                await updatePassword(user, newPassword);
+
+                Alert.alert("Success", "Password changed successfully!");
+
+                // Sign out the user after password change and redirect to login
+                await signOut(auth);
+                router.push('/login');
+            } catch (error) {
+                Alert.alert("Error", error.message);
+            }
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -21,12 +60,14 @@ const ChangePasswordScreen = () => {
                 <View style={styles.header}>
                     <Text style={styles.headerTitle}>Change Password</Text>
                 </View>
+                
+                {/* Current Password Input */}
                 <View style={styles.inputContainer}>
                     <Text style={styles.label}>Current Password</Text>
                     <View style={styles.passwordContainer}>
                         <TextInput
                             secureTextEntry={!currentPasswordVisible}
-                            placeholder="*************"
+                            placeholder="Current Password"
                             placeholderTextColor="#bcbcbc"
                             value={currentPassword}
                             onChangeText={setCurrentPassword}
@@ -36,67 +77,54 @@ const ChangePasswordScreen = () => {
                             onPress={() => setCurrentPasswordVisible(!currentPasswordVisible)}
                             style={styles.eyeIcon}
                         >
-                            <Ionicons
-                                name={currentPasswordVisible ? 'eye' : 'eye-off'}
-                                size={24}
-                                color="grey"
-                            />
+                            <Ionicons name={currentPasswordVisible ? 'eye' : 'eye-off'} size={24} color="grey" />
                         </TouchableOpacity>
                     </View>
-                    <Text style={styles.forgotPassword} onPress={() => navigation.navigate('ForgotPassword')}>
-                        Forgot Password?
-                    </Text>
                 </View>
 
+                {/* New Password Input */}
                 <View style={styles.inputContainer}>
                     <Text style={styles.label}>New Password</Text>
                     <View style={styles.passwordContainer}>
                         <TextInput
-                            secureTextEntry={!currentPasswordVisible}
-                            placeholder="*************"
+                            secureTextEntry={!newPasswordVisible}
+                            placeholder="New Password"
                             placeholderTextColor="#bcbcbc"
                             value={newPassword}
                             onChangeText={setNewPassword}
                             style={styles.input}
                         />
                         <TouchableOpacity
-                            onPress={() => setCurrentPasswordVisible(!currentPasswordVisible)}
+                            onPress={() => setNewPasswordVisible(!newPasswordVisible)}
                             style={styles.eyeIcon}
                         >
-                            <Ionicons
-                                name={currentPasswordVisible ? 'eye' : 'eye-off'}
-                                size={24}
-                                color="grey"
-                            />
+                            <Ionicons name={newPasswordVisible ? 'eye' : 'eye-off'} size={24} color="grey" />
                         </TouchableOpacity>
                     </View>
                 </View>
 
+                {/* Confirm New Password Input */}
                 <View style={styles.inputContainer}>
                     <Text style={styles.label}>Confirm New Password</Text>
                     <View style={styles.passwordContainer}>
                         <TextInput
-                            secureTextEntry={!confirmPasswordVisible}
-                            placeholder="*************"
+                            secureTextEntry={!newPasswordVisible}
+                            placeholder="Confirm Password"
                             placeholderTextColor="#bcbcbc"
                             value={confirmPassword}
                             onChangeText={setConfirmPassword}
                             style={styles.input}
                         />
                         <TouchableOpacity
-                            onPress={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
+                            onPress={() => setNewPasswordVisible(!newPasswordVisible)}
                             style={styles.eyeIcon}
                         >
-                            <Ionicons
-                                name={confirmPasswordVisible ? 'eye' : 'eye-off'}
-                                size={24}
-                                color="grey"
-                            />
+                            <Ionicons name={newPasswordVisible ? 'eye' : 'eye-off'} size={24} color="grey" />
                         </TouchableOpacity>
                     </View>
                 </View>
 
-                <TouchableOpacity style={styles.button} onPress={() => console.log('Change password')}>
+                <TouchableOpacity style={styles.button} onPress={handleChangePassword}>
                     <Text style={styles.buttonText}>Change Password</Text>
                 </TouchableOpacity>
             </ScrollView>
@@ -146,13 +174,6 @@ const styles = StyleSheet.create({
     },
     eyeIcon: {
         marginLeft: 10,
-    },
-    forgotPassword: {
-        fontSize: 15,
-        color: '#303030',
-        textDecorationLine: 'underline',
-        textAlign: 'right',
-        marginTop: 5,
     },
     button: {
         backgroundColor: '#85D3C0',
