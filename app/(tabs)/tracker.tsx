@@ -82,7 +82,7 @@ const TrackerScreen = () => {
   return (
     <View style={styles.container}>
       <BackArrow onPress={() => router.push("/home")} />
-      <Text style={styles.header}>Tracker</Text>
+      <Text style={styles.header}>TRACKER</Text>
       <LineChart
         data={chartData}
         width={screenWidth - 30}
@@ -98,7 +98,7 @@ const TrackerScreen = () => {
           router.push("/treatment");
         }}
       >
-        <Text style={styles.buttonText}>POEM Score & Treatment</Text>
+        <Text style={styles.buttonText}>POEM SURVEY RESULT</Text>
       </TouchableOpacity>
       <BottomNav />
     </View>
@@ -113,16 +113,16 @@ const styles = StyleSheet.create({
     paddingVertical: 45,
   },
   header: {
-    fontSize: 24,
+    fontSize: 30,
     color: "#85D3C0",
-    fontWeight: "600",
-    marginBottom: 10,
+    fontWeight: "bold",
+    marginBottom: 50,
   },
   chart: {
     marginVertical: 8,
   },
   button: {
-    backgroundColor: "#85D3C0",
+    backgroundColor: "#74BDB3",
     borderRadius: 20,
     paddingVertical: 15,
     paddingHorizontal: 30,

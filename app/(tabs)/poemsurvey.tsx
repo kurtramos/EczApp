@@ -13,6 +13,7 @@ import { firestore } from "../firebaseConfig";
 import { getAuth } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 
+
 const POEMScreen = () => {
   const router = useRouter();
   const [response, setResponse] = useState({
@@ -32,18 +33,17 @@ const POEMScreen = () => {
   const handleSubmit = () => {
     // Check if all questions are answered
     const allQuestionsAnswered = Object.values(response).every((answer) => answer !== null);
-    handleSave();
   
-    if (!allQuestionsAnswered) {
+    if (allQuestionsAnswered) {
+      // If all questions are answered, proceed to save
+      handleSave();
+    } else {
+      // If not all questions are answered, show an alert and stop the submission
       alert("Please answer all questions before submitting.");
-      return;
     }
-  
-    // If all questions are answered, proceed to save
-    handleSave();
   };
   
-
+  
   const handleSave = async () => {
     const user = getAuth().currentUser;
     let userEmail = user?.email;
@@ -104,8 +104,10 @@ const POEMScreen = () => {
         <View style={styles.header}>
           <Text style={styles.title}>POEM</Text>
           <Text style={styles.description}>
-          Complete the POEM questionnaire once a week to monitor changes in your skin condition. Please answer the following questions carefully, rating each on a scale from 0 (lowest) to 7 (highest).
-          Your responses will be totaled at the end to indicate the severity of your eczema.
+          Complete the POEM questionnaire once a week to monitor changes in your skin condition. 
+          </Text>
+          <Text style={styles.description}>
+          Read and answer the questions carefully before submitting. Your total score will indicate eczema severity. 
           </Text>
         </View>
 
@@ -333,7 +335,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#74BDB3",
     paddingVertical: 15,
     paddingHorizontal: 20,
-    borderRadius: 50,
+    borderRadius: 20,
     alignItems: "center",
     marginHorizontal: 50,
     marginBottom: 95, 

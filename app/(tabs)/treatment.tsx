@@ -38,7 +38,6 @@ const Treatment = () => {
         );
 
         try {
-          // Query to get the latest document by timestamp, limited to one result
           const scoreQuery = query(
             scoresRef,
             orderBy("timestamp", "desc"),
@@ -63,42 +62,19 @@ const Treatment = () => {
     }, [])
   );
 
-  const getSeverityLevel = (score) => {
-    switch (true) {
-      case score <= 2:
-        return "Clear";
-      case score >= 3 && score <= 7:
-        return "Mild";
-      case score >= 8 && score <= 16:
-        return "Moderate";
-      case score >= 17 && score <= 24:
-        return "Severe";
-      case score >= 25:
-        return "Very Severe";
-      default:
-        return "Unknown";
-    }
-  };
+  const { level, message } = getSeverityLevel(poemScore);
 
   return (
     <View style={styles.container}>
       <BackArrow onPress={() => router.push("/tracker")} />
-      <Text style={styles.heading}>TREATMENT</Text>
+      <Text style={styles.heading}>POEM RESULT</Text>
       <ScrollView style={styles.scrollView}>
         <View style={styles.squareBackground}>
-          <Text style={styles.subheading}>Treatment Information</Text>
-          <Text style={styles.paragraph}>
-            The remedies provided below are for managing mild cases of eczema.
-            If symptoms persist or worsen, it is important to consult your
-            doctor for further evaluation and treatment. Always seek
-            professional medical advice for more severe conditions.
-          </Text>
           <Text style={styles.subheading}>Your POEM score is:</Text>
           <Text style={styles.poemScore}>{poemScore}</Text>
           <Text style={styles.severityLabel}>Severity Level:</Text>
-          <Text style={styles.severityValue}>
-            {getSeverityLevel(poemScore)}
-          </Text>
+          <Text style={styles.severityValue}>{level}</Text>
+          <Text style={styles.message}>{message}</Text>
         </View>
       </ScrollView>
 
@@ -107,6 +83,44 @@ const Treatment = () => {
   );
 };
 
+
+  const getSeverityLevel = (score) => {
+    switch (true) {
+      case score <= 2:
+        return {
+          level: "Clear",
+          message: "Your skin is clear, with minimal eczema symptoms. Continue using your doctor's prescribed daily skincare."
+        };
+      case score >= 3 && score <= 7:
+        return {
+          level: "Mild",
+          message: "Mild eczema symptoms detected. Keep monitoring your skin condition. You may continue using your doctor's prescribed daily skincare, keep the affected area moisturized/hydrated."
+        };
+      case score >= 8 && score <= 16:
+        return {
+          level: "Moderate",
+          message: "Moderate eczema symptoms are present. Consider consulting a healthcare provider."
+        };
+      case score >= 17 && score <= 24:
+        return {
+          level: "Severe",
+          message: "Severe eczema symptoms detected. It’s recommended to seek medical advice."
+        };
+      case score >= 25:
+        return {
+          level: "Very Severe",
+          message: "Very severe eczema symptoms. Please consult a healthcare provider immediately."
+        };
+      default:
+        return {
+          level: "Unknown",
+          message: "Score out of range. Please check your input."
+        };
+    }
+  };
+  
+
+  
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -134,16 +148,16 @@ const styles = StyleSheet.create({
     padding: 30,
   },
   heading: {
-    fontSize: 24,
+    fontSize: 30,
     color: "#85D3C0",
     fontWeight: "bold",
     textAlign: "left",
     marginTop: 48,
-    marginLeft: 60,
+    marginLeft: 120,
   },
   subheading: {
     fontSize: 25,
-    color: "#85D3C0",
+    color: "#74BDB3",
     fontWeight: "bold",
     textAlign: "left",
   },
@@ -161,9 +175,9 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   severityLabel: {
-    fontSize: 22,
-    color: "#85D3C0",
-    fontWeight: "600",
+    fontSize: 25,
+    color: "#74BDB3",
+    fontWeight: "bold",
     marginTop: 20,
   },
   severityValue: {
@@ -172,6 +186,14 @@ const styles = StyleSheet.create({
     color: "#000",
     marginTop: 5,
   },
+  message: {  
+    fontSize: 16,
+    color: "grey",
+    textAlign: "center",
+    marginTop: 10,
+    paddingHorizontal: 10,
+  },
 });
+
 
 export default Treatment;

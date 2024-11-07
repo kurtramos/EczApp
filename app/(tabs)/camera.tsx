@@ -100,13 +100,13 @@ const styles = StyleSheet.create({
         color: '#333',
     },
     button: {
-        backgroundColor: '#85D3C0',
+        backgroundColor: '#74BDB3',
         borderRadius: 20,
         paddingVertical: 10,
         paddingHorizontal: 30,
         width: screenWidth - 60,
         alignItems: 'center',
-        marginTop: 20, // Adjusting margin to create more space above the button
+        marginTop: 6, 
     },
     buttonText: {
         color: 'white',
