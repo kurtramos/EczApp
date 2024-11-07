@@ -56,8 +56,8 @@ const Doctors = () => {
   return (
     <View style={styles.container}>
       <BackArrow onPress={() => router.push('/home')} />
-      <Text style={styles.heading}>Doctors</Text>
-      <Text style={styles.subheading}>FIND AN ALLERGY/IMMUNOLOGY SPECIALIST</Text>
+      <Text style={styles.heading}>DOCTORS</Text>
+      <Text style={styles.subheading}>Find an allergy/immunology specialist</Text>
 
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
         {/* Informational Text */}
@@ -176,12 +176,12 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   heading: {
-    fontSize: 24,
-    color: '#85D3C0',
+    fontSize: 35,
+    color: '#74BDB3',
     fontWeight: 'bold',
-    textAlign: 'left',
-    marginTop: 48,
-    marginLeft: 60,
+    textAlign: 'center',
+    marginTop: 70,
+    marginBottom: 10,
   },
   subheading: {
     fontSize: 20,

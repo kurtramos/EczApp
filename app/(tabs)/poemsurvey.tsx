@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -29,31 +29,21 @@ const POEMScreen = () => {
     setResponse((prev) => ({ ...prev, [question]: option }));
   };
 
-  useEffect(() => {
-    // Save upon answering all questions
-    if (
-      response.question1 &&
-      response.question2 &&
-      response.question3 &&
-      response.question4 &&
-      response.question5 &&
-      response.question6 &&
-      response.question7
-    ) {
-      handleSave();
-
-      // Clear responses
-      setResponse({
-        question1: null,
-        question2: null,
-        question3: null,
-        question4: null,
-        question5: null,
-        question6: null,
-        question7: null,
-      });
+  const handleSubmit = () => {
+    // Check if all questions are answered
+    const allQuestionsAnswered = Object.values(response).every((answer) => answer !== null);
+    handleSave();
+  
+    if (!allQuestionsAnswered) {
+      alert("Please answer all questions before submitting.");
+      return;
     }
-  }, [selectOption]);
+  
+    // If all questions are answered, proceed to save
+    handleSave();
+  };
+  
+  
 
   const handleSave = async () => {
     const user = getAuth().currentUser;
@@ -64,8 +54,6 @@ const POEMScreen = () => {
       alert("No user is currently logged in.");
       return;
     }
-
-    console.log(`Logged in as: ${userEmail}`);
 
     const totalScore = calculateScore();
     const timestamp = new Date();
@@ -80,21 +68,13 @@ const POEMScreen = () => {
         timestampString
       );
 
-      console.log(
-        `Responses: ${response.question1}, ${response.question2}, ${response.question3}`
-      );
-      console.log(`Total score: ${totalScore}`);
-      console.log(`Timestamp: ${timestamp}`);
-
       await setDoc(docRef, {
         responses: response,
         totalScore: totalScore,
         timestamp: timestamp,
       });
 
-      console.log("Responses saved successfully!");
       alert("Responses saved successfully!");
-
       router.push("/treatment");
     } catch (error) {
       console.error("Error saving responses: ", error);
@@ -121,12 +101,12 @@ const POEMScreen = () => {
   return (
     <View style={styles.container}>
       <BackArrow onPress={() => router.push("/home")} />
-      <ScrollView>
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <View style={styles.header}>
           <Text style={styles.title}>POEM</Text>
           <Text style={styles.description}>
-            Complete the POEM questionnaire once a week to track changes in your
-            skin condition. Please answer the following questions carefully:
+          Complete the POEM questionnaire once a week to monitor changes in your skin condition. Please answer the following questions carefully, rating each on a scale from 0 (lowest) to 7 (highest).
+          Your responses will be totaled at the end to indicate the severity of your eczema.
           </Text>
         </View>
 
@@ -272,8 +252,17 @@ const POEMScreen = () => {
             ))}
           </View>
         </View>
+        
+      
+
         <View style={styles.poemEnd}></View>
       </ScrollView>
+
+       {/* Submit Button */}
+      <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+        <Text style={styles.submitButtonText}>Submit</Text>
+      </TouchableOpacity>
+
       <BottomNav />
     </View>
   );
@@ -284,20 +273,27 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
   },
+  scrollViewContent: {
+    paddingBottom: 100, // Added space to prevent overlap with the BottomNav
+  },
   header: {
-    padding: 40,
+    padding: 35,
     alignItems: "center",
+    fontSize: 35,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 30,
   },
   title: {
-    fontSize: 32,
-    color: "#85D3C0",
-    fontWeight: "600",
+    fontSize: 40,
+    color: "#74BDB3",
+    fontWeight: "700",
   },
   description: {
-    fontSize: 12,
+    fontSize: 13,
     color: "black",
     textAlign: "center",
-    marginTop: 10,
+    marginTop: 15,
   },
   questionContainer: {
     marginVertical: 20,
@@ -332,13 +328,22 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   poemEnd: {
-    padding: 50,
+    padding: 0,
   },
-  footer: {
-    height: 50,
-    backgroundColor: "#85D3C0",
-    justifyContent: "center",
+  submitButton: {
+    backgroundColor: "#74BDB3",
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 50,
     alignItems: "center",
+    marginHorizontal: 50,
+    marginBottom: 95, 
+    marginTop: 10,
+  },
+  submitButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 

@@ -64,11 +64,12 @@ const styles = StyleSheet.create({
         paddingBottom: 20, // Add bottom padding to avoid content being cut off
     },
     header: {
-        fontSize: 32,
-        color: '#85D3C0',
-        fontWeight: '600',
+        fontSize: 35,
+        color: '#74BDB3',
+        fontWeight: 'bold',
         textAlign: 'center',
-        marginVertical: 23, // Increased margin for more spacing
+        marginTop: 70,
+        marginBottom: 10,
     },
     description: {
         fontSize: 16,

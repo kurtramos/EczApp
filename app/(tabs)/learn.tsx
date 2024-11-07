@@ -125,7 +125,7 @@ const Learn = () => {
 
             {/* Section 8: Disclaimer */}
             <TouchableOpacity onPress={() => toggleSection('disclaimer')}>
-              <Text style={styles.sectionTitle}>Disclaimer:</Text>
+              <Text style={styles.sectionTitle}>Disclaimer</Text>
             </TouchableOpacity>
             {activeSection === 'disclaimer' && (
               <Text style={styles.sectionContent}>
@@ -143,15 +143,16 @@ const Learn = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f4f4f4',
+    backgroundColor: 'white',
   },
+  
   heading: {
-    fontSize: 24,
-    color: '#85D3C0',
+    fontSize: 35,
+    color: '#74BDB3',
     fontWeight: 'bold',
-    textAlign: 'left',
-    marginTop: 48,
-    marginLeft: 60,
+    textAlign: 'center',
+    marginTop: 70,
+    marginBottom: 10,
   },
   squareBackground: {
     backgroundColor: '#C3EFE5',
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
     borderRadius: 20, 
     padding: 20, 
     alignSelf: 'center', 
-    marginTop: 30,
+    marginTop: 10,
   },
   scrollViewContent: {
     paddingBottom: 100,
@@ -169,16 +170,20 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 159,
+    height: 200,
     borderRadius: 10,
     marginBottom: 20,
   },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#85D3C0',
-    marginBottom: 10,
-  },
+    sectionTitle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: '#FFFFFF',           
+      backgroundColor: '#9ED4C7', 
+      padding: 10,                
+      marginBottom: 10,
+      textAlign: 'center',        
+    },
+  
   sectionContent: {
     fontSize: 14,
     fontWeight: '300',

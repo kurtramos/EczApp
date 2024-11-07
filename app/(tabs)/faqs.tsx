@@ -44,7 +44,7 @@ const HowToUse = () => {
 
             {/* Section 2: What Is the Camera For */}
             <TouchableOpacity onPress={() => toggleSection('whatIsCameraFor')}>
-              <Text style={styles.sectionTitle}>What Is the Camera For?</Text>
+              <Text style={styles.sectionTitle}>What Is the Camera For</Text>
             </TouchableOpacity>
             {activeSection === 'whatIsCameraFor' && (
               <Text style={styles.sectionContent}>
@@ -84,7 +84,7 @@ const HowToUse = () => {
 
             {/* Section 5: What Is the POEM Score */}
             <TouchableOpacity onPress={() => toggleSection('whatIsPoemScore')}>
-              <Text style={styles.sectionTitle}>What Is the POEM Score?</Text>
+              <Text style={styles.sectionTitle}>What Is the POEM Score</Text>
             </TouchableOpacity>
             {activeSection === 'whatIsPoemScore' && (
               <Text style={styles.sectionContent}>
@@ -98,7 +98,7 @@ const HowToUse = () => {
 
             {/* Section 6: How Can I Get Treatment */}
             <TouchableOpacity onPress={() => toggleSection('howToGetTreatment')}>
-              <Text style={styles.sectionTitle}>How Can I Get Treatment?</Text>
+              <Text style={styles.sectionTitle}>How Can I Get Treatment</Text>
             </TouchableOpacity>
             {activeSection === 'howToGetTreatment' && (
               <Text style={styles.sectionContent}>
@@ -123,12 +123,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#f4f4f4',
   },
   heading: {
-    fontSize: 24,
-    color: '#85D3C0',
+    fontSize: 35,
+    color: '#74BDB3',
     fontWeight: 'bold',
-    textAlign: 'left',
-    marginTop: 48,
-    marginLeft: 60,
+    textAlign: 'center',
+    marginTop: 70,
+    marginBottom: 10,
   },
   squareBackground: {
     backgroundColor: '#C3EFE5',
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 20,
     alignSelf: 'center',
-    marginTop: 30,
+    marginTop: 10,
   },
   scrollViewContent: {
     paddingBottom: 100,
@@ -146,15 +146,18 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 159,
+    height: 200,
     borderRadius: 10,
     marginBottom: 20,
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#85D3C0',
-    marginBottom: 10,
+      fontWeight: 'bold',
+      color: '#FFFFFF',           
+      backgroundColor: '#9ED4C7', 
+      padding: 10,                
+      marginBottom: 10,
+      textAlign: 'center',  
   },
   sectionContent: {
     fontSize: 14,

@@ -56,9 +56,7 @@ export default function HomeScreen() {
         <View style={styles.header}>
           <Image
             style={styles.profileImage}
-            source={{
-              uri: profileImage || "https://via.placeholder.com/72x72",
-            }}
+        source={require('../../assets/logos/EczemaCareLogoG.png')} 
           />
           <View style={styles.greeting}>
             <Text style={styles.welcomeText}>Hi, Welcome Back</Text>
@@ -80,53 +78,13 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* Search Bar */}
-        <View style={styles.searchBar}>
-          <Icon
-            name="search"
-            size={15}
-            color="#5A5858"
-            style={styles.searchIcon}
-          />
-          <TextInput style={styles.searchInput} placeholder="Search..." />
-        </View>
+        
 
-        {/* Calendar Section */}
-        <View style={styles.calendarContainer}>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={styles.calendarItem}>
-              <Text style={styles.calendarDay}>9</Text>
-              <Text style={styles.calendarLabel}>Mon</Text>
-            </View>
-            <View style={styles.calendarItem}>
-              <Text style={styles.calendarDay}>10</Text>
-              <Text style={styles.calendarLabel}>Tue</Text>
-            </View>
-            <View style={[styles.calendarItem, styles.selectedDay]}>
-              <Text style={styles.calendarDaySelected}>11</Text>
-              <Text style={styles.calendarLabelSelected}>Wed</Text>
-            </View>
-            <View style={styles.calendarItem}>
-              <Text style={styles.calendarDay}>12</Text>
-              <Text style={styles.calendarLabel}>Thu</Text>
-            </View>
-            <View style={styles.calendarItem}>
-              <Text style={styles.calendarDaySelected}>13</Text>
-              <Text style={styles.calendarLabelSelected}>Fri</Text>
-            </View>
-            <View style={styles.calendarItem}>
-              <Text style={styles.calendarDaySelected}>14</Text>
-              <Text style={styles.calendarLabelSelected}>Sat</Text>
-            </View>
-          </ScrollView>
-        </View>
-
-        {/* Appointment Section */}
-        <View style={styles.appointmentCard}>
-          <Text style={styles.appointmentTime}>11 Wednesday - Today</Text>
-          <Text style={styles.doctorName}>Dr. Malizza Custodio, M.D.</Text>
-          <Text style={styles.appointmentDetails}>
-            Treatment and prevention of Atopic Dermatitis.
+        {/* Header Title Section */}
+        <View style={styles.titleCard}>
+          <Text style={styles.headerTitle}>EczemaCare</Text>
+          <Text style={styles.headerInfo}>
+          A Mobile Application for Monitoring and Tracking the Severity of Atopic Dermatitis.
           </Text>
         </View>
 
@@ -136,13 +94,13 @@ export default function HomeScreen() {
           onPress={() => router.push("/learn")}
         >
           <Text style={styles.infoTitle}>LEARN</Text>
-          <Text style={styles.infoText}>Learn about eczema.</Text>
+          <Text style={styles.infoText}>Everything to know about Eczema.</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.infoCard} onPress={() => router.push('/faqs')}>
           <Text style={styles.infoTitle}>HOW TO USE</Text>
           <Text style={styles.infoText}>
-            How to use certain features and navigate the app.
+            How to use specific features and navigate the app.
           </Text>
         </TouchableOpacity>
 
@@ -152,7 +110,7 @@ export default function HomeScreen() {
         >
           <Text style={styles.infoTitle}>DOCTORS</Text>
           <Text style={styles.infoText}>
-            Learn more about the doctors.
+            Find a specialist in your area for skin consultation.
           </Text>
         </TouchableOpacity>
       </ScrollView>
@@ -178,15 +136,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   profileImage: {
-    width: 72,
-    height: 72,
+    width: 65,
+    height: 65,
     borderRadius: 36,
+    marginTop: 22,
   },
   greeting: {
     marginLeft: 20,
+    marginTop: 22,
   },
   welcomeText: {
-    fontSize: 14,
+    fontSize: 15,
     color: "#85D3C0",
     fontWeight: "700",
   },
@@ -198,87 +158,48 @@ const styles = StyleSheet.create({
   iconContainer: {
     marginLeft: "auto",
     flexDirection: "row",
+    marginTop: 12,
   },
   iconCircle: {
-    width: 27,
-    height: 27,
+    width: 40,
+    height: 40,
     backgroundColor: "#C3EFE5",
     borderRadius: 9999,
     marginLeft: 10,
     justifyContent: "center",
     alignItems: "center",
   },
-  searchBar: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#F3F3F3",
-    borderRadius: 23,
-    padding: 10,
-    marginHorizontal: 20,
-    marginTop: 10,
-  },
-  searchIcon: {
-    marginRight: 10,
-  },
-  searchInput: {
-    flex: 1,
-    fontSize: 14,
-    color: "#303030",
-  },
-  calendarContainer: {
+  
+  Container: {
     flexDirection: "row",
     paddingHorizontal: 20,
     marginVertical: 20,
   },
-  calendarItem: {
-    marginRight: 10,
-    alignItems: "center",
-  },
-  calendarDay: {
-    fontSize: 24,
-    color: "#303030",
-    fontWeight: "500",
-  },
-  calendarLabel: {
-    fontSize: 12,
-    color: "#303030",
-    fontWeight: "300",
-  },
-  selectedDay: {
-    backgroundColor: "#85D3C0",
-    borderRadius: 18,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-  },
-  calendarDaySelected: {
-    color: "white",
-  },
-  calendarLabelSelected: {
-    color: "white",
-  },
-  appointmentCard: {
-    backgroundColor: "#C3EFE5",
+  
+  titleCard: {
+    backgroundColor: "#74BDB3",
     padding: 20,
     marginHorizontal: 20,
     borderRadius: 17,
+    marginTop: 15,
+    marginBottom: 10,
   },
-  appointmentTime: {
-    fontSize: 12,
-    color: "#5A5858",
-    fontWeight: "300",
-  },
-  doctorName: {
-    fontSize: 14,
-    fontWeight: "500",
-    color: "#303030",
+
+  headerTitle: {
+    fontSize: 36,
+    fontWeight: "600",
+    color: "#DDF9F3",
     marginTop: 10,
+    marginBottom: 10,
   },
-  appointmentDetails: {
-    fontSize: 12,
-    fontWeight: "300",
-    color: "#5A5858",
-    marginTop: 5,
+
+  headerInfo: {
+    fontSize: 17,
+    color: "#DDF9F3",
+    fontWeight: "400",
+    marginBottom: 10,
   },
+  
   infoCard: {
     backgroundColor: "#C3EFE5",
     padding: 20,
@@ -292,7 +213,7 @@ const styles = StyleSheet.create({
     color: "#5D9386",
   },
   infoText: {
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: "300",
     color: "#5A5858",
   },
