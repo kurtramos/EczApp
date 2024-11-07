@@ -1,5 +1,5 @@
 import React, { useState } from 'react'; 
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Alert, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'; 
 import BackArrow from '../components/BackArrow'; 
 import BottomNav from '../components/BottomNav'; 
@@ -18,11 +18,10 @@ const CameraScreen = () => {
         if (permission.granted) {
             const result = await ImagePicker.launchCameraAsync();
             if (!result.cancelled) {
-                console.log(result.uri);
                 setImageUri(result.uri); // Set the captured image URI
             }
         } else {
-            console.log("Camera permission not granted");
+            Alert.alert("Camera permission not granted");
         }
     };
 
@@ -32,21 +31,20 @@ const CameraScreen = () => {
         if (permission.granted) {
             const result = await ImagePicker.launchImageLibraryAsync();
             if (!result.cancelled) {
-                console.log(result.uri);
                 setImageUri(result.uri); // Set the selected image URI
             }
         } else {
-            console.log("Media library permission not granted");
+            Alert.alert("Media library permission not granted");
         }
     };
 
     return (
         <View style={styles.container}>
-            <BackArrow onPress={() => router.push('/camera')} />
+            <BackArrow onPress={() => router.push('/home')} />
             <View style={styles.header}>
                 <Text style={styles.headerText}>CAMERA</Text>
             </View>
-            <TouchableOpacity style={styles.cameraPlaceholder} onPress={() => router.push('/cameraapp')}>
+            <TouchableOpacity style={styles.cameraPlaceholder} onPress={openCamera}>
                 <Text style={styles.placeholderText}>CLICK TO OPEN CAMERA</Text>
             </TouchableOpacity>
             {imageUri && (
@@ -62,13 +60,14 @@ const CameraScreen = () => {
                 <TouchableOpacity style={styles.actionButton} onPress={openImageGallery}>
                     <Text style={styles.buttonText}>Image Upload</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.actionButton}>
+                <TouchableOpacity style={styles.actionButton} onPress={() => Alert.alert("Image Saved")}>
                     <Text style={styles.buttonText}>Save</Text>
                 </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.galleryButton}>
+            <TouchableOpacity style={styles.galleryButton} onPress={() => router.push('/gallery')}>
                 <Text style={styles.galleryText}>Gallery</Text>
             </TouchableOpacity>
+
             <BottomNav />
         </View>
     );
@@ -81,12 +80,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingTop: 20,
     },
-        header: {
+    header: {
         fontSize: 32,
         color: '#85D3C0',
         fontWeight: '600',
         textAlign: 'center',
-        marginVertical: 20
+        marginVertical: 20,
     },
     headerText: {
         fontSize: 32,
@@ -97,7 +96,7 @@ const styles = StyleSheet.create({
     },
     cameraPlaceholder: {
         width: screenWidth - 40,
-        height: 382,
+        height: 330,
         backgroundColor: 'black',
         borderRadius: 13,
         marginTop: 40,
