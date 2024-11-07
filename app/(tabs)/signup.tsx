@@ -72,11 +72,18 @@ const SignUpScreen = () => {
     }
   };
 
-  const onDateChange = (event: any, selectedDate: Date) => {
-    const currentDate = selectedDate || tempDate;
-    setDateOfBirth(currentDate);
-    setShowDatePicker(false);
+  const onDateChange = (event, selectedDate) => {
+    if (selectedDate) {
+      setTempDate(selectedDate); // Temporarily save the selected date
+    }
   };
+  
+
+  const confirmDateOfBirth = () => {
+    setDateOfBirth(tempDate); // Set the confirmed date as date of birth
+    setShowDatePicker(false); // Close the date picker modal
+  };
+  
 
   const handleScroll = (event) => {
     const { contentOffset, layoutMeasurement, contentSize } = event.nativeEvent;
@@ -248,29 +255,28 @@ const SignUpScreen = () => {
           style={styles.inputField}
           onPress={() => setShowDatePicker(true)}
         >
-          <Text style={styles.dateOfBirthText}>
-            {dateOfBirth.toLocaleDateString()}
-          </Text>
+          <Text style={styles.dateOfBirthText}>{dateOfBirth.toLocaleDateString()}</Text>
         </TouchableOpacity>
 
-        <Modal
-          visible={showDatePicker}
-          transparent={true}
-          animationType="slide"
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.datePickerContainer}>
-              <DateTimePicker
-                value={tempDate}
-                mode="date"
-                display="default"
-                onChange={onDateChange}
-                maximumDate={new Date()}
-              />
-            </View>
-          </View>
-        </Modal>
+        <Modal visible={showDatePicker} transparent={true} animationType="slide">
+  <View style={styles.modalContainer}>
+    <View style={styles.datePickerContainer}>
+      <DateTimePicker
+        value={tempDate}
+        mode="date"
+        display="default"
+        onChange={onDateChange}
+        maximumDate={new Date()}
+      />
+      {/* Confirm Button */}
+      <TouchableOpacity style={styles.confirmButton} onPress={confirmDateOfBirth}>
+        <Text style={styles.confirmButtonText}>Confirm</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+</Modal>
 
+        
         {/* Terms of Use with Checkbox */}
         <View style={styles.checkboxContainer}>
           <TouchableOpacity
@@ -548,6 +554,29 @@ const styles = StyleSheet.create({
     color: "#bcbcbc",
     fontSize: 16,
   },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  datePickerContainer: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  confirmButton: {
+    backgroundColor: "#85D3C0",
+    borderRadius: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    marginTop: 20,
+  },
+  confirmButtonText: {
+    color: "white",
+    fontSize: 18,
+  },
   passwordContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -583,21 +612,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "black",
   },
-  datepickerContainer: {
-    zIndex: 10,
-  },
+  // datepickerContainer: {
+  //   zIndex: 10,
+  // },
   mobileInput: {
     flex: 1,
     height: 45,
     paddingHorizontal: 10,
     fontSize: 16,
   },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    backgroundColor: "rgba(0,0,0,0.5)",
-    zIndex: 1,
-  },
+  // modalContainer: {
+  //   flex: 1,
+  //   justifyContent: "center",
+  //   backgroundColor: "rgba(0,0,0,0.5)",
+  //   zIndex: 1,
+  // },
   modalContent: {
     backgroundColor: "white",
     padding: 20,
@@ -683,17 +712,17 @@ const styles = StyleSheet.create({
     color: "white",
     marginRight: 10,
   },
-  confirmButton: {
-    backgroundColor: "#85D3C0",
-    borderRadius: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 30,
-    marginTop: 20,
-  },
-  confirmButtonText: {
-    color: "white",
-    fontSize: 18,
-  },
+  // confirmButton: {
+  //   backgroundColor: "#85D3C0",
+  //   borderRadius: 20,
+  //   paddingVertical: 10,
+  //   paddingHorizontal: 30,
+  //   marginTop: 20,
+  // },
+  // confirmButtonText: {
+  //   color: "white",
+  //   fontSize: 18,
+  // },
   signUpButton: {
     width: "50%",
     height: 45,

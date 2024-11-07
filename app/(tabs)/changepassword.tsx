@@ -14,44 +14,48 @@ const ChangePasswordScreen = () => {
     const [newPasswordVisible, setNewPasswordVisible] = useState(false);
     const auth = getAuth();
 
-    // Handle Password Change
-    const handleChangePassword = async () => {
-        if (newPassword !== confirmPassword) {
-            Alert.alert("Error", "New passwords do not match!");
-            return;
-        }
+   // Handle Password Change
+const handleChangePassword = async () => {
+    // Check if any field is empty
+    if (!currentPassword || !newPassword || !confirmPassword) {
+        Alert.alert("Error", "Please fill in all fields.");
+        return;
+    }
 
-        if (currentPassword === newPassword) {
-            Alert.alert("Error", "New password cannot be the same as the current password.");
-            return;
-        }
+    // Check if new password matches the confirm password
+    if (newPassword !== confirmPassword) {
+        Alert.alert("Error", "New passwords do not match!");
+        return;
+    }
 
-        if (!currentPassword || !newPassword || !confirmPassword) {
-            Alert.alert("Error", "Please fill in all fields.");
-            return;
-        }
+    // Check if the new password is the same as the current password
+    if (currentPassword === newPassword) {
+        Alert.alert("Error", "New password cannot be the same as the current password.");
+        return;
+    }
 
-        const user = auth.currentUser;
-        if (user && user.email) {
-            const credential = EmailAuthProvider.credential(user.email, currentPassword);
+    const user = auth.currentUser;
+    if (user && user.email) {
+        const credential = EmailAuthProvider.credential(user.email, currentPassword);
+        
+        try {
+            // Reauthenticate user
+            await reauthenticateWithCredential(user, credential);
             
-            try {
-                // Reauthenticate user
-                await reauthenticateWithCredential(user, credential);
-                
-                // Update password
-                await updatePassword(user, newPassword);
+            // Update password
+            await updatePassword(user, newPassword);
 
-                Alert.alert("Success", "Password changed successfully!");
+            Alert.alert("Success", "Password changed successfully!");
 
-                // Sign out the user after password change and redirect to login
-                await signOut(auth);
-                router.push('/login');
-            } catch (error) {
-                Alert.alert("Error", error.message);
-            }
+            // Sign out the user after password change and redirect to login
+            await signOut(auth);
+            router.push('/login');
+        } catch (error) {
+            Alert.alert("Error", error.message);
         }
-    };
+    }
+};
+
 
     return (
         <View style={styles.container}>
