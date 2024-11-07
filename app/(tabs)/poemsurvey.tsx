@@ -43,7 +43,6 @@ const POEMScreen = () => {
     handleSave();
   };
   
-  
 
   const handleSave = async () => {
     const user = getAuth().currentUser;
