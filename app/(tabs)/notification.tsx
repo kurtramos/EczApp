@@ -1,47 +1,92 @@
-import React from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons'; // Ensure to install this package
+import React, { useEffect, useState } from 'react';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import BackArrow from '../components/BackArrow';
-import { useRouter } from 'expo-router'; 
+import NotificationBell from '../components/notificationbell';
+import { useRouter } from 'expo-router';
+import { firestore } from "../firebaseConfig";
+import { getAuth } from "firebase/auth";
+import { collection, getDocs, orderBy, query, Timestamp } from "firebase/firestore";
 
+interface Notification {
+  id: string;
+  title: string;
+  details: string;
+  timestamp: Date;
+}
 
-const NotificationScreen = () => {
-    const router = useRouter();
+const NotificationScreen: React.FC = () => {
+  const router = useRouter();
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      const user = getAuth().currentUser;
+      const userEmail = user?.email;
+      if (!userEmail) return;
+
+      try {
+        const notificationsRef = collection(firestore, "users", userEmail, "notifications");
+        const notificationsQuery = query(notificationsRef, orderBy("timestamp", "desc"));
+        const querySnapshot = await getDocs(notificationsQuery);
+
+        const fetchedNotifications = querySnapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            title: data.title || "Untitled Notification",
+            details: data.details || "No Details",
+            timestamp: data.timestamp instanceof Timestamp ? data.timestamp.toDate() : new Date()
+          };
+        });
+
+        setNotifications(fetchedNotifications);
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+      }
+    };
+
+    fetchNotifications();
+  }, []);
+
+  const formatTimeAgo = (date: Date): string => {
+    if (!(date instanceof Date)) {
+      console.error("Invalid date format:", date);
+      return "Invalid date";
+    }
+
+    const now = new Date();
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+    const days = Math.floor(diffInSeconds / 86400);
+
+    return days > 0 ? `${days} D` : `${Math.floor(diffInSeconds / 3600)} H`;
+  };
+
   return (
     <View style={styles.container}>
-    <BackArrow onPress={() => router.push('/home')} />
+      <View style={styles.headerContainer}>
+        <BackArrow onPress={() => router.push('/home')} />
+      </View>
+
       <ScrollView style={styles.scrollView}>
-
         <View style={styles.header}>
-          {/* <TouchableOpacity>
-            <Icon name="arrow-back" size={24} color="#85D3C0" />
-          </TouchableOpacity> */}
-
           <Text style={styles.headerTitle}>Notification</Text>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Today</Text>
-          <NotificationItem time="2 M" title="Scheduled Appointment" details="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
-          <NotificationItem time="2 H" title="Scheduled Change" details="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
-          <NotificationItem time="3 H" title="Medical Notes" details="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Yesterday</Text>
-          <NotificationItem time="1 D" title="Scheduled Appointment" details="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>15 April</Text>
-          <NotificationItem time="5 D" title="Medical History Update" details="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
-        </View>
+        {notifications.map(notification => (
+          <NotificationItem
+            key={notification.id}
+            time={formatTimeAgo(notification.timestamp)} 
+            title={notification.title} 
+            details={notification.details} 
+          />
+        ))}
       </ScrollView>
     </View>
   );
 };
 
-const NotificationItem = ({ time, title, details }) => {
+const NotificationItem: React.FC<{ time: string, title: string, details: string }> = ({ time, title, details }) => {
   return (
     <View style={styles.notificationItem}>
       <Icon name="event-note" size={24} color="#85D3C0" style={styles.icon} />
@@ -60,17 +105,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingTop: 20,
   },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
   scrollView: {
     marginHorizontal: 20,
   },
-  backArrow: {
-    position: 'absolute',
-    top: 20,
-    left: 20,
-    zIndex: 1,
-  },
   header: {
-    // flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
   },
@@ -79,16 +123,7 @@ const styles = StyleSheet.create({
     color: '#85D3C0', 
     fontWeight: 'bold',
     textAlign: 'left',
-    marginTop: 25, 
-    // marginLeft: 40,
-  },
-  section: {
-    marginBottom: 20,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    color: '#5D9386',
-    marginBottom: 10,
+    marginTop: 25,
   },
   notificationItem: {
     flexDirection: 'row',
@@ -96,7 +131,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#DBFFF6',
     padding: 10,
     borderRadius: 10,
-    marginBottom: 10,
+    marginBottom: 15, // Add space between each notification item
   },
   icon: {
     marginRight: 10,

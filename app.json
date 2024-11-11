@@ -13,13 +13,22 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.eczemacare.bundle",
+      "infoPlist": {
+        "NSUserTrackingUsageDescription": "This identifier will be used to personalize your experience.",
+        "NSCameraUsageDescription": "This app requires camera access",
+        "NSLocationWhenInUseUsageDescription": "This app requires location access",
+        "UIBackgroundModes": ["fetch", "remote-notification"]
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "useNextNotificationsApi": true, 
+      "permissions": ["RECEIVE_BOOT_COMPLETED"] 
     },
     "web": {
       "bundler": "metro",
@@ -34,7 +43,7 @@
       "typedRoutes": true
     },
     "extra": {
-      "googleClientId": "53407213745-imhm40io7284jck0bh3iu9asmfh8vmpm.apps.googleusercontent.com" 
+      "googleClientId": "53407213745-imhm40io7284jck0bh3iu9asmfh8vmpm.apps.googleusercontent.com"
     }
   }
 }
