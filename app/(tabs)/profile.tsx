@@ -12,6 +12,7 @@ import BackArrow from "../components/BackArrow";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { firestore } from "../firebaseConfig";
+import { FontAwesome } from '@expo/vector-icons'; // Using FontAwesome for badge icon
 
 const ProfileScreen = () => {
   const router = useRouter();
@@ -21,6 +22,7 @@ const ProfileScreen = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [isVerified, setIsVerified] = useState(false); // New state for verification status
 
   useFocusEffect(
     React.useCallback(() => {
@@ -36,10 +38,9 @@ const ProfileScreen = () => {
             const userData = userDocSnap.data();
             setFirstName(userData.firstName ?? "No First Name Available");
             setLastName(userData.lastName ?? "No Last Name Available");
-            setPhoneNumber(
-              userData.mobileNumber ?? "No Phone Number Available"
-            );
+            setPhoneNumber(userData.mobileNumber ?? "No Phone Number Available");
             setEmail(userData.email ?? user?.email);
+            setIsVerified(userData.isVerified ?? false); // Set verification status
           } else {
             console.log("No user data found in Firestore.");
           }
@@ -56,6 +57,21 @@ const ProfileScreen = () => {
       <ScrollView>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Profile</Text>
+
+          {/* Verification Badge */}
+          <View style={styles.badgeContainer}>
+            {isVerified ? (
+              <View style={styles.verifiedBadge}>
+                <FontAwesome name="check-circle" size={20} color="#4CAF50" />
+                <Text style={styles.badgeText}>Verified User</Text>
+              </View>
+            ) : (
+              <View style={styles.notVerifiedBadge}>
+                <FontAwesome name="times-circle" size={20} color="#F44336" />
+                <Text style={styles.badgeText}>Not Yet Verified</Text>
+              </View>
+            )}
+          </View>
         </View>
 
         <View style={styles.field}>
@@ -103,8 +119,34 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: "#85D3C0",
     fontWeight: "600",
-    marginVertical: 50,
+    marginVertical: 20,
     textAlign: "center",
+  },
+  badgeContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 10,
+  },
+  verifiedBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#E8F5E9",
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 20,
+  },
+  notVerifiedBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#FFEBEE",
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 20,
+  },
+  badgeText: {
+    marginLeft: 5,
+    fontSize: 16,
+    color: "#333",
   },
   field: {
     paddingVertical: 10,
