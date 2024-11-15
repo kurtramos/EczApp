@@ -67,11 +67,11 @@ const NotificationScreen: React.FC = () => {
       <View style={styles.headerContainer}>
         <BackArrow onPress={() => router.push('/home')} />
       </View>
-
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.header}>
+      <View style={styles.header}>
           <Text style={styles.headerTitle}>Notification</Text>
         </View>
+      <ScrollView style={styles.scrollView}>
+  
 
         {notifications.map(notification => (
           <NotificationItem
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     color: '#85D3C0', 
     fontWeight: 'bold',
     textAlign: 'left',
-    marginTop: 25,
+    marginTop: 45,
   },
   notificationItem: {
     flexDirection: 'row',

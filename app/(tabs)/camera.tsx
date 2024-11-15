@@ -14,8 +14,9 @@ const CameraScreen = () => {
     return (
         <View style={styles.container}>
             <BackArrow onPress={() => router.push('/home')} />
+            <Text style={styles.header}>CAMERA</Text>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
-                <Text style={styles.header}>CAMERA</Text>
+
                 <Text style={styles.description}>
                     Use the camera to capture images for skin condition recognition. Follow the instructions below for better accuracy.
                 </Text>
@@ -44,10 +45,11 @@ const CameraScreen = () => {
                     </View>
                 </View>
 
-                <TouchableOpacity style={styles.button} onPress={() => router.push('/camerascreen')}>
+            </ScrollView>
+            
+            <TouchableOpacity style={styles.button} onPress={() => router.push('/camerascreen')}>
                     <Text style={styles.buttonText}>Proceed</Text>
                 </TouchableOpacity>
-            </ScrollView>
             <BottomNav /> 
         </View>
     );
@@ -68,7 +70,7 @@ const styles = StyleSheet.create({
         color: '#74BDB3',
         fontWeight: 'bold',
         textAlign: 'center',
-        marginTop: 70,
+        marginTop: 20,
         marginBottom: 10,
     },
     description: {
@@ -100,19 +102,20 @@ const styles = StyleSheet.create({
         color: '#333',
     },
     button: {
-        backgroundColor: '#74BDB3',
+        backgroundColor: "#74BDB3",
+        paddingVertical: 15,
+        paddingHorizontal: 20,
         borderRadius: 20,
-        paddingVertical: 10,
-        paddingHorizontal: 30,
-        width: screenWidth - 60,
-        alignItems: 'center',
-        marginTop: 6, 
-    },
-    buttonText: {
-        color: 'white',
-        fontSize: 18,
-        fontWeight: '600',
-    },
+        alignItems: "center",
+        marginHorizontal: 50,
+        marginBottom: 95, 
+        marginTop: 10,
+      },
+      buttonText: {
+        color: "white",
+        fontSize: 16,
+        fontWeight: "bold",
+      },
 });
 
 export default CameraScreen;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
     View,
     Text,
@@ -6,32 +6,105 @@ import {
     TouchableOpacity,
     Modal,
     Image,
-    FlatList,
+    ScrollView,
     Dimensions,
+    Alert,
+    ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import BackArrow from '../components/BackArrow';
+import { getAuth } from 'firebase/auth';
+import { firestore } from '../firebaseConfig';
+import { collection, query, getDocs, doc, getDoc } from 'firebase/firestore';
 
 const { width } = Dimensions.get('window');
-const imageSize = width / 3 - 10; // To fit 3 images in a row with spacing
-
-const images = [
-    { uri: 'https://akfamilyderm.com/wp-content/uploads/2022/10/blog-eczema-img-2.jpg' },
-    { uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjWKtUMo4IDzNfJAoZ40k4Xj8SebmhIWL6QA&s' },
-    { uri: 'https://www.health.com/thmb/Nmt0eGt3Gj8m7pPaQd-yocwMgJ8=/850x0/filters:no_upscale():max_bytes(150000):strip_icc()/psoriasis-eczema-d50e904a5b934809be74dc8f2fa2743c.jpg' },
-    { uri: 'https://images.everydayhealth.com/images/skin-beauty/eczema/what-is-eczema-02-hand-eczema-722x406.jpg?sfvrsn=3b197278_5' },
-    // { uri: 'https://example.com/sample5.jpg' },
-    // { uri: 'https://example.com/sample6.jpg' },
-    // { uri: 'https://example.com/sample7.jpg' },
-    // { uri: 'https://example.com/sample8.jpg' },
-    // { uri: 'https://example.com/sample9.jpg' },
-];
+const imageSize = width / 3 - 10;
 
 const GalleryScreen = () => {
     const router = useRouter();
+    const [images, setImages] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
+    const [profileInfo, setProfileInfo] = useState({
+        firstName: 'Unknown',
+        lastName: 'Unknown',
+        email: 'Unknown',
+    });
+
+    const user = getAuth().currentUser;
+
+    useFocusEffect(
+        useCallback(() => {
+            if (user) {
+                fetchUserImages();
+                fetchProfileInfo();
+            } else {
+                Alert.alert('Error', 'No user is logged in');
+            }
+        }, [user])
+    );
+
+    // Fetch user's profile information
+    const fetchProfileInfo = async () => {
+        try {
+            const userDocRef = doc(firestore, 'users', user.email);
+            const userDocSnap = await getDoc(userDocRef);
+            if (userDocSnap.exists()) {
+                const data = userDocSnap.data();
+                setProfileInfo({
+                    firstName: data.firstName || 'Unknown',
+                    lastName: data.lastName || 'Unknown',
+                    email: data.email || user.email,
+                });
+            } else {
+                console.log("No profile information found for the user.");
+            }
+        } catch (error) {
+            console.error("Error fetching profile info:", error);
+            Alert.alert("Error", "Failed to load profile information.");
+        }
+    };
+
+    // Fetch user's images
+    const fetchUserImages = async () => {
+        try {
+            setLoading(true);
+            const imagesCollectionRef = collection(firestore, 'users', user.email, 'images');
+            const imagesQuery = query(imagesCollectionRef);
+            const querySnapshot = await getDocs(imagesQuery);
+
+            const userImages = querySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                uri: doc.data().imageUrl,
+                timestamp: doc.data().timestamp || 'Unknown',
+            }));
+
+            const groupedImages = groupImagesByDate(userImages);
+            setImages(groupedImages);
+        } catch (error) {
+            console.error('Error fetching images:', error);
+            Alert.alert('Error', 'Could not fetch images.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Group images by date
+    const groupImagesByDate = (images) => {
+        const grouped = images.reduce((acc, image) => {
+            const date = new Date(image.timestamp).toLocaleDateString(); // Format to a readable date
+            if (!acc[date]) acc[date] = [];
+            acc[date].push(image);
+            return acc;
+        }, {});
+
+        return Object.entries(grouped).map(([date, images]) => ({
+            title: date,
+            data: images,
+        }));
+    };
 
     const openModal = (image) => {
         setSelectedImage(image);
@@ -43,33 +116,47 @@ const GalleryScreen = () => {
         setSelectedImage(null);
     };
 
-    const renderImage = ({ item }) => (
-        <TouchableOpacity onPress={() => openModal(item)}>
-            <Image source={item} style={styles.imageThumbnail} />
-        </TouchableOpacity>
-    );
-
     return (
         <View style={styles.container}>
             <BackArrow onPress={() => router.push('/camerascreen')} />
-            <Text style={styles.header}>Eczema Samples Gallery</Text>
-            
-            <FlatList
-                data={images}
-                renderItem={renderImage}
-                keyExtractor={(item, index) => index.toString()}
-                numColumns={3}
-                contentContainerStyle={styles.galleryContainer}
-            />
-            
-            {/* Modal for zoomed image view */}
+            <Text style={styles.header}>Your Captured Images</Text>
+
+            {loading ? (
+                <ActivityIndicator size="large" color="#85D3C0" style={styles.loadingIndicator} />
+            ) : images.length > 0 ? (
+                <ScrollView>
+                    {images.map((group, index) => (
+                        <View key={index} style={styles.groupContainer}>
+                            <Text style={styles.groupHeader}>{group.title}</Text>
+                            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.imageRow}>
+                                {group.data.map((image) => (
+                                    <TouchableOpacity key={image.id} onPress={() => openModal(image)}>
+                                        <Image source={{ uri: image.uri }} style={styles.imageThumbnail} />
+                                    </TouchableOpacity>
+                                ))}
+                            </ScrollView>
+                        </View>
+                    ))}
+                </ScrollView>
+            ) : (
+                <Text style={styles.noImagesText}>No images to display.</Text>
+            )}
+
+            {/* Modal for zoomed image view with details */}
             <Modal visible={modalVisible} transparent={true}>
                 <View style={styles.modalBackground}>
                     <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
                         <Ionicons name="close" size={30} color="white" />
                     </TouchableOpacity>
                     {selectedImage && (
-                        <Image source={selectedImage} style={styles.fullImage} resizeMode="contain" />
+                        <View style={styles.detailsContainer}>
+                            <Image source={{ uri: selectedImage.uri }} style={styles.fullImage} resizeMode="contain" />
+                            <Text style={styles.detailsText}>
+                                Captured by: {profileInfo.firstName} {profileInfo.lastName}
+                            </Text>
+                            <Text style={styles.detailsText}>Email: {profileInfo.email}</Text>
+                            <Text style={styles.detailsText}>Created: {new Date(selectedImage.timestamp).toLocaleString()}</Text>
+                        </View>
                     )}
                 </View>
             </Modal>
@@ -90,16 +177,34 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginVertical: 28,
     },
-    galleryContainer: {
+    groupContainer: {
+        marginBottom: 20,
+    },
+    groupHeader: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#333',
+        marginLeft: 10,
+        marginBottom: 10,
+    },
+    imageRow: {
+        flexDirection: 'row',
         paddingHorizontal: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
     },
     imageThumbnail: {
         width: imageSize,
         height: imageSize,
-        margin: 5,
+        marginRight: 5,
         borderRadius: 10,
+    },
+    loadingIndicator: {
+        marginTop: 20,
+    },
+    noImagesText: {
+        textAlign: 'center',
+        color: '#888',
+        fontSize: 16,
+        marginTop: 20,
     },
     modalBackground: {
         flex: 1,
@@ -113,9 +218,19 @@ const styles = StyleSheet.create({
         right: 20,
         zIndex: 1,
     },
+    detailsContainer: {
+        alignItems: 'center',
+        padding: 20,
+    },
     fullImage: {
         width: width - 40,
         height: '80%',
+        borderRadius: 10,
+    },
+    detailsText: {
+        color: 'white',
+        fontSize: 16,
+        marginTop: 10,
     },
 });
 

@@ -1,40 +1,94 @@
 import React, { useState } from 'react'; 
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Alert, Image } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons'; 
 import BackArrow from '../components/BackArrow'; 
 import BottomNav from '../components/BottomNav'; 
 import { useRouter } from 'expo-router'; 
 import * as ImagePicker from 'expo-image-picker';
+import { getAuth } from 'firebase/auth';
+import { firestore, storage } from '../firebaseConfig';
+import { collection, addDoc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const screenWidth = Dimensions.get('window').width;
 
 const CameraScreen = () => {
     const router = useRouter();
-    const [imageUri, setImageUri] = useState(null); // State to store the selected image URI
+    const [imageUri, setImageUri] = useState(null);  // Stores the selected or captured image URI
 
     // Function to open the camera
     const openCamera = async () => {
         const permission = await ImagePicker.requestCameraPermissionsAsync();
         if (permission.granted) {
             const result = await ImagePicker.launchCameraAsync();
-            if (!result.cancelled) {
-                setImageUri(result.uri); // Set the captured image URI
+            if (!result.cancelled && result.assets && result.assets[0].uri) {
+                setImageUri(result.assets[0].uri); // Set the captured image URI
+                console.log("Camera image URI:", result.assets[0].uri);
+            } else {
+                console.log("Camera capture was cancelled or URI is undefined");
+                Alert.alert("Camera capture was cancelled or failed.");
             }
         } else {
             Alert.alert("Camera permission not granted");
         }
     };
-
-    // Function to open the image gallery
+    
     const openImageGallery = async () => {
         const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (permission.granted) {
             const result = await ImagePicker.launchImageLibraryAsync();
-            if (!result.cancelled) {
-                setImageUri(result.uri); // Set the selected image URI
+            if (!result.cancelled && result.assets && result.assets[0].uri) {
+                setImageUri(result.assets[0].uri); // Set the selected image URI
+                console.log("Gallery image URI:", result.assets[0].uri);
+            } else {
+                console.log("Image selection was cancelled or URI is undefined");
+                Alert.alert("Image selection was cancelled or failed.");
             }
         } else {
             Alert.alert("Media library permission not granted");
+        }
+    };
+    
+    // Function to save image to Firebase Storage and Firestore
+    const saveImage = async () => {
+        if (!imageUri) {
+            Alert.alert("No image selected");
+            return;
+        }
+
+        try {
+            const user = getAuth().currentUser;
+            const userEmail = user?.email;
+
+            if (!userEmail) {
+                Alert.alert("No user is currently logged in.");
+                return;
+            }
+
+            // Create a unique path for each image
+            const imageName = `images/${userEmail}/${Date.now()}_image.jpg`;
+            const storageRef = ref(storage, imageName);
+
+            console.log("Fetching image as blob...");
+            const response = await fetch(imageUri);
+            const blob = await response.blob();
+            console.log("Uploading blob to Firebase Storage...");
+            await uploadBytes(storageRef, blob);
+
+            console.log("Getting download URL...");
+            const downloadURL = await getDownloadURL(storageRef);
+            console.log("Download URL:", downloadURL);
+
+            // Save the image URL to Firestore
+            const imagesCollectionRef = collection(firestore, "users", userEmail, "images");
+            await addDoc(imagesCollectionRef, {
+                imageUrl: downloadURL,
+                timestamp: new Date().toISOString(),
+            });
+
+            Alert.alert("Image saved successfully!");
+        } catch (error) {
+            console.error("Error saving image:", error);
+            Alert.alert("Failed to save image");
         }
     };
 
@@ -44,15 +98,16 @@ const CameraScreen = () => {
             <View style={styles.header}>
                 <Text style={styles.headerText}>CAMERA</Text>
             </View>
-            <TouchableOpacity style={styles.cameraPlaceholder} onPress={openCamera}>
-                <Text style={styles.placeholderText}>CLICK TO OPEN CAMERA</Text>
+
+            {/* Display the selected image in the placeholder area if it exists */}
+            <TouchableOpacity style={styles.cameraPlaceholder} onPress={!imageUri ? openCamera : null}>
+                {imageUri ? (
+                    <Image source={{ uri: imageUri }} style={styles.cameraPlaceholderImage} />
+                ) : (
+                    <Text style={styles.placeholderText}>CLICK TO OPEN CAMERA</Text>
+                )}
             </TouchableOpacity>
-            {imageUri && (
-                <View style={styles.imagePreview}>
-                    <Text style={styles.previewText}>Selected Image:</Text>
-                    <Image source={{ uri: imageUri }} style={styles.image} />
-                </View>
-            )}
+
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.actionButton} onPress={openCamera}>
                     <Text style={styles.buttonText}>Retake</Text>
@@ -60,10 +115,11 @@ const CameraScreen = () => {
                 <TouchableOpacity style={styles.actionButton} onPress={openImageGallery}>
                     <Text style={styles.buttonText}>Image Upload</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.actionButton} onPress={() => Alert.alert("Image Saved")}>
+                <TouchableOpacity style={styles.actionButton} onPress={saveImage}>
                     <Text style={styles.buttonText}>Save</Text>
                 </TouchableOpacity>
             </View>
+
             <TouchableOpacity style={styles.galleryButton} onPress={() => router.push('/gallery')}>
                 <Text style={styles.galleryText}>Gallery</Text>
             </TouchableOpacity>
@@ -99,27 +155,19 @@ const styles = StyleSheet.create({
         height: 330,
         backgroundColor: 'black',
         borderRadius: 13,
-        marginTop: 40,
+        marginTop: 10,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    cameraPlaceholderImage: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 13,
+        resizeMode: 'cover',
     },
     placeholderText: {
         color: 'white',
         fontSize: 18,
-    },
-    imagePreview: {
-        marginTop: 20,
-        alignItems: 'center',
-    },
-    previewText: {
-        fontSize: 16,
-        color: '#5D9386',
-    },
-    image: {
-        width: 200,
-        height: 200,
-        borderRadius: 10,
-        marginTop: 10,
     },
     buttonContainer: {
         flexDirection: 'row',
