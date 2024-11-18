@@ -5,14 +5,14 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  Alert,
 } from "react-native";
-import * as Notifications from 'expo-notifications';
 import BackArrow from "../components/BackArrow";
 import { useRouter } from "expo-router";
 import BottomNav from "../components/BottomNav";
 import { firestore } from "../firebaseConfig";
 import { getAuth } from "firebase/auth";
-import { doc, setDoc, collection, addDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
 const POEMScreen = () => {
   const router = useRouter();
@@ -30,23 +30,32 @@ const POEMScreen = () => {
     setResponse((prev) => ({ ...prev, [question]: option }));
   };
 
-  const handleSubmit = () => {
-    const allQuestionsAnswered = Object.values(response).every((answer) => answer !== null);
-  
-    if (allQuestionsAnswered) {
-      handleSave();
-    } else {
-      alert("Please answer all questions before submitting.");
+  const handleSubmit = async () => {
+    // Validate that all questions are answered
+    const allQuestionsAnswered = Object.values(response).every(
+      (answer) => answer !== null
+    );
+
+    if (!allQuestionsAnswered) {
+      Alert.alert("Incomplete Survey", "Please answer all questions before submitting.");
+      return;
     }
+
+    // Save the responses and redirect to treatment based on score
+    await handleSave();
+    const totalScore = calculateScore();
+    router.push(`/treatment?score=${totalScore}`); // Redirect to treatment page with the score
+
+    resetSurvey();
   };
-  
+
   const handleSave = async () => {
     const user = getAuth().currentUser;
     const userEmail = user?.email;
 
     if (!userEmail) {
       console.error("No user is currently logged in.");
-      alert("No user is currently logged in.");
+      Alert.alert("Error", "No user is currently logged in.");
       return;
     }
 
@@ -55,26 +64,37 @@ const POEMScreen = () => {
     const timestampString = timestamp.toISOString();
 
     try {
-      const docRef = doc(firestore, "users", userEmail, "POEMSurvey", "lastSurvey");
+      const docRef = doc(
+        firestore,
+        "users",
+        userEmail,
+        "POEMScores",
+        timestampString
+      );
+
       await setDoc(docRef, {
         responses: response,
         totalScore: totalScore,
-        lastSurveyDate: timestampString,
+        timestamp: timestamp,
       });
-  // Add notification document in Firestore
-  const notificationsRef = collection(firestore, "users", userEmail, "notifications");
-  await addDoc(notificationsRef, {
-    title: "Please Take Your Survey",
-    details: "It has been a week since your last POEM survey.",
-    timestamp: timestamp,
-  });
-      alert("Responses saved successfully!");
-      scheduleSurveyReminder();
-      router.push("/treatment");
+
+      Alert.alert("Success", "Responses saved successfully!");
     } catch (error) {
       console.error("Error saving responses: ", error);
-      alert("Failed to save responses.");
+      Alert.alert("Error", "Failed to save responses.");
     }
+  };
+
+  const resetSurvey = () => {
+    setResponse({
+      question1: null,
+      question2: null,
+      question3: null,
+      question4: null,
+      question5: null,
+      question6: null,
+      question7: null,
+    });
   };
 
   const calculateScore = () => {
@@ -86,189 +106,65 @@ const POEMScreen = () => {
       "7": 4,
     };
 
-    const totalScore = Object.values(response).reduce((acc, curr) => {
+    return Object.values(response).reduce((acc, curr) => {
       return acc + (curr ? scoreMapping[curr] : 0);
     }, 0);
-
-    return totalScore;
-  };
-
-  const scheduleSurveyReminder = async () => {
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: "Survey Reminder",
-        body: "It's time to take your weekly POEM survey!",
-        sound: false,
-      },
-      trigger: {
-        seconds: 5 // 7 days in seconds
-      },
-    });
   };
 
   return (
     <View style={styles.container}>
-    <BackArrow onPress={() => router.push("/home")} />
-    <ScrollView contentContainerStyle={styles.scrollViewContent}>
-      <View style={styles.header}>
-        <Text style={styles.title}>POEM</Text>
-        <Text style={styles.description}>
-          Complete the POEM questionnaire once a week to monitor changes in your skin condition.
-        </Text>
-        <Text style={styles.description}>
-          Read and answer the questions carefully before submitting. Your total score will indicate eczema severity.
-        </Text>
-      </View>
+      <BackArrow onPress={() => router.push("/home")} />
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        <View style={styles.header}>
+          <Text style={styles.title}>POEM</Text>
+          <Text style={styles.description}>
+            Complete the POEM questionnaire once a week to monitor changes in
+            your skin condition. Please answer the following questions
+            carefully, rating each on a scale from 0 (lowest) to 7 (highest).
+            Your responses will be totaled at the end to indicate the severity
+            of your eczema.
+          </Text>
+        </View>
 
-      <View style={styles.questionContainer}>
-        <Text style={styles.question}>
-          Over the last week, on how many days has your/your child’s skin been
-          itchy because of the eczema?
-        </Text>
-        <View style={styles.optionsContainer}>
-          {["0", "1-2", "3-4", "5-6", "7"].map((option, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[
-                styles.option,
-                response.question1 === option && styles.selectedOption,
-              ]}
-              onPress={() => selectOption("question1", option)}
-            >
-              <Text style={styles.optionText}>{option}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
+        {/* Survey Questions */}
+        {[
+          "Over the last week, on how many days has your/your child’s skin been itchy because of the eczema?",
+          "Over the last week, on how many nights has your/your child's sleep been disturbed because of the eczema?",
+          "Over the last week, on how many days has your/your child’s skin been bleeding because of the eczema?",
+          "Over the last week, on how many days has your/your child’s skin been weeping or oozing clear fluid because of the eczema?",
+          "Over the last week, on how many days has your/your child’s skin been cracked because of the eczema?",
+          "Over the last week, on how many days has your/your child’s skin been flaking off because of the eczema?",
+          "Over the last week, on how many days has your/your child’s skin felt dry or rough because of the eczema?",
+        ].map((question, index) => (
+          <View key={index} style={styles.questionContainer}>
+            <Text style={styles.question}>{question}</Text>
+            <View style={styles.optionsContainer}>
+              {["0", "1-2", "3-4", "5-6", "7"].map((option, idx) => (
+                <TouchableOpacity
+                  key={idx}
+                  style={[
+                    styles.option,
+                    response[`question${index + 1}`] === option &&
+                      styles.selectedOption,
+                  ]}
+                  onPress={() =>
+                    selectOption(`question${index + 1}`, option)
+                  }
+                >
+                  <Text style={styles.optionText}>{option}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        ))}
 
-      <View style={styles.questionContainer}>
-        <Text style={styles.question}>
-          Over the last week, on how many nights has your/your child's sleep
-          been disturbed because of the eczema?
-        </Text>
-        <View style={styles.optionsContainer}>
-          {["0", "1-2", "3-4", "5-6", "7"].map((option, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[
-                styles.option,
-                response.question2 === option && styles.selectedOption,
-              ]}
-              onPress={() => selectOption("question2", option)}
-            >
-              <Text style={styles.optionText}>{option}</Text>
-            </TouchableOpacity>
-          ))}
+        {/* Submit Button */}
+        <View style={styles.submitButtonContainer}>
+          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+            <Text style={styles.submitButtonText}>Submit</Text>
+          </TouchableOpacity>
         </View>
-      </View>
-
-      <View style={styles.questionContainer}>
-        <Text style={styles.question}>
-          Over the last week, on how many days has your/your child’s skin been
-          bleeding because of the eczema?
-        </Text>
-        <View style={styles.optionsContainer}>
-          {["0", "1-2", "3-4", "5-6", "7"].map((option, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[
-                styles.option,
-                response.question3 === option && styles.selectedOption,
-              ]}
-              onPress={() => selectOption("question3", option)}
-            >
-              <Text style={styles.optionText}>{option}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
-      <View style={styles.questionContainer}>
-        <Text style={styles.question}>
-          Over the last week, on how many days has your/your child’s skin been
-          weeping or oozing clear fluid because of the eczema?
-        </Text>
-        <View style={styles.optionsContainer}>
-          {["0", "1-2", "3-4", "5-6", "7"].map((option, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[
-                styles.option,
-                response.question4 === option && styles.selectedOption,
-              ]}
-              onPress={() => selectOption("question4", option)}
-            >
-              <Text style={styles.optionText}>{option}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
-      <View style={styles.questionContainer}>
-        <Text style={styles.question}>
-          Over the last week, on how many days has your/your child’s skin been
-          cracked because of the eczema?
-        </Text>
-        <View style={styles.optionsContainer}>
-          {["0", "1-2", "3-4", "5-6", "7"].map((option, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[
-                styles.option,
-                response.question5 === option && styles.selectedOption,
-              ]}
-              onPress={() => selectOption("question5", option)}
-            >
-              <Text style={styles.optionText}>{option}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
-      <View style={styles.questionContainer}>
-        <Text style={styles.question}>
-          Over the last week, on how many days has your /your child’s skin
-          been flaking off because of the eczema?
-        </Text>
-        <View style={styles.optionsContainer}>
-          {["0", "1-2", "3-4", "5-6", "7"].map((option, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[
-                styles.option,
-                response.question6 === option && styles.selectedOption,
-              ]}
-              onPress={() => selectOption("question6", option)}
-            >
-              <Text style={styles.optionText}>{option}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
-      <View style={styles.questionContainer}>
-        <Text style={styles.question}>
-          Over the last week, on how many days has your/your child’s skin felt
-          dry or rough because of the eczema?
-        </Text>
-        <View style={styles.optionsContainer}>
-          {["0", "1-2", "3-4", "5-6", "7"].map((option, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[
-                styles.option,
-                response.question7 === option && styles.selectedOption,
-              ]}
-              onPress={() => selectOption("question7", option)}
-            >
-              <Text style={styles.optionText}>{option}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
-      <View style={styles.poemEnd}></View>
-    </ScrollView>
-      {/* Submit Button */}
-      <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-        <Text style={styles.submitButtonText}>Submit</Text>
-      </TouchableOpacity>
-
+      </ScrollView>
       <BottomNav />
     </View>
   );
@@ -280,14 +176,14 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   scrollViewContent: {
-    paddingBottom: 100, // Added space to prevent overlap with the BottomNav
+    paddingBottom: 100,
   },
   header: {
     padding: 35,
     alignItems: "center",
     fontSize: 35,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
     marginTop: 30,
   },
   title: {
@@ -333,18 +229,17 @@ const styles = StyleSheet.create({
     fontSize: 13,
     textAlign: "center",
   },
-  poemEnd: {
-    padding: 0,
+  submitButtonContainer: {
+    alignItems: "center",
+    marginVertical: 20,
   },
   submitButton: {
     backgroundColor: "#74BDB3",
     paddingVertical: 15,
     paddingHorizontal: 20,
-    borderRadius: 20,
+    borderRadius: 50,
     alignItems: "center",
     marginHorizontal: 50,
-    marginBottom: 95, 
-    marginTop: 10,
   },
   submitButtonText: {
     color: "white",

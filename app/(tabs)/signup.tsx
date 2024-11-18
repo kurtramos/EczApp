@@ -121,7 +121,7 @@ const SignUpScreen = () => {
       );
       return;
     }
-
+  
     try {
       const auth = getAuth();
       const userCredential = await createUserWithEmailAndPassword(
@@ -129,16 +129,14 @@ const SignUpScreen = () => {
         email,
         password
       );
-
+  
       const user = userCredential.user;
-
+  
       // Send email verification
       await sendEmailVerification(user);
       Alert.alert("Verification Email Sent", "Please check your email to verify your account.");
-
+  
       // Add user details to Firestore
-
-      // Add user details to db
       const docRef = doc(firestore, "users", email);
       await setDoc(docRef, {
         firstName: firstName,
@@ -148,14 +146,16 @@ const SignUpScreen = () => {
         dateOfBirth: dateOfBirth,
         isVerified: false, // New field to track email verification status
       });
-
+  
       Alert.alert("Success", "Account created successfully!");
       router.push("/login");
     } catch (error) {
+      console.error("Sign-Up Error:", error);
       const errorMessage = error.message || "An unknown error occurred";
       Alert.alert("Sign-Up Error", errorMessage);
     }
   };
+  
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>

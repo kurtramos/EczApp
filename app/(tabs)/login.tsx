@@ -30,13 +30,13 @@ export default function App() {
       Alert.alert("Error", "Please enter both email and password.");
       return;
     }
-
+  
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-
+  
       // Check if email is verified
-      if (!user.emailVerified) {  
+      if (!user.emailVerified) {
         Alert.alert(
           "Email Not Verified",
           "Please verify your email before logging in. Check your email inbox for the verification link.",
@@ -57,11 +57,11 @@ export default function App() {
         );
         return;
       }
-
+  
       // Update Firestore to mark user as verified if necessary
       const userDocRef = doc(firestore, "users", user.email);
       const userDocSnap = await getDoc(userDocRef);
-
+  
       if (userDocSnap.exists()) {
         const userData = userDocSnap.data();
         if (!userData.isVerified) {
@@ -69,13 +69,14 @@ export default function App() {
           console.log("Updated isVerified to true in Firestore");
         }
       }
-
+  
       Alert.alert("Success", "Logged in successfully!");
       router.push("/home");
     } catch (error) {
       Alert.alert("Login Error", error.message);
     }
   };
+  
 
   // Handle Password Reset
   const handleForgotPassword = async () => {

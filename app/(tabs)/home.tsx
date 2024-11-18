@@ -28,27 +28,32 @@ export default function HomeScreen() {
       const fetchUserData = async () => {
         const auth = getAuth();
         const user = auth.currentUser;
-
+  
         if (user) {
           setUserEmail(user.email ?? "Unknown Email");
           setProfileImage(user.photoURL || "https://via.placeholder.com/72x72");
-
-          const userDocRef = doc(firestore, "users", user.email ?? "");
-          const userDocSnap = await getDoc(userDocRef);
-
-          if (userDocSnap.exists()) {
-            const userData = userDocSnap.data();
-            setFullName(userData.firstName + " " + userData.lastName);
-          } else {
-            console.log("No user data found in Firestore.");
+  
+          try {
+            const userDocRef = doc(firestore, "users", user.email ?? "");
+            const userDocSnap = await getDoc(userDocRef);
+  
+            if (userDocSnap.exists()) {
+              const userData = userDocSnap.data();
+              setFullName(`${userData.firstName} ${userData.lastName}`);
+            } else {
+              Alert.alert("Error", "No user data found in Firestore.");
+            }
+          } catch (error) {
+            console.error("Error fetching user data:", error);
+            Alert.alert("Error", "Failed to retrieve user data from Firestore.");
           }
         }
       };
-
+  
       fetchUserData();
     }, [])
   );
-
+  
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
