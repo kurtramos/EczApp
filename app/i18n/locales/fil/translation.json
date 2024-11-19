@@ -1,6 +1,22 @@
 {
   "language": "Filipino",
   "home": {
-    "welcome": "Kamusta"
+    "welcome": "Kamusta",
+    "learn": {
+      "title": "ALAMIN",
+      "description": "Lahat ng dapat malaman tungkol sa Eczema."
+    },
+    "how_to_use": {
+      "title": "PAANO GUMAMIT",
+      "description": "Paano gamitin ang mga partikular na tampok at mag-navigate sa app."
+    },
+    "doctors": {
+      "title": "MGA DOKTOR",
+      "description": "Maghanap ng espesyalista sa iyong lugar para sa konsultasyon tungkol sa balat."
+    },
+    "eczema_care": {
+      "title": "EczemaCare",
+      "description": "Isang Mobile Application para sa Pagmamanman at Pagtutok ng Lala ng Atopic Dermatitis."
+    }
   }
 }

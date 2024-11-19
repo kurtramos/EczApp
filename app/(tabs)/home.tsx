@@ -70,7 +70,6 @@ export default function HomeScreen() {
             source={require("../../assets/logos/EczemaCareLogoG.png")}
           />
           <View style={styles.greeting}>
-            {/* <Text style={styles.welcomeText}>Hi, Welcome Back</Text> */}
             <Text style={styles.welcomeText}>{t("home.welcome")}</Text>
             <Text style={styles.welcomeText}>{fullName || "Guest"}</Text>
           </View>
@@ -92,10 +91,9 @@ export default function HomeScreen() {
 
         {/* Header Title Section */}
         <View style={styles.titleCard}>
-          <Text style={styles.headerTitle}>EczemaCare</Text>
+          <Text style={styles.headerTitle}>{t("home.eczema_care.title")}</Text>
           <Text style={styles.headerInfo}>
-            A Mobile Application for Monitoring and Tracking the Severity of
-            Atopic Dermatitis.
+            {t("home.eczema_care.description")}
           </Text>
         </View>
 
@@ -104,17 +102,17 @@ export default function HomeScreen() {
           style={styles.infoCard}
           onPress={() => router.push("/learn")}
         >
-          <Text style={styles.infoTitle}>LEARN</Text>
-          <Text style={styles.infoText}>Everything to know about Eczema.</Text>
+          <Text style={styles.infoTitle}>{t("home.learn.title")}</Text>
+          <Text style={styles.infoText}>{t("home.learn.description")}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.infoCard}
           onPress={() => router.push("/faqs")}
         >
-          <Text style={styles.infoTitle}>HOW TO USE</Text>
+          <Text style={styles.infoTitle}>{t("home.how_to_use.title")}</Text>
           <Text style={styles.infoText}>
-            How to use specific features and navigate the app.
+            {t("home.how_to_use.description")}
           </Text>
         </TouchableOpacity>
 
@@ -122,10 +120,8 @@ export default function HomeScreen() {
           style={styles.infoCard}
           onPress={() => router.push("/aboutus")}
         >
-          <Text style={styles.infoTitle}>DOCTORS</Text>
-          <Text style={styles.infoText}>
-            Find a specialist in your area for skin consultation.
-          </Text>
+          <Text style={styles.infoTitle}>{t("home.doctors.title")}</Text>
+          <Text style={styles.infoText}>{t("home.doctors.description")}</Text>
         </TouchableOpacity>
       </ScrollView>
 

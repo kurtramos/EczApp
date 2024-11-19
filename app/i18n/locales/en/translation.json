@@ -1,6 +1,22 @@
 {
   "language": "English",
   "home": {
-    "welcome": "Hi, Welcome Back"
+    "welcome": "Hi, Welcome Back",
+    "learn": {
+      "title": "LEARN",
+      "description": "Everything to know about Eczema."
+    },
+    "how_to_use": {
+      "title": "HOW TO USE",
+      "description": "How to use specific features and navigate the app."
+    },
+    "doctors": {
+      "title": "DOCTORS",
+      "description": "Find a specialist in your area for skin consultation."
+    },
+    "eczema_care": {
+      "title": "EczemaCare",
+      "description": "A Mobile Application for Monitoring and Tracking the Severity of Atopic Dermatitis."
+    }
   }
 }
