@@ -20,6 +20,59 @@
     }
   },
 
+  "learn": {
+    "learn": "Learn",
+    "what_is_eczema": "What is Eczema?",
+    "is_eczema_curable": "Is Eczema Curable?",
+    "types_of_eczema": "Types of Eczema",
+    "symptoms": "Symptoms",
+    "remedies": "Remedies",
+    "what_to_do": "What to Do",
+    "what_to_avoid": "What to Avoid",
+    "disclaimer": "Disclaimer",
+    "eczema_description": "Eczema, also known as atopic dermatitis, is a chronic skin condition that causes inflamed, itchy, and red skin. It occurs when the skin's protective barrier is weakened, making it more sensitive to irritants and allergens. Eczema often starts in childhood but can affect people of all ages.",
+    "eczema_curable_description": "Unfortunately, there is no cure for eczema. However, it can be managed with proper treatment and care. Symptoms can come and go, with periods of flare-ups followed by times of remission. Long-term management focuses on reducing flare-ups and controlling symptoms.",
+    "types_of_eczema_description": "There are several types of eczema, including Atopic Dermatitis, Contact Dermatitis, Dyshidrotic Eczema, Nummular Eczema, Seborrheic Dermatitis, and Stasis Dermatitis.",
+    "symptoms_description": "Eczema symptoms can vary, but common signs include dry, scaly, or cracked skin, itching, red or inflamed skin, small raised bumps that may leak fluid, thickened skin, and sensitive skin that reacts to irritants.",
+    "remedies_description": "Eczema treatment typically involves Moisturizers, Topical Steroids, Antihistamines, Wet Wrap Therapy, Phototherapy, and Lifestyle Adjustments.",
+    "what_to_do_description": "Keep Skin Moisturized, Use Gentle Skincare Products, Wear Soft, Breathable Fabrics, Manage Stress, and See a Dermatologist.",
+    "what_to_avoid_description": "Avoid Harsh Soaps and Detergents, Hot Showers or Baths, Scratching, Environmental Triggers, and Rough or Synthetic Fabrics.",
+    "disclaimer_description": "This application is designed to help track and monitor the severity of a patient’s eczema. It is not intended to replace professional medical advice or treatment. If symptoms persist or worsen, please consult your doctor for further evaluation and care."
+  },
+
+  "how_to_use": {
+    "how_to_use": "How to Use",
+    "how_to_use_the_camera": "How to Use the Camera",
+    "how_to_use_the_camera_description": "To use the camera in the EczemaCare app:\n1. Navigate to the “Camera” section from the app menu.\n2. Point your camera at the affected skin area you want to monitor.\n3. Tap the shutter button to take a clear photo.\n4. Save the image, which will be stored in your personal health records for easy reference.\n\nTip: Ensure good lighting and a close-up shot for better accuracy.",
+    "what_is_the_camera_for": "What Is the Camera For",
+    "what_is_the_camera_for_description": "The camera feature in the EczemaCare app allows you to:\n• Take photos of your skin condition to track changes over time.\n• Compare current skin health with past images to observe improvements or flare-ups.\n• Store the images in the app for the healthcare provider to view and provide better diagnosis and management.",
+    "when_to_answer_poem": "When to Answer the POEM Survey",
+    "when_to_answer_poem_description": "You should complete the POEM (Patient-Oriented Eczema Measure) survey:\n• Once a week to monitor your eczema symptoms. The survey can be taken as needed for when the case gets worse.\n• After significant changes in your condition or treatment adjustments.\n• Before a scheduled check-up with your healthcare provider to give them updated information about your symptoms.",
+    "how_to_use_the_tracker": "How to Use the Tracker",
+    "how_to_use_the_tracker_description": "To use the tracker effectively:\n1. Access the Tracker section from the menu.\n2. Input details about your symptoms, medications, and daily skin care routine.\n3. Use the tracker to log any changes in your skin condition or flare-ups.\n4. Review your progress by checking the weekly or monthly summaries to see patterns or improvements.",
+    "what_is_the_poem_score": "What Is the POEM Score",
+    "what_is_the_poem_score_description": "The POEM score is a measure used to assess the severity of your eczema symptoms. It’s based on a series of questions related to:\n• Itching and discomfort.\n• Sleep disturbance.\n• Frequency and extent of eczema flare-ups.\n\nYour responses generate a score, which helps both you and your healthcare provider understand how well your eczema is being managed and whether treatment adjustments are needed.",
+    "how_can_i_get_treatment": "How Can I Get Treatment",
+    "how_can_i_get_treatment_description": "For treatment options:\n1. Visit the Treatment section in the app, where you’ll find personalized recommendations based on your POEM score and tracking data.\n2. Schedule an appointment with your dermatologist through the app's integrated telehealth feature, or consult your healthcare provider in person.\n3. Ensure you follow the prescribed treatment plan, including medications, moisturizers, and lifestyle adjustments.\n\nNote: Always consult a healthcare professional before making any changes to your treatment plan."
+  },
+
+  "doctors": {
+    "heading": "DOCTORS",
+    "subheading": "Find an allergy/immunology specialist",
+    "info_section": {
+      "text": "Allergy and Immunology specialists are experts in diagnosing and treating allergic diseases and immune system disorders. These may include asthma, food allergies, eczema, allergic rhinitis, and autoimmune conditions."
+    },
+    "carousel": {
+      "scroll_down": "Scroll down to know more about the doctors."
+    },
+    "psaai_source": "PSAAI is a globally recognized organization of moral and ethical physicians with a passion for excellence in the field of Allergy and Immunology. It is committed to dedicated service, continuing education, training, and research, with the ultimate goal of providing the best healthcare for all people.",
+    "search_bar": {
+      "placeholder": "Search for a doctor, city, hospital, unit, contact, or platform..."
+    },
+    "no_results": "No doctors found matching your search.",
+    "doctor_source": "The doctor list is sourced from"
+  },
+
   "settings": {
     "settings": "Settings",
     "language_setting": "Language Setting",

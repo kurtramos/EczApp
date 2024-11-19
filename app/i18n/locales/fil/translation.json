@@ -20,6 +20,59 @@
     }
   },
 
+  "learn": {
+    "learn": "Alamin",
+    "what_is_eczema": "Ano ang Eczema?",
+    "is_eczema_curable": "Pwede bang magamot ang Eczema?",
+    "types_of_eczema": "Mga Uri ng Eczema",
+    "symptoms": "Sintomas",
+    "remedies": "Mga Lunas",
+    "what_to_do": "Ano ang Dapat Gawin",
+    "what_to_avoid": "Ano ang Dapat Iwasan",
+    "disclaimer": "Paunawa",
+    "eczema_description": "Ang Eczema, na kilala rin bilang atopic dermatitis, ay isang chronic na kondisyon sa balat na nagdudulot ng pamamaga, pangangati, at pamumula ng balat. Nangyayari ito kapag ang proteksyon ng balat ay humina, kaya't ito'y mas sensitibo sa mga irritants at allergens. Kadalasang nagsisimula ito sa pagkabata, ngunit maaari ring makaapekto sa mga tao sa lahat ng edad.",
+    "eczema_curable_description": "Sa kasamaang palad, walang lunas para sa eczema. Gayunpaman, maaari itong pamahalaan sa pamamagitan ng tamang paggamot at pangangalaga. Ang mga sintomas ay maaaring magbago, mula sa mga flare-ups hanggang sa mga panahon ng remission. Ang pangmatagalang pamamahala ay nakatuon sa pagbabawas ng mga flare-ups at pagkontrol ng mga sintomas.",
+    "types_of_eczema_description": "Mayroong iba't ibang uri ng eczema, kabilang ang Atopic Dermatitis, Contact Dermatitis, Dyshidrotic Eczema, Nummular Eczema, Seborrheic Dermatitis, at Stasis Dermatitis.",
+    "symptoms_description": "Ang mga sintomas ng eczema ay maaaring magkaiba-iba, ngunit ang mga karaniwang palatandaan ay ang tuyot, magaspang, o basag na balat, pangangati, pamumula ng balat, maliliit na paltos na maaaring mag-leak ng likido, pagkatibay ng balat, at sensitibong balat na tumutugon sa mga irritants.",
+    "remedies_description": "Ang paggamot sa eczema ay karaniwang kinabibilangan ng Moisturizers, Topical Steroids, Antihistamines, Wet Wrap Therapy, Phototherapy, at Lifestyle Adjustments.",
+    "what_to_do_description": "I-moisturize ang Balat, Gumamit ng Malalambot na Produkto sa Balat, Magsuot ng Malalambot at Maaliwalas na Tela, Pamahalaan ang Stress, at Kumonsulta sa isang Dermatologist.",
+    "what_to_avoid_description": "Iwasan ang Harsh na Sabon at Detergents, Mainit na Paliguan o Banyo, Pangangati, Mga Environmental Triggers, at Magaspang o Sintetiko na Tela.",
+    "disclaimer_description": "Ang application na ito ay nilayon upang makatulong sa pagsubaybay at pagmamasid sa kalubhaan ng eczema ng isang pasyente. Hindi ito maaaring pumalit sa propesyonal na medikal na payo o paggamot. Kung magpatuloy o lumala ang mga sintomas, mangyaring kumonsulta sa iyong doktor para sa karagdagang pagsusuri at pangangalaga."
+  },
+
+  "how_to_use": {
+    "how_to_use": "Paano Gamitin",
+    "how_to_use_the_camera": "Paano Gamitin ang Kamera",
+    "how_to_use_the_camera_description": "Para gamitin ang kamera sa EczemaCare app:\n1. Pumunta sa seksyong “Kamera” mula sa menu ng app.\n2. Itutok ang kamera sa apektadong bahagi ng balat na nais mong subaybayan.\n3. Pindutin ang button ng shutter para kumuha ng malinaw na larawan.\n4. I-save ang larawan, na itatago sa iyong personal na health records para madaling ma-access.\n\nTip: Siguraduhing may tamang ilaw at malapit ang kuha para sa mas tumpak na larawan.",
+    "what_is_the_camera_for": "Para Saan ang Kamera?",
+    "what_is_the_camera_for_description": "Ang kamera sa EczemaCare app ay ginagamit para:\n• Kumuha ng mga larawan ng iyong kondisyon sa balat upang masubaybayan ang mga pagbabago sa paglipas ng panahon.\n• Ikumpara ang kalagayan ng iyong balat ngayon sa mga nakaraang larawan upang makita ang mga pagbabago o flare-ups.\n• Itago ang mga larawan sa app para makita ng iyong healthcare provider at mabigyan ka ng mas tamang diagnosis at management.",
+    "when_to_answer_poem": "Kailan Dapat Sagutin ang POEM Survey?",
+    "when_to_answer_poem_description": "Dapat mong sagutin ang POEM (Patient-Oriented Eczema Measure) survey:\n• Isang beses kada linggo para subaybayan ang iyong mga sintomas ng eczema. Maaari rin itong sagutin kapag lumala ang iyong kondisyon.\n• Pagkatapos ng mga makabuluhang pagbabago sa iyong kondisyon o paggamot.\n• Bago ang isang nakatakdang check-up sa iyong healthcare provider upang magbigay ng pinakabagong impormasyon tungkol sa iyong mga sintomas.",
+    "how_to_use_the_tracker": "Paano Gamitin ang Tracker",
+    "how_to_use_the_tracker_description": "Para gamitin ang tracker ng tama:\n1. Pumunta sa seksyon ng Tracker mula sa menu.\n2. I-input ang mga detalye tungkol sa iyong mga sintomas, gamot, at pang-araw-araw na routine sa pangangalaga ng balat.\n3. Gamitin ang tracker para i-log ang anumang pagbabago sa iyong kondisyon ng balat o flare-ups.\n4. Tingnan ang iyong progreso sa pamamagitan ng pagsusuri ng lingguhan o buwanang summary para makita ang mga pattern o improvements.",
+    "what_is_the_poem_score": "Ano ang POEM Score?",
+    "what_is_the_poem_score_description": "Ang POEM score ay isang sukatan na ginagamit upang masukat ang tindi ng iyong mga sintomas ng eczema. Batay ito sa mga serye ng mga tanong tungkol sa:\n• Pangangati at discomfort.\n• Pagkagambala sa tulog.\n• Dali at lawak ng mga flare-ups ng eczema.\n\nAng iyong mga sagot ay magbibigay ng isang score, na makakatulong sa iyo at sa iyong healthcare provider upang malaman kung gaano kaepektibo ang paggamot at kung kailangan bang baguhin ang iyong plano.",
+    "how_can_i_get_treatment": "Paano Ako Makakakuha ng Gamot o Paggamot?",
+    "how_can_i_get_treatment_description": "Para sa mga opsyon sa paggamot:\n1. Pumunta sa seksyon ng Treatment sa app, kung saan makikita mo ang mga personalisadong rekomendasyon batay sa iyong POEM score at mga datos mula sa tracker.\n2. Mag-schedule ng appointment sa iyong dermatologist gamit ang integrated na telehealth feature ng app, o kumonsulta sa iyong healthcare provider ng personal.\n3. Siguraduhing sundin ang iyong iniresetang plano sa paggamot, kabilang ang mga gamot, moisturizer, at mga pagbabago sa lifestyle.\n\nTandaan: Laging kumonsulta sa isang healthcare professional bago baguhin ang iyong plano sa paggamot."
+  },
+
+  "doctors": {
+    "heading": "MGA DOKTOR",
+    "subheading": "Maghanap ng allergy/immunology specialist",
+    "info_section": {
+      "text": "Ang mga allergy at Immunology specialists ay mga eksperto sa pagsusuri at paggamot ng mga allergic na sakit at mga disorder ng immune system. Kasama dito ang asthma, food allergies, eczema, allergic rhinitis, at mga autoimmune na kondisyon."
+    },
+    "carousel": {
+      "scroll_down": "Mag-scroll pababa upang malaman pa ang tungkol sa mga doktor."
+    },
+    "psaai_source": "Ang PSAAI ay isang globally recognized na organisasyon ng mga moral at ethical na mga doktor na may malasakit sa kahusayan sa larangan ng Allergy at Immunology. Nakatuon ito sa dedikadong serbisyo, patuloy na edukasyon, pagsasanay, at pananaliksik, na may layunin na magbigay ng pinakamahusay na healthcare para sa lahat ng tao.",
+    "search_bar": {
+      "placeholder": "Maghanap ng doktor, lungsod, ospital, yunit, kontak, o platform..."
+    },
+    "no_results": "Walang mga doktor na natagpuan na tumutugma sa iyong paghahanap.",
+    "doctor_source": "Ang listahan ng doktor ay galing sa"
+  },
+
   "settings": {
     "settings": "Mga Setting",
     "language_setting": "Setting ng Wika",
