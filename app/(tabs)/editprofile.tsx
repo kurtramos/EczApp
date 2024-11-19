@@ -13,8 +13,10 @@ import BackArrow from "../components/BackArrow";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { firestore } from "../firebaseConfig";
+import { useTranslation } from "react-i18next";
 
 const EditProfile = () => {
+  const { t } = useTranslation();
   const router = useRouter(); // For navigation
   // Define states for text fields
   const [firstName, setFirstName] = useState("");
@@ -34,10 +36,10 @@ const EditProfile = () => {
 
           if (userDocSnap.exists()) {
             const userData = userDocSnap.data();
-            setFirstName(userData.firstName ?? "No First Name Available");
-            setLastName(userData.lastName ?? "No Last Name Available");
+            setFirstName(userData.firstName ?? t("account.no_first_name"));
+            setLastName(userData.lastName ?? t("account.no_last_name"));
             setPhoneNumber(
-              userData.mobileNumber ?? "No Phone Number Available"
+              userData.mobileNumber ?? t("account.no_phone_number")
             );
             setEmail(userData.email ?? user?.email);
           } else {
@@ -76,12 +78,12 @@ const EditProfile = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Edit Profile</Text>
+      <Text style={styles.title}>{t("account.edit_profile")}</Text>
 
       {/* First Name Input */}
       <TextInput
         style={styles.input}
-        placeholder="First Name"
+        placeholder={t("account.first_name")}
         value={firstName}
         onChangeText={setFirstName}
       />
@@ -89,7 +91,7 @@ const EditProfile = () => {
       {/* Last Name Input */}
       <TextInput
         style={styles.input}
-        placeholder="Last Name"
+        placeholder={t("account.last_name")}
         value={lastName}
         onChangeText={setLastName}
       />
@@ -97,7 +99,7 @@ const EditProfile = () => {
       {/* Phone Number Input */}
       <TextInput
         style={styles.input}
-        placeholder="Phone Number"
+        placeholder={t("account.phone_number")}
         value={phoneNumber}
         onChangeText={setPhoneNumber}
         keyboardType="phone-pad" // Ensure correct keyboard type on mobile
@@ -106,15 +108,14 @@ const EditProfile = () => {
       {/* Email Input */}
       <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder={t("account.email")}
         value={email}
-        // onChangeText={setEmail}
         keyboardType="email-address" // Ensure correct keyboard type for email
       />
 
       {/* Save Button */}
       <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-        <Text style={styles.saveButtonText}>Save</Text>
+        <Text style={styles.saveButtonText}>{t("account.save")}</Text>
       </TouchableOpacity>
     </View>
   );

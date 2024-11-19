@@ -19,6 +19,7 @@
       "description": "A Mobile Application for Monitoring and Tracking the Severity of Atopic Dermatitis."
     }
   },
+
   "settings": {
     "settings": "Settings",
     "language_setting": "Language Setting",
@@ -40,5 +41,101 @@
     "confirm_deletion_message": "Are you sure you want to delete your account? This action is irreversible, and all your data and files will be permanently deleted.",
     "delete": "Delete",
     "cancel": "Cancel"
+  },
+
+  "account": {
+    "age": "Age",
+    "my_account": "My account",
+    "personal_information": "Personal Information",
+    "profile": "Profile",
+    "my_record": "My Record",
+    "privacy_policy": "Privacy Policy",
+    "logout": "Logout",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "phone_number": "Phone Number",
+    "email": "Email",
+    "edit_profile": "Edit Profile",
+    "verified_user": "Verified User",
+    "not_verified": "Not Verified",
+    "save": "Save",
+    "logged_out": "You have been successfully logged out.",
+    "no_first_name": "No First Name Available",
+    "no_last_name": "No Last Name Available",
+    "no_phone_number": "No Phone Number Available",
+    "poem_score_trend": "POEM Score Trend",
+    "medications_and_treatment": "Medications & Treatment",
+    "previous_survey_info": "Previous Survey Info",
+    "no_previous_survey": "No Previous Survey",
+    "score": "Score",
+    "severity_level": "Severity Level",
+    "clear": "Clear",
+    "mild": "Mild",
+    "moderate": "Moderate",
+    "severe": "Severe",
+    "very_severe": "Very Severe",
+    "unknown": "Unknown",
+    "clear_message": "Your skin is clear, with minimal eczema symptoms.",
+    "mild_message": "Mild eczema symptoms detected. Keep monitoring your skin condition.",
+    "moderate_message": "Moderate eczema symptoms are present. Consider consulting a healthcare provider.",
+    "severe_message": "Severe eczema symptoms detected. It’s recommended to seek medical advice.",
+    "very_severe_message": "Very severe eczema symptoms. Please consult a healthcare provider immediately.",
+    "unknown_message": "Score out of range. Please check your input.",
+    "no_survey_found": "No previous survey found.",
+    "no_data": "No Data"
+  },
+
+  "privacy_policy": {
+    "heading": "Privacy Policy",
+    "intro_paragraph": "EczemaCare is committed to protecting your privacy. This Privacy Policy outlines how we collect, use, share, and protect your personal information. By using EczemaCare, you agree to the collection and use of information as described in this policy.",
+    "information_we_collect": {
+      "title": "1. Information We Collect",
+      "personal_information": {
+        "title": "Personal Information",
+        "items": [
+          "First and Last Name",
+          "Date of Birth",
+          "Contact Number",
+          "Email Address"
+        ]
+      },
+      "medical_information": {
+        "title": "Medical Information",
+        "items": [
+          "Images of affected skin areas (uploaded by the user)",
+          "Responses and scores from the POEM (Patient-Oriented Eczema Measure) survey"
+        ]
+      }
+    },
+    "how_we_use_information": {
+      "title": "2. How We Use Your Information",
+      "paragraph": "EczemaCare uses your information for the following purposes:",
+      "purposes": [
+        "TREATMENT TRACKING: Your POEM survey scores allow us to monitor changes in your condition over time.",
+        "COMMUNICATION: We may use your contact details to notify you about important updates, responses, or recommendations regarding your eczema care.",
+        "RESEARCH AND ANALYSIS: Aggregated, anonymized data may be used for internal research to improve our services. Individual information will not be shared without your explicit consent."
+      ]
+    },
+    "data_sharing_and_disclosure": {
+      "title": "3. Data Sharing and Disclosure",
+      "paragraph": "We will not share your personal information with third parties except:",
+      "conditions": [
+        "WITH YOUR CONSENT: We may share information with third parties when you explicitly consent.",
+        "FOR LEGAL REQUIREMENTS: We may disclose information if required by law, court order, or government regulation.",
+        "WITH OUR MEDICAL VALIDATOR: EczemaCare collaborates with a medical expert to ensure the effectiveness and accuracy of treatment recommendations. Your anonymized data may be shared with the medical expert for validation purposes."
+      ]
+    },
+    "data_security": {
+      "title": "4. Data Security",
+      "paragraph": "We implement robust security measures to protect your personal information from unauthorized access, use, or disclosure. However, no method of data transmission over the internet is 100% secure, and we cannot guarantee absolute security."
+    },
+    "data_retention": {
+      "title": "5. Data Retention",
+      "paragraph": "We will retain your information as long as necessary to fulfill the purposes outlined in this Privacy Policy or as required by law. You may request deletion of your personal data by contacting us directly, and we will process your request per applicable laws."
+    },
+    "your_rights": {
+      "title": "6. Your Rights",
+      "paragraph": "You have the right to access, correct, or request deletion of your personal information. If you would like to exercise any of these rights, please contact us through our support email at [Support Email]."
+    }
   }
 }

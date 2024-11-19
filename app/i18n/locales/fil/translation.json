@@ -19,6 +19,7 @@
       "description": "Isang Mobile Application para sa Pagmamanman at Pagtutok ng Lala ng Atopic Dermatitis."
     }
   },
+
   "settings": {
     "settings": "Mga Setting",
     "language_setting": "Setting ng Wika",
@@ -40,5 +41,101 @@
     "confirm_deletion_message": "Sigurado ka bang nais mong burahin ang iyong account? Ang hakbang na ito ay hindi maibabalik, at lahat ng iyong data at mga file ay permanenteng mabubura.",
     "delete": "Burahin",
     "cancel": "Kanselahin"
+  },
+
+  "account": {
+    "age": "Edad",
+    "my_account": "Aking account",
+    "personal_information": "Personal na Impormasyon",
+    "profile": "Profile",
+    "my_record": "Aking Record",
+    "privacy_policy": "Patakaran sa Privacy",
+    "logout": "Mag-logout",
+    "first_name": "Pangalan",
+    "last_name": "Apelyido",
+    "phone_number": "Numero ng Telepono",
+    "email": "Email",
+    "edit_profile": "I-edit ang Profile",
+    "verified_user": "Beripikadong User",
+    "not_verified": "Hindi Beripikado",
+    "save": "I-save",
+    "logged_out": "Matagumpay kang nag-log out.",
+    "no_first_name": "Walang Available na Pangalan",
+    "no_last_name": "Walang Available na Apelyido",
+    "no_phone_number": "Walang Available na Numero ng Telepono",
+    "poem_score_trend": "POEM Score Trend",
+    "medications_and_treatment": "Mga Gamot at Paggamot",
+    "previous_survey_info": "Nakaraang Impormasyon ng Survey",
+    "no_previous_survey": "Walang Nakaraang Survey",
+    "score": "Puntos",
+    "severity_level": "Antas ng Kalubhaan",
+    "clear": "Malinaw",
+    "mild": "Banayad",
+    "moderate": "Katamtaman",
+    "severe": "Matindi",
+    "very_severe": "Napakatindi",
+    "unknown": "Hindi Kilala",
+    "clear_message": "Malinaw ang iyong balat, may kaunting sintomas ng eksema.",
+    "mild_message": "Banayad na sintomas ng eksema. Patuloy na subaybayan ang iyong kondisyon ng balat.",
+    "moderate_message": "Katamtamang sintomas ng eksema. Isaalang-alang ang pagkonsulta sa isang healthcare provider.",
+    "severe_message": "Matinding sintomas ng eksema. Inirerekomenda na kumonsulta sa doktor.",
+    "very_severe_message": "Napakatinding sintomas ng eksema. Mangyaring kumonsulta agad sa healthcare provider.",
+    "unknown_message": "Ang puntos ay labas ng saklaw. Pakisuri ang iyong input.",
+    "no_survey_found": "Walang nakaraang survey na natagpuan.",
+    "no_data": "Walang Data"
+  },
+
+  "privacy_policy": {
+    "heading": "Patakaran sa Privacy",
+    "intro_paragraph": "Ang EczemaCare ay nakatuon sa pagprotekta ng iyong privacy. Ang Patakaran sa Privacy na ito ay naglalahad kung paano namin kinokolekta, ginagamit, ibinabahagi, at pinoprotektahan ang iyong personal na impormasyon. Sa paggamit ng EczemaCare, sumasang-ayon ka sa pagkolekta at paggamit ng impormasyon ayon sa inilalarawan sa patakarang ito.",
+    "information_we_collect": {
+      "title": "1. Impormasyon na Kinokolekta Namin",
+      "personal_information": {
+        "title": "Personal na Impormasyon",
+        "items": [
+          "Pangalan at Apelyido",
+          "Petsa ng Kapanganakan",
+          "Numero ng Telepono",
+          "Email Address"
+        ]
+      },
+      "medical_information": {
+        "title": "Medikal na Impormasyon",
+        "items": [
+          "Mga Larawan ng apektadong bahagi ng balat (na in-upload ng gumagamit)",
+          "Mga sagot at iskor mula sa POEM (Patient-Oriented Eczema Measure) survey"
+        ]
+      }
+    },
+    "how_we_use_information": {
+      "title": "2. Paano Namin Ginagamit ang Iyong Impormasyon",
+      "paragraph": "Ginagamit ng EczemaCare ang iyong impormasyon para sa mga sumusunod na layunin:",
+      "purposes": [
+        "PAGMOMONITOR NG PAGGAMIT: Ang iyong POEM survey scores ay tumutulong sa amin na subaybayan ang pagbabago ng iyong kondisyon sa paglipas ng panahon.",
+        "KOMUNIKASYON: Maaaring gamitin ang iyong contact details upang ipaalam sa iyo ang mga mahalagang update, sagot, o rekomendasyon ukol sa iyong pangangalaga sa eczema.",
+        "PANANALIKSIK AT ANALISIS: Ang pinagsamang, anonymized na data ay maaaring gamitin para sa internal na pananaliksik upang mapabuti ang aming mga serbisyo. Hindi ibabahagi ang iyong personal na impormasyon nang walang iyong explicit na pahintulot."
+      ]
+    },
+    "data_sharing_and_disclosure": {
+      "title": "3. Pagbabahagi at Pagpapahayag ng Data",
+      "paragraph": "Hindi namin ibabahagi ang iyong personal na impormasyon sa mga third parties maliban kung:",
+      "conditions": [
+        "SA IYONG PAHINTULOT: Maaaring ibahagi ang impormasyon sa mga third parties kapag ikaw ay nagbigay ng explicit na pahintulot.",
+        "PAMAMAGITAN NG LEGAL NA PAGPAPAGAMIT: Maaaring ibunyag ang impormasyon kung kinakailangan ng batas, kautusan ng hukuman, o regulasyon ng gobyerno.",
+        "SA AMING MEDICAL VALIDATOR: Nakikipagtulungan ang EczemaCare sa isang medikal na eksperto upang tiyakin ang bisa at kawastuhan ng mga rekomendasyon sa paggamot. Ang iyong anonymized na data ay maaaring ibahagi sa eksperto para sa layunin ng beripikasyon."
+      ]
+    },
+    "data_security": {
+      "title": "4. Seguridad ng Data",
+      "paragraph": "Nagpapatupad kami ng matibay na hakbang sa seguridad upang protektahan ang iyong personal na impormasyon mula sa hindi awtorisadong pag-access, paggamit, o pagpapahayag. Gayunpaman, walang paraan ng pag-transmit ng data sa internet ang 100% na secure, at hindi namin matitiyak ang ganap na seguridad."
+    },
+    "data_retention": {
+      "title": "5. Pagpapanatili ng Data",
+      "paragraph": "Itatago namin ang iyong impormasyon hangga't kinakailangan upang matugunan ang mga layunin na inilalahad sa Patakaran sa Privacy na ito o ayon sa kinakailangan ng batas. Maaaring hilingin mong tanggalin ang iyong personal na data sa pamamagitan ng direktang pakikipag-ugnayan sa amin, at iproseso namin ang iyong hiling alinsunod sa mga naaangkop na batas."
+    },
+    "your_rights": {
+      "title": "6. Ang Iyong Mga Karapatan",
+      "paragraph": "May karapatan kang ma-access, itama, o hilingin ang pagtanggal ng iyong personal na impormasyon. Kung nais mong gamitin ang alinman sa mga karapatang ito, mangyaring makipag-ugnayan sa amin sa pamamagitan ng aming support email sa [Support Email]."
+    }
   }
 }

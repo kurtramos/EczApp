@@ -1,65 +1,97 @@
-import React from 'react';
-import { ScrollView, Text, StyleSheet, View } from 'react-native';
-import BackArrow from '../components/BackArrow';
-import { useRouter } from 'expo-router'; 
+import React from "react";
+import { ScrollView, Text, StyleSheet, View } from "react-native";
+import BackArrow from "../components/BackArrow";
+import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 const PrivacyPolicy = () => {
+  const { t } = useTranslation();
   const router = useRouter();
+
   return (
-    
     <View style={styles.container}>
-      <BackArrow onPress={() => router.push('/myaccount')} />
+      <BackArrow onPress={() => router.push("/myaccount")} />
       <ScrollView style={styles.scrollView}>
-        <Text style={styles.heading}>Privacy Policy</Text>
+        <Text style={styles.heading}>{t("privacy_policy.heading")}</Text>
         <Text style={styles.paragraph}>
-        EczemaCare is committed to protecting your privacy. This Privacy Policy outlines how we collect, use, share, and protect 
-        your personal information. By using EczemaCare, you agree to the collection and use of information as described in this policy.
+          {t("privacy_policy.intro_paragraph")}
         </Text>
-        <Text style={styles.subHeading}>1. Information We Collect</Text>
-          <Text style={styles.paragraph}>
-          To provide you with a personalized experience and track your progress, 
-          EczemaCare collects the following information:</Text>
 
-        <Text style={styles.subHeading2}>Personal Information</Text>
-          <Text style={styles.bullets}>• First and Last Name</Text>
-          <Text style={styles.bullets}>• Date of Birth</Text>
-          <Text style={styles.bullets}>• Contact Number</Text>
-          <Text style={styles.bullets}>• Email Address</Text>
+        <Text style={styles.subHeading}>
+          {t("privacy_policy.information_we_collect.title")}
+        </Text>
+        <Text style={styles.subHeading2}>
+          {t(
+            "privacy_policy.information_we_collect.personal_information.title"
+          )}
+        </Text>
+        {t("privacy_policy.information_we_collect.personal_information.items", {
+          returnObjects: true,
+        }).map((item, index) => (
+          <Text key={index} style={styles.bullets}>
+            • {item}
+          </Text>
+        ))}
 
-          <Text style={styles.subHeading2}>Medical Information</Text>
-          <Text style={styles.bullets}>• Images of affected skin areas (uploaded by the user)</Text>
-          <Text style={styles.bullets}>• Responses and scores from the POEM (Patient-Oriented Eczema Measure) survey</Text>
+        <Text style={styles.subHeading2}>
+          {t("privacy_policy.information_we_collect.medical_information.title")}
+        </Text>
+        {t("privacy_policy.information_we_collect.medical_information.items", {
+          returnObjects: true,
+        }).map((item, index) => (
+          <Text key={index} style={styles.bullets}>
+            • {item}
+          </Text>
+        ))}
 
-        <Text style={styles.subHeading}>2. How We Use Your Information</Text>
-          <Text style={styles.paragraph}>
-          EczemaCare uses your information for the following purposes: </Text>
+        <Text style={styles.subHeading}>
+          {t("privacy_policy.how_we_use_information.title")}
+        </Text>
+        <Text style={styles.paragraph}>
+          {t("privacy_policy.how_we_use_information.paragraph")}
+        </Text>
+        {t("privacy_policy.how_we_use_information.purposes", {
+          returnObjects: true,
+        }).map((purpose, index) => (
+          <Text key={index} style={styles.bullets}>
+            {purpose}
+          </Text>
+        ))}
 
-          <Text style={styles.bullets}>• TREATMENT TRACKING: Your POEM survey scores allow us to monitor changes in your condition over time.</Text>
-          <Text style={styles.bullets}>• COMMUNICATION: We may use your contact details to notify you about important updates, responses, or recommendations regarding your eczema care.</Text>
-          <Text style={styles.bullets}>• RESEARCH AND ANALYSIS: Aggregated, anonymized data may be used for internal research to improve our services. Individual information will not be shared without your explicit consent.</Text>
+        <Text style={styles.subHeading}>
+          {t("privacy_policy.data_sharing_and_disclosure.title")}
+        </Text>
+        <Text style={styles.paragraph}>
+          {t("privacy_policy.data_sharing_and_disclosure.paragraph")}
+        </Text>
+        {t("privacy_policy.data_sharing_and_disclosure.conditions", {
+          returnObjects: true,
+        }).map((condition, index) => (
+          <Text key={index} style={styles.bullets}>
+            {condition}
+          </Text>
+        ))}
 
-          <Text style={styles.subHeading}>3. Data Sharing and Disclosure</Text>
-          <Text style={styles.paragraph}>
-          We will not share your personal information with third parties except: </Text>
+        <Text style={styles.subHeading}>
+          {t("privacy_policy.data_security.title")}
+        </Text>
+        <Text style={styles.paragraph}>
+          {t("privacy_policy.data_security.paragraph")}
+        </Text>
 
-          <Text style={styles.bullets}>• WITH YOUR CONSENT: We may share information with third parties when you explicitly consent.</Text>
-          <Text style={styles.bullets}>• FOR LEGAL REQUIREMENTS: We may disclose information if required by law, court order, or government regulation.</Text>
-          <Text style={styles.bullets}>• WITH OUR MEDICAL VALIDATOR: EczemaCare collaborates with a medical expert to ensure the effectiveness and accuracy of treatment recommendations. Your anonymized data may be shared with the medical expert for validation purposes.</Text>
+        <Text style={styles.subHeading}>
+          {t("privacy_policy.data_retention.title")}
+        </Text>
+        <Text style={styles.paragraph}>
+          {t("privacy_policy.data_retention.paragraph")}
+        </Text>
 
-        <Text style={styles.subHeading}>4. Data Security</Text>
-          <Text style={styles.paragraph}>
-          We implement robust security measures to protect your personal information from unauthorized access, use, or disclosure. 
-          However, no method of data transmission over the internet is 100% secure, and we cannot guarantee absolute security. </Text>
-
-          <Text style={styles.subHeading}>5. Data Retention</Text>
-          <Text style={styles.paragraph}>
-          We will retain your information as long as necessary to fulfill the purposes outlined in this Privacy Policy 
-          or as required by law. You may request deletion of your personal data by contacting us directly, and we will process your request per applicable laws.</Text>
-
-          <Text style={styles.subHeading}>6. Your Rights</Text>
-          <Text style={styles.paragraph}>
-          You have the right to access, correct, or request deletion of your personal information. If you would like to exercise any of these rights, please contact us through our support email at [Support Email]. </Text>
-
+        <Text style={styles.subHeading}>
+          {t("privacy_policy.your_rights.title")}
+        </Text>
+        <Text style={styles.paragraph}>
+          {t("privacy_policy.your_rights.paragraph")}
+        </Text>
       </ScrollView>
     </View>
   );
@@ -68,38 +100,38 @@ const PrivacyPolicy = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f4f4f4',
+    backgroundColor: "#f4f4f4",
     padding: 20,
   },
   bullets: {
-    fontSize: 16,        
-    color: '#000',      
-    marginBottom: 10,    
-    marginLeft: 40, 
+    fontSize: 16,
+    color: "#000",
+    marginBottom: 10,
+    marginLeft: 40,
   },
   scrollView: {
     flex: 1,
   },
   heading: {
     fontSize: 24,
-    color: '#74BDB3',
-    fontWeight: 'bold',
+    color: "#74BDB3",
+    fontWeight: "bold",
     marginBottom: 20,
     marginTop: 30,
-    textAlign: 'center',
+    textAlign: "center",
   },
   subHeading: {
     fontSize: 18,
-    color: '#74BDB3',
-    fontWeight: '600',
+    color: "#74BDB3",
+    fontWeight: "600",
     marginTop: 20,
     marginBottom: 10,
   },
 
   subHeading2: {
     fontSize: 18,
-    color: '#74BDB3',
-    fontWeight: '600',
+    color: "#74BDB3",
+    fontWeight: "600",
     marginTop: 20,
     marginBottom: 10,
     marginLeft: 25,
@@ -108,7 +140,7 @@ const styles = StyleSheet.create({
   paragraph: {
     fontSize: 16,
     lineHeight: 22,
-    textAlign: 'justify',
+    textAlign: "justify",
   },
 });
 
