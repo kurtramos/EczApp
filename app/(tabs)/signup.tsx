@@ -17,7 +17,11 @@ import { useRouter } from "expo-router";
 import BackArrow from "../components/BackArrow";
 
 // Firebase imports
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification  } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 import { firestore } from "../firebaseConfig";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 
@@ -77,13 +81,11 @@ const SignUpScreen = () => {
       setTempDate(selectedDate); // Temporarily save the selected date
     }
   };
-  
 
   const confirmDateOfBirth = () => {
     setDateOfBirth(tempDate); // Set the confirmed date as date of birth
     setShowDatePicker(false); // Close the date picker modal
   };
-  
 
   const handleScroll = (event) => {
     const { contentOffset, layoutMeasurement, contentSize } = event.nativeEvent;
@@ -121,7 +123,7 @@ const SignUpScreen = () => {
       );
       return;
     }
-  
+
     try {
       const auth = getAuth();
       const userCredential = await createUserWithEmailAndPassword(
@@ -129,13 +131,16 @@ const SignUpScreen = () => {
         email,
         password
       );
-  
+
       const user = userCredential.user;
-  
+
       // Send email verification
       await sendEmailVerification(user);
-      Alert.alert("Verification Email Sent", "Please check your email to verify your account.");
-  
+      Alert.alert(
+        "Verification Email Sent",
+        "Please check your email to verify your account."
+      );
+
       // Add user details to Firestore
       const docRef = doc(firestore, "users", email);
       await setDoc(docRef, {
@@ -145,8 +150,9 @@ const SignUpScreen = () => {
         mobileNumber: mobileNumber,
         dateOfBirth: dateOfBirth,
         isVerified: false, // New field to track email verification status
+        language: "English",
       });
-  
+
       Alert.alert("Success", "Account created successfully!");
       router.push("/login");
     } catch (error) {
@@ -155,7 +161,6 @@ const SignUpScreen = () => {
       Alert.alert("Sign-Up Error", errorMessage);
     }
   };
-  
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -255,28 +260,36 @@ const SignUpScreen = () => {
           style={styles.inputField}
           onPress={() => setShowDatePicker(true)}
         >
-          <Text style={styles.dateOfBirthText}>{dateOfBirth.toLocaleDateString()}</Text>
+          <Text style={styles.dateOfBirthText}>
+            {dateOfBirth.toLocaleDateString()}
+          </Text>
         </TouchableOpacity>
 
-        <Modal visible={showDatePicker} transparent={true} animationType="slide">
-  <View style={styles.modalContainer}>
-    <View style={styles.datePickerContainer}>
-      <DateTimePicker
-        value={tempDate}
-        mode="date"
-        display="default"
-        onChange={onDateChange}
-        maximumDate={new Date()}
-      />
-      {/* Confirm Button */}
-      <TouchableOpacity style={styles.confirmButton} onPress={confirmDateOfBirth}>
-        <Text style={styles.confirmButtonText}>Confirm</Text>
-      </TouchableOpacity>
-    </View>
-  </View>
-</Modal>
+        <Modal
+          visible={showDatePicker}
+          transparent={true}
+          animationType="slide"
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.datePickerContainer}>
+              <DateTimePicker
+                value={tempDate}
+                mode="date"
+                display="default"
+                onChange={onDateChange}
+                maximumDate={new Date()}
+              />
+              {/* Confirm Button */}
+              <TouchableOpacity
+                style={styles.confirmButton}
+                onPress={confirmDateOfBirth}
+              >
+                <Text style={styles.confirmButtonText}>Confirm</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
 
-        
         {/* Terms of Use with Checkbox */}
         <View style={styles.checkboxContainer}>
           <TouchableOpacity
