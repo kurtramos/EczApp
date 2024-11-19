@@ -13,8 +13,10 @@ import BottomNav from "../components/BottomNav";
 import { firestore } from "../firebaseConfig";
 import { getAuth } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import { useTranslation } from "react-i18next";
 
 const POEMScreen = () => {
+  const { t } = useTranslation();
   const router = useRouter();
   const [response, setResponse] = useState({
     question1: null,
@@ -37,7 +39,10 @@ const POEMScreen = () => {
     );
 
     if (!allQuestionsAnswered) {
-      Alert.alert("Incomplete Survey", "Please answer all questions before submitting.");
+      Alert.alert(
+        t("poem_survey.alerts.incomplete_survey.title"),
+        t("poem_survey.alerts.incomplete_survey.message")
+      );
       return;
     }
 
@@ -78,10 +83,16 @@ const POEMScreen = () => {
         timestamp: timestamp,
       });
 
-      Alert.alert("Success", "Responses saved successfully!");
+      Alert.alert(
+        t("poem_survey.alerts.success.title"),
+        t("poem_survey.alerts.success.message")
+      );
     } catch (error) {
       console.error("Error saving responses: ", error);
-      Alert.alert("Error", "Failed to save responses.");
+      Alert.alert(
+        t("poem_survey.alerts.error.title"),
+        t("poem_survey.alerts.error.message")
+      );
     }
   };
 
@@ -116,52 +127,40 @@ const POEMScreen = () => {
       <BackArrow onPress={() => router.push("/home")} />
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <View style={styles.header}>
-          <Text style={styles.title}>POEM</Text>
-          <Text style={styles.description}>
-            Complete the POEM questionnaire once a week to monitor changes in
-            your skin condition. Please answer the following questions
-            carefully, rating each on a scale from 0 (lowest) to 7 (highest).
-            Your responses will be totaled at the end to indicate the severity
-            of your eczema.
-          </Text>
+          <Text style={styles.title}>{t("poem_survey.title")}</Text>
+          <Text style={styles.description}>{t("poem_survey.description")}</Text>
         </View>
 
         {/* Survey Questions */}
-        {[
-          "Over the last week, on how many days has your/your child’s skin been itchy because of the eczema?",
-          "Over the last week, on how many nights has your/your child's sleep been disturbed because of the eczema?",
-          "Over the last week, on how many days has your/your child’s skin been bleeding because of the eczema?",
-          "Over the last week, on how many days has your/your child’s skin been weeping or oozing clear fluid because of the eczema?",
-          "Over the last week, on how many days has your/your child’s skin been cracked because of the eczema?",
-          "Over the last week, on how many days has your/your child’s skin been flaking off because of the eczema?",
-          "Over the last week, on how many days has your/your child’s skin felt dry or rough because of the eczema?",
-        ].map((question, index) => (
-          <View key={index} style={styles.questionContainer}>
-            <Text style={styles.question}>{question}</Text>
-            <View style={styles.optionsContainer}>
-              {["0", "1-2", "3-4", "5-6", "7"].map((option, idx) => (
-                <TouchableOpacity
-                  key={idx}
-                  style={[
-                    styles.option,
-                    response[`question${index + 1}`] === option &&
-                      styles.selectedOption,
-                  ]}
-                  onPress={() =>
-                    selectOption(`question${index + 1}`, option)
-                  }
-                >
-                  <Text style={styles.optionText}>{option}</Text>
-                </TouchableOpacity>
-              ))}
+        {t("poem_survey.questions", { returnObjects: true }).map(
+          (question, index) => (
+            <View key={index} style={styles.questionContainer}>
+              <Text style={styles.question}>{question}</Text>
+              <View style={styles.optionsContainer}>
+                {["0", "1-2", "3-4", "5-6", "7"].map((option, idx) => (
+                  <TouchableOpacity
+                    key={idx}
+                    style={[
+                      styles.option,
+                      response[`question${index + 1}`] === option &&
+                        styles.selectedOption,
+                    ]}
+                    onPress={() => selectOption(`question${index + 1}`, option)}
+                  >
+                    <Text style={styles.optionText}>{option}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
             </View>
-          </View>
-        ))}
+          )
+        )}
 
         {/* Submit Button */}
         <View style={styles.submitButtonContainer}>
           <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-            <Text style={styles.submitButtonText}>Submit</Text>
+            <Text style={styles.submitButtonText}>
+              {t("poem_survey.submit_button")}
+            </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

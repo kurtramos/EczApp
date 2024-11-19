@@ -73,6 +73,76 @@
     "doctor_source": "Ang listahan ng doktor ay galing sa"
   },
 
+  "poem_survey": {
+    "title": "POEM",
+    "description": "Kumpletuhin ang POEM questionnaire isang beses sa isang linggo upang masubaybayan ang pagbabago sa kondisyon ng iyong balat. Pakisagot nang maingat ang mga sumusunod na tanong, at bigyan ng marka mula 0 (pinakamababa) hanggang 7 (pinakamataas). Ang kabuuang puntos ay magpapakita ng kalubhaan ng iyong eczema.",
+    "questions": [
+      "Sa nakaraang linggo, ilang araw ang naging makati ang iyong/iyong anak na balat dahil sa eczema?",
+      "Sa nakaraang linggo, ilang gabi ang naging sagabal sa iyong/iyong anak na pagtulog dahil sa eczema?",
+      "Sa nakaraang linggo, ilang araw ang dumugo ang iyong/iyong anak na balat dahil sa eczema?",
+      "Sa nakaraang linggo, ilang araw ang naglabas ng malinaw na likido ang iyong/iyong anak na balat dahil sa eczema?",
+      "Sa nakaraang linggo, ilang araw ang nagbitak ang iyong/iyong anak na balat dahil sa eczema?",
+      "Sa nakaraang linggo, ilang araw ang nagtuklap ang iyong/iyong anak na balat dahil sa eczema?",
+      "Sa nakaraang linggo, ilang araw ang naging magaspang o tuyo ang iyong/iyong anak na balat dahil sa eczema?"
+    ],
+    "submit_button": "Ipasa",
+    "alerts": {
+      "incomplete_survey": {
+        "title": "Hindi Kumpletong Survey",
+        "message": "Pakisagutan lahat ng tanong bago isumite."
+      },
+      "success": {
+        "title": "Success",
+        "message": "Matagumpay na na-save ang mga sagot!"
+      },
+      "error": {
+        "title": "Error",
+        "message": "Hindi naisave ang mga sagot."
+      }
+    }
+  },
+
+  "poem_result": {
+    "poem_result": "RESULTA NG POEM",
+    "score": "Ang iyong POEM score ay",
+    "severity_level": "Antas ng Kalubhaan"
+  },
+
+  "camera": {
+    "title": "CAMERA",
+    "description": "Gamitin ang camera upang kumuha ng mga larawan para sa pagkilala ng kondisyon ng balat. Sundin ang mga tagubilin sa ibaba para sa mas mahusay na katumpakan.",
+    "steps": {
+      "step1": {
+        "title": "Step 1: Ilaw",
+        "description": "Siguraduhing maliwanag ang lugar. Mas mainam ang natural na ilaw para sa mas mahusay na pagkilala ng kondisyon ng balat."
+      },
+      "step2": {
+        "title": "Step 2: Posisyon",
+        "description": "Hawakan ang camera nang matatag at tiyaking ang apektadong balat ay nasa gitna ng frame. Panatilihing 6-8 pulgada ang layo ng telepono."
+      },
+      "step3": {
+        "title": "Step 3: Pokus",
+        "description": "Tiyaking malinaw at hindi malabo ang larawan. I-tap ang screen upang magpokus sa bahagi ng interes."
+      }
+    },
+    "proceed_button": "Magpatuloy",
+    "placeholder_text": "PINDUTIN UPANG BUKSAN ANG CAMERA",
+    "retake_button": "Ulitin",
+    "image_upload_button": "Mag-upload ng Larawan",
+    "save_button": "I-save",
+    "gallery_button": "Gallery",
+    "alerts": {
+      "camera_permission_not_granted": "Hindi nabigyan ng pahintulot ang camera",
+      "camera_cancelled": "Kinansela o nabigo ang pagkuha ng larawan.",
+      "gallery_permission_not_granted": "Hindi nabigyan ng pahintulot ang media library",
+      "image_selection_cancelled": "Kinansela o nabigo ang pagpili ng larawan.",
+      "no_image_selected": "Walang napiling larawan",
+      "user_not_logged_in": "Walang kasalukuyang naka-log in na user.",
+      "image_saved": "Matagumpay na na-save ang larawan!",
+      "image_save_failed": "Nabigo ang pag-save ng larawan"
+    }
+  },
+
   "settings": {
     "settings": "Mga Setting",
     "language_setting": "Setting ng Wika",

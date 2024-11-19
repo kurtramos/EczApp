@@ -73,6 +73,76 @@
     "doctor_source": "The doctor list is sourced from"
   },
 
+  "poem_survey": {
+    "title": "POEM",
+    "description": "Complete the POEM questionnaire once a week to monitor changes in your skin condition. Please answer the following questions carefully, rating each on a scale from 0 (lowest) to 7 (highest). Your responses will be totaled at the end to indicate the severity of your eczema.",
+    "questions": [
+      "Over the last week, on how many days has your/your child’s skin been itchy because of the eczema?",
+      "Over the last week, on how many nights has your/your child's sleep been disturbed because of the eczema?",
+      "Over the last week, on how many days has your/your child’s skin been bleeding because of the eczema?",
+      "Over the last week, on how many days has your/your child’s skin been weeping or oozing clear fluid because of the eczema?",
+      "Over the last week, on how many days has your/your child’s skin been cracked because of the eczema?",
+      "Over the last week, on how many days has your/your child’s skin been flaking off because of the eczema?",
+      "Over the last week, on how many days has your/your child’s skin felt dry or rough because of the eczema?"
+    ],
+    "submit_button": "Submit",
+    "alerts": {
+      "incomplete_survey": {
+        "title": "Incomplete Survey",
+        "message": "Please answer all questions before submitting."
+      },
+      "success": {
+        "title": "Success",
+        "message": "Responses saved successfully!"
+      },
+      "error": {
+        "title": "Error",
+        "message": "Failed to save responses."
+      }
+    }
+  },
+
+  "poem_result": {
+    "poem_result": "POEM RESULT",
+    "score": "Your POEM score is",
+    "severity_level": "Severity Level"
+  },
+
+  "camera": {
+    "title": "CAMERA",
+    "description": "Use the camera to capture images for skin condition recognition. Follow the instructions below for better accuracy.",
+    "steps": {
+      "step1": {
+        "title": "Step 1: Lighting",
+        "description": "Ensure the area is well-lit. Natural lighting is preferred for better accuracy in recognizing skin conditions."
+      },
+      "step2": {
+        "title": "Step 2: Positioning",
+        "description": "Hold the camera steady and ensure the affected skin is centered in the frame. Keep the phone 6-8 inches away."
+      },
+      "step3": {
+        "title": "Step 3: Focus",
+        "description": "Make sure the image is clear and not blurry. Tap on the screen to focus on the area of interest."
+      }
+    },
+    "proceed_button": "Proceed",
+    "placeholder_text": "CLICK TO OPEN CAMERA",
+    "retake_button": "Retake",
+    "image_upload_button": "Image Upload",
+    "save_button": "Save",
+    "gallery_button": "Gallery",
+    "alerts": {
+      "camera_permission_not_granted": "Camera permission not granted",
+      "camera_cancelled": "Camera capture was cancelled or failed.",
+      "gallery_permission_not_granted": "Media library permission not granted",
+      "image_selection_cancelled": "Image selection was cancelled or failed.",
+      "no_image_selected": "No image selected",
+      "user_not_logged_in": "No user is currently logged in.",
+      "image_saved": "Image saved successfully!",
+      "image_save_failed": "Failed to save image"
+    }
+  },
+
   "settings": {
     "settings": "Settings",
     "language_setting": "Language Setting",
