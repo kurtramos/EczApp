@@ -18,5 +18,27 @@
       "title": "EczemaCare",
       "description": "Isang Mobile Application para sa Pagmamanman at Pagtutok ng Lala ng Atopic Dermatitis."
     }
+  },
+  "settings": {
+    "settings": "Mga Setting",
+    "language_setting": "Setting ng Wika",
+    "change_language": "Baguhin ang Setting ng Wika",
+    "notification_setting": "Setting ng Notipikasyon",
+    "general_notification": "Pangkalahatang Notipikasyon",
+    "sound": "Tunog",
+    "vibrate": "Mag-vibrate",
+    "change_password": "Baguhin ang Password",
+    "current_password": "Kasalukuyang Password",
+    "new_password": "Bagong Password",
+    "confirm_new_password": "Kumpirmahin ang Bagong Password",
+    "password_changed_successfully": "Matagumpay na nabago ang password!",
+    "new_password_same_as_current": "Ang bagong password ay hindi maaaring pareho ng kasalukuyang password",
+    "new_passwords_do_not_match": "Hindi magkatugma ang mga bagong password!",
+    "please_fill_in_all_fields": "Paki-puno ang lahat ng mga field.",
+    "delete_account": "Burahin ang Account",
+    "confirm_deletion": "Kumpirmahin ang Pagbura",
+    "confirm_deletion_message": "Sigurado ka bang nais mong burahin ang iyong account? Ang hakbang na ito ay hindi maibabalik, at lahat ng iyong data at mga file ay permanenteng mabubura.",
+    "delete": "Burahin",
+    "cancel": "Kanselahin"
   }
 }

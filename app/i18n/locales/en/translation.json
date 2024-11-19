@@ -18,5 +18,27 @@
       "title": "EczemaCare",
       "description": "A Mobile Application for Monitoring and Tracking the Severity of Atopic Dermatitis."
     }
+  },
+  "settings": {
+    "settings": "Settings",
+    "language_setting": "Language Setting",
+    "change_language": "Change Language Setting",
+    "notification_setting": "Notification Setting",
+    "general_notification": "General Notification",
+    "sound": "Sound",
+    "vibrate": "Vibrate",
+    "change_password": "Change Password",
+    "current_password": "Current Password",
+    "new_password": "New Password",
+    "confirm_new_password": "Confirm New Password",
+    "password_changed_successfully": "Password changed successfully!",
+    "new_password_same_as_current": "New password cannot be the same as the current password",
+    "new_passwords_do_not_match": "New passwords do not match!",
+    "please_fill_in_all_fields": "Please fill in all fields.",
+    "delete_account": "Delete Account",
+    "confirm_deletion": "Confirm Deletion",
+    "confirm_deletion_message": "Are you sure you want to delete your account? This action is irreversible, and all your data and files will be permanently deleted.",
+    "delete": "Delete",
+    "cancel": "Cancel"
   }
 }

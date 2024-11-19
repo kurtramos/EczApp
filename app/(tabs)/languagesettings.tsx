@@ -71,7 +71,7 @@ const LanguageSelector = () => {
     <View style={styles.container}>
       <BackArrow onPress={() => router.push("/settings")} />
       <View style={styles.selectorContainer}>
-        <Text style={styles.welcomeText}>Change Language Settings</Text>
+        <Text style={styles.welcomeText}>{t("settings.change_language")}</Text>
 
         <TouchableOpacity
           style={styles.languageBox}

@@ -1,27 +1,36 @@
-import React from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import BackArrow from '../components/BackArrow';
-import { useRouter } from 'expo-router';
+import React from "react";
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import BackArrow from "../components/BackArrow";
+import { useRouter } from "expo-router";
 import { getAuth } from "firebase/auth";
 import { firestore } from "../firebaseConfig";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { getStorage, ref, listAll, deleteObject } from "firebase/storage";
+import { useTranslation } from "react-i18next";
 
 const SettingsScreen = () => {
+  const { t } = useTranslation();
   const router = useRouter();
 
   const handleDeleteAccount = async () => {
     Alert.alert(
-      "Confirm Deletion",
-      "Are you sure you want to delete your account? This action is irreversible, and all your data and files will be permanently deleted.",
+      t("settings.confirm_deletion"),
+      t("settings.confirm_deletion_message"),
       [
         {
-          text: "Cancel",
+          text: t("settings.cancel"),
           style: "cancel",
         },
         {
-          text: "Delete",
+          text: t("settings.delete"),
           style: "destructive",
           onPress: deleteAccount,
         },
@@ -48,7 +57,12 @@ const SettingsScreen = () => {
       // Delete Firestore sub-collections (e.g., POEMScores, POEMSurvey, notifications)
       const subCollections = ["POEMScores", "POEMSurvey", "notifications"];
       for (const subCollection of subCollections) {
-        const subCollectionRef = collection(firestore, "users", userEmail, subCollection);
+        const subCollectionRef = collection(
+          firestore,
+          "users",
+          userEmail,
+          subCollection
+        );
         const querySnapshot = await getDocs(subCollectionRef);
         querySnapshot.forEach(async (docSnapshot) => {
           await deleteDoc(docSnapshot.ref);
@@ -69,20 +83,39 @@ const SettingsScreen = () => {
       router.push("/Homescreen"); // Redirect to home or login screen
     } catch (error) {
       console.error("Error deleting account:", error);
-      Alert.alert("Error", "Failed to delete your account. Please try again later.");
+      Alert.alert(
+        "Error",
+        "Failed to delete your account. Please try again later."
+      );
     }
   };
 
   return (
     <View style={styles.container}>
-      <BackArrow onPress={() => router.push('/myaccount')} />
+      <BackArrow onPress={() => router.push("/myaccount")} />
       <ScrollView style={styles.scrollView}>
-        <Text style={styles.title}>Settings</Text>
+        <Text style={styles.title}>{t("settings.settings")}</Text>
 
-        <SettingOption icon="language" title="Language Setting" onPress={() => router.push('/languagesettings')} />
-        <SettingOption icon="notifications" title="Notification Setting" onPress={() => router.push('/notificationsettings')} />
-        <SettingOption icon="lock" title="Change Password" onPress={() => router.push('/changepassword')} />
-        <SettingOption icon="delete" title="Delete Account" onPress={handleDeleteAccount} />
+        <SettingOption
+          icon="language"
+          title={t("settings.language_setting")}
+          onPress={() => router.push("/languagesettings")}
+        />
+        <SettingOption
+          icon="notifications"
+          title={t("settings.notification_setting")}
+          onPress={() => router.push("/notificationsettings")}
+        />
+        <SettingOption
+          icon="lock"
+          title={t("settings.change_password")}
+          onPress={() => router.push("/changepassword")}
+        />
+        <SettingOption
+          icon="delete"
+          title={t("settings.delete_account")}
+          onPress={handleDeleteAccount}
+        />
       </ScrollView>
     </View>
   );
@@ -101,24 +134,24 @@ const SettingOption = ({ icon, title, onPress }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
   scrollView: {
     paddingHorizontal: 20,
   },
   title: {
     fontSize: 24,
-    color: '#85D3C0',
-    fontWeight: '600',
+    color: "#85D3C0",
+    fontWeight: "600",
     marginVertical: 50,
-    textAlign: 'center',
+    textAlign: "center",
   },
   option: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#E8E8E8',
+    borderBottomColor: "#E8E8E8",
   },
   icon: {
     marginRight: 20,
@@ -131,13 +164,11 @@ const styles = StyleSheet.create({
 
 export default SettingsScreen;
 
-
-
 // import React from 'react';
 // import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 // import Icon from 'react-native-vector-icons/MaterialIcons';
 // import BackArrow from '../components/BackArrow';
-// import { useRouter } from 'expo-router'; 
+// import { useRouter } from 'expo-router';
 // import BottomNav from '../components/BottomNav';
 
 // const SettingsScreen = () => {
@@ -146,7 +177,7 @@ export default SettingsScreen;
 //     <View style={styles.container}>
 //           <BackArrow onPress={() => router.push('/home')} />
 //       <ScrollView>
-        
+
 //         <View style={styles.header}>
 
 //           <Text style={styles.headerTitle}>Settings</Text>
