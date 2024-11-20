@@ -1,10 +1,19 @@
-import React, { useState } from 'react';
-import { ScrollView, Text, StyleSheet, View, Image, TouchableOpacity } from 'react-native';
-import BottomNav from '../components/BottomNav';
-import BackArrow from '../components/BackArrow';
-import { useRouter } from 'expo-router';
+import React, { useState } from "react";
+import {
+  ScrollView,
+  Text,
+  StyleSheet,
+  View,
+  Image,
+  TouchableOpacity,
+} from "react-native";
+import BottomNav from "../components/BottomNav";
+import BackArrow from "../components/BackArrow";
+import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 const HowToUse = () => {
+  const { t } = useTranslation();
   const router = useRouter();
   const [activeSection, setActiveSection] = useState(null);
 
@@ -15,98 +24,89 @@ const HowToUse = () => {
 
   return (
     <View style={styles.container}>
-      <BackArrow onPress={() => router.push('/home')} />
-      <Text style={styles.heading}>How to Use</Text>
+      <BackArrow onPress={() => router.push("/home")} />
+      <Text style={styles.heading}>{t("how_to_use.how_to_use")}</Text>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <View style={styles.squareBackground}>
           {/* Image */}
           <Image
-            source={require('../../assets/logos/faqs.jpg')}
+            source={require("../../assets/logos/faqs.jpg")}
             style={styles.image}
           />
 
           {/* Content */}
           <View style={styles.contentContainer}>
             {/* Section 1: How to Use the Camera */}
-            <TouchableOpacity onPress={() => toggleSection('howToUseCamera')}>
-              <Text style={styles.sectionTitle}>How to Use the Camera</Text>
+            <TouchableOpacity onPress={() => toggleSection("howToUseCamera")}>
+              <Text style={styles.sectionTitle}>
+                {t("how_to_use.how_to_use_the_camera")}
+              </Text>
             </TouchableOpacity>
-            {activeSection === 'howToUseCamera' && (
+            {activeSection === "howToUseCamera" && (
               <Text style={styles.sectionContent}>
-                To use the camera in the EczemaCare app:{"\n"}
-                1. Navigate to the <Text style={styles.bold}>“Camera”</Text> section from the app menu.{"\n"}
-                2. Point your camera at the affected skin area you want to monitor.{"\n"}
-                3. Tap the shutter button to take a clear photo.{"\n"}
-                4. Save the image, which will be stored in your personal health records for easy reference.{"\n\n"}
-                <Text style={styles.bold}>Tip:</Text> Ensure good lighting and a close-up shot for better accuracy.
+                {t("how_to_use.how_to_use_the_camera_description")}
               </Text>
             )}
 
             {/* Section 2: What Is the Camera For */}
-            <TouchableOpacity onPress={() => toggleSection('whatIsCameraFor')}>
-              <Text style={styles.sectionTitle}>What Is the Camera For</Text>
+            <TouchableOpacity onPress={() => toggleSection("whatIsCameraFor")}>
+              <Text style={styles.sectionTitle}>
+                {t("how_to_use.what_is_the_camera_for")}
+              </Text>
             </TouchableOpacity>
-            {activeSection === 'whatIsCameraFor' && (
+            {activeSection === "whatIsCameraFor" && (
               <Text style={styles.sectionContent}>
-                The camera feature in the EczemaCare app allows you to:{"\n"}
-                • Take photos of your skin condition to track changes over time.{"\n"}
-                • Compare current skin health with past images to observe improvements or flare-ups.{"\n"}
-                • Store the images in the app for the healthcare provider to view and provide better diagnosis and management.
+                {t("how_to_use.what_is_the_camera_for_description")}
               </Text>
             )}
 
             {/* Section 3: When to Answer the POEM Survey */}
-            <TouchableOpacity onPress={() => toggleSection('whenToAnswerPoem')}>
-              <Text style={styles.sectionTitle}>When to Answer the POEM Survey</Text>
+            <TouchableOpacity onPress={() => toggleSection("whenToAnswerPoem")}>
+              <Text style={styles.sectionTitle}>
+                {t("how_to_use.when_to_answer_poem")}
+              </Text>
             </TouchableOpacity>
-            {activeSection === 'whenToAnswerPoem' && (
+            {activeSection === "whenToAnswerPoem" && (
               <Text style={styles.sectionContent}>
-                You should complete the <Text style={styles.bold}>POEM (Patient-Oriented Eczema Measure)</Text> survey:{"\n"}
-                • Once a week to monitor your eczema symptoms. The survey can be taken as needed for when the case gets worse.{"\n"}
-                • After significant changes in your condition or treatment adjustments.{"\n"}
-                • Before a scheduled check-up with your healthcare provider to give them updated information about your symptoms.
+                {t("how_to_use.when_to_answer_poem_description")}
               </Text>
             )}
 
             {/* Section 4: How to Use the Tracker */}
-            <TouchableOpacity onPress={() => toggleSection('howToUseTracker')}>
-              <Text style={styles.sectionTitle}>How to Use the Tracker</Text>
+            <TouchableOpacity onPress={() => toggleSection("howToUseTracker")}>
+              <Text style={styles.sectionTitle}>
+                {t("how_to_use.how_to_use_the_tracker")}
+              </Text>
             </TouchableOpacity>
-            {activeSection === 'howToUseTracker' && (
+            {activeSection === "howToUseTracker" && (
               <Text style={styles.sectionContent}>
-                To use the tracker effectively:{"\n"}
-                1. Access the <Text style={styles.bold}>Tracker</Text> section from the menu.{"\n"}
-                2. Input details about your symptoms, medications, and daily skin care routine.{"\n"}
-                3. Use the tracker to log any changes in your skin condition or flare-ups.{"\n"}
-                4. Review your progress by checking the weekly or monthly summaries to see patterns or improvements.
+                {t("how_to_use.how_to_use_the_tracker_description")}
               </Text>
             )}
 
             {/* Section 5: What Is the POEM Score */}
-            <TouchableOpacity onPress={() => toggleSection('whatIsPoemScore')}>
-              <Text style={styles.sectionTitle}>What Is the POEM Score</Text>
+            <TouchableOpacity onPress={() => toggleSection("whatIsPoemScore")}>
+              <Text style={styles.sectionTitle}>
+                {t("how_to_use.what_is_the_poem_score")}
+              </Text>
             </TouchableOpacity>
-            {activeSection === 'whatIsPoemScore' && (
+            {activeSection === "whatIsPoemScore" && (
               <Text style={styles.sectionContent}>
-                The <Text style={styles.bold}>POEM score</Text> is a measure used to assess the severity of your eczema symptoms. It’s based on a series of questions related to:{"\n"}
-                • Itching and discomfort.{"\n"}
-                • Sleep disturbance.{"\n"}
-                • Frequency and extent of eczema flare-ups.{"\n\n"}
-                Your responses generate a score, which helps both you and your healthcare provider understand how well your eczema is being managed and whether treatment adjustments are needed.
+                {t("how_to_use.what_is_the_poem_score_description")}
               </Text>
             )}
 
             {/* Section 6: How Can I Get Treatment */}
-            <TouchableOpacity onPress={() => toggleSection('howToGetTreatment')}>
-              <Text style={styles.sectionTitle}>How Can I Get Treatment</Text>
+            <TouchableOpacity
+              onPress={() => toggleSection("howToGetTreatment")}
+            >
+              <Text style={styles.sectionTitle}>
+                {t("how_to_use.how_can_i_get_treatment")}
+              </Text>
             </TouchableOpacity>
-            {activeSection === 'howToGetTreatment' && (
+            {activeSection === "howToGetTreatment" && (
               <Text style={styles.sectionContent}>
-                For treatment options:{"\n"}
-                1. Visit the <Text style={styles.bold}>Treatment</Text> section in the app, where you’ll find personalized recommendations based on your POEM score and tracking data.{"\n"}
-                2. Schedule an appointment with your dermatologist through the app's integrated telehealth feature, or consult your healthcare provider in person.{"\n"}
-                3. Ensure you follow the prescribed treatment plan, including medications, moisturizers, and lifestyle adjustments.{"\n\n"}
-                <Text style={styles.bold}>Note:</Text> Always consult a healthcare professional before making any changes to your treatment plan.
+                {t("how_to_use.how_can_i_get_treatment_description")}
               </Text>
             )}
           </View>
@@ -120,22 +120,22 @@ const HowToUse = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f4f4f4',
+    backgroundColor: "#f4f4f4",
   },
   heading: {
     fontSize: 35,
-    color: '#74BDB3',
-    fontWeight: 'bold',
-    textAlign: 'center',
+    color: "#74BDB3",
+    fontWeight: "bold",
+    textAlign: "center",
     marginTop: 70,
     marginBottom: 10,
   },
   squareBackground: {
-    backgroundColor: '#C3EFE5',
-    width: '90%',
+    backgroundColor: "#C3EFE5",
+    width: "90%",
     borderRadius: 20,
     padding: 20,
-    alignSelf: 'center',
+    alignSelf: "center",
     marginTop: 10,
   },
   scrollViewContent: {
@@ -145,31 +145,31 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   image: {
-    width: '100%',
+    width: "100%",
     height: 200,
     borderRadius: 10,
     marginBottom: 20,
   },
   sectionTitle: {
     fontSize: 18,
-      fontWeight: 'bold',
-      color: '#FFFFFF',           
-      backgroundColor: '#9ED4C7', 
-      padding: 10,                
-      marginBottom: 10,
-      textAlign: 'center',  
+    fontWeight: "bold",
+    color: "#FFFFFF",
+    backgroundColor: "#9ED4C7",
+    padding: 10,
+    marginBottom: 10,
+    textAlign: "center",
   },
   sectionContent: {
     fontSize: 14,
-    fontWeight: '300',
-    fontFamily: 'League Spartan',
+    fontWeight: "300",
+    fontFamily: "League Spartan",
     lineHeight: 20,
-    color: 'black',
-    textAlign: 'justify',
+    color: "black",
+    textAlign: "justify",
     marginBottom: 20,
   },
   bold: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });
 

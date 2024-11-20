@@ -1,0 +1,264 @@
+{
+  "language": "Filipino",
+  "home": {
+    "welcome": "Kamusta",
+    "learn": {
+      "title": "ALAMIN",
+      "description": "Lahat ng dapat malaman tungkol sa Eczema."
+    },
+    "how_to_use": {
+      "title": "PAANO GUMAMIT",
+      "description": "Paano gamitin ang mga partikular na tampok at mag-navigate sa app."
+    },
+    "doctors": {
+      "title": "MGA DOKTOR",
+      "description": "Maghanap ng espesyalista sa iyong lugar para sa konsultasyon tungkol sa balat."
+    },
+    "eczema_care": {
+      "title": "EczemaCare",
+      "description": "Isang Mobile Application para sa Pagmamanman at Pagtutok ng Lala ng Atopic Dermatitis."
+    }
+  },
+
+  "learn": {
+    "learn": "Alamin",
+    "what_is_eczema": "Ano ang Eczema?",
+    "is_eczema_curable": "Pwede bang magamot ang Eczema?",
+    "types_of_eczema": "Mga Uri ng Eczema",
+    "symptoms": "Sintomas",
+    "remedies": "Mga Lunas",
+    "what_to_do": "Ano ang Dapat Gawin",
+    "what_to_avoid": "Ano ang Dapat Iwasan",
+    "disclaimer": "Paunawa",
+    "eczema_description": "Ang Eczema, na kilala rin bilang atopic dermatitis, ay isang chronic na kondisyon sa balat na nagdudulot ng pamamaga, pangangati, at pamumula ng balat. Nangyayari ito kapag ang proteksyon ng balat ay humina, kaya't ito'y mas sensitibo sa mga irritants at allergens. Kadalasang nagsisimula ito sa pagkabata, ngunit maaari ring makaapekto sa mga tao sa lahat ng edad.",
+    "eczema_curable_description": "Sa kasamaang palad, walang lunas para sa eczema. Gayunpaman, maaari itong pamahalaan sa pamamagitan ng tamang paggamot at pangangalaga. Ang mga sintomas ay maaaring magbago, mula sa mga flare-ups hanggang sa mga panahon ng remission. Ang pangmatagalang pamamahala ay nakatuon sa pagbabawas ng mga flare-ups at pagkontrol ng mga sintomas.",
+    "types_of_eczema_description": "Mayroong iba't ibang uri ng eczema, kabilang ang Atopic Dermatitis, Contact Dermatitis, Dyshidrotic Eczema, Nummular Eczema, Seborrheic Dermatitis, at Stasis Dermatitis.",
+    "symptoms_description": "Ang mga sintomas ng eczema ay maaaring magkaiba-iba, ngunit ang mga karaniwang palatandaan ay ang tuyot, magaspang, o basag na balat, pangangati, pamumula ng balat, maliliit na paltos na maaaring mag-leak ng likido, pagkatibay ng balat, at sensitibong balat na tumutugon sa mga irritants.",
+    "remedies_description": "Ang paggamot sa eczema ay karaniwang kinabibilangan ng Moisturizers, Topical Steroids, Antihistamines, Wet Wrap Therapy, Phototherapy, at Lifestyle Adjustments.",
+    "what_to_do_description": "I-moisturize ang Balat, Gumamit ng Malalambot na Produkto sa Balat, Magsuot ng Malalambot at Maaliwalas na Tela, Pamahalaan ang Stress, at Kumonsulta sa isang Dermatologist.",
+    "what_to_avoid_description": "Iwasan ang Harsh na Sabon at Detergents, Mainit na Paliguan o Banyo, Pangangati, Mga Environmental Triggers, at Magaspang o Sintetiko na Tela.",
+    "disclaimer_description": "Ang application na ito ay nilayon upang makatulong sa pagsubaybay at pagmamasid sa kalubhaan ng eczema ng isang pasyente. Hindi ito maaaring pumalit sa propesyonal na medikal na payo o paggamot. Kung magpatuloy o lumala ang mga sintomas, mangyaring kumonsulta sa iyong doktor para sa karagdagang pagsusuri at pangangalaga."
+  },
+
+  "how_to_use": {
+    "how_to_use": "Paano Gamitin",
+    "how_to_use_the_camera": "Paano Gamitin ang Kamera",
+    "how_to_use_the_camera_description": "Para gamitin ang kamera sa EczemaCare app:\n1. Pumunta sa seksyong “Kamera” mula sa menu ng app.\n2. Itutok ang kamera sa apektadong bahagi ng balat na nais mong subaybayan.\n3. Pindutin ang button ng shutter para kumuha ng malinaw na larawan.\n4. I-save ang larawan, na itatago sa iyong personal na health records para madaling ma-access.\n\nTip: Siguraduhing may tamang ilaw at malapit ang kuha para sa mas tumpak na larawan.",
+    "what_is_the_camera_for": "Para Saan ang Kamera?",
+    "what_is_the_camera_for_description": "Ang kamera sa EczemaCare app ay ginagamit para:\n• Kumuha ng mga larawan ng iyong kondisyon sa balat upang masubaybayan ang mga pagbabago sa paglipas ng panahon.\n• Ikumpara ang kalagayan ng iyong balat ngayon sa mga nakaraang larawan upang makita ang mga pagbabago o flare-ups.\n• Itago ang mga larawan sa app para makita ng iyong healthcare provider at mabigyan ka ng mas tamang diagnosis at management.",
+    "when_to_answer_poem": "Kailan Dapat Sagutin ang POEM Survey?",
+    "when_to_answer_poem_description": "Dapat mong sagutin ang POEM (Patient-Oriented Eczema Measure) survey:\n• Isang beses kada linggo para subaybayan ang iyong mga sintomas ng eczema. Maaari rin itong sagutin kapag lumala ang iyong kondisyon.\n• Pagkatapos ng mga makabuluhang pagbabago sa iyong kondisyon o paggamot.\n• Bago ang isang nakatakdang check-up sa iyong healthcare provider upang magbigay ng pinakabagong impormasyon tungkol sa iyong mga sintomas.",
+    "how_to_use_the_tracker": "Paano Gamitin ang Tracker",
+    "how_to_use_the_tracker_description": "Para gamitin ang tracker ng tama:\n1. Pumunta sa seksyon ng Tracker mula sa menu.\n2. I-input ang mga detalye tungkol sa iyong mga sintomas, gamot, at pang-araw-araw na routine sa pangangalaga ng balat.\n3. Gamitin ang tracker para i-log ang anumang pagbabago sa iyong kondisyon ng balat o flare-ups.\n4. Tingnan ang iyong progreso sa pamamagitan ng pagsusuri ng lingguhan o buwanang summary para makita ang mga pattern o improvements.",
+    "what_is_the_poem_score": "Ano ang POEM Score?",
+    "what_is_the_poem_score_description": "Ang POEM score ay isang sukatan na ginagamit upang masukat ang tindi ng iyong mga sintomas ng eczema. Batay ito sa mga serye ng mga tanong tungkol sa:\n• Pangangati at discomfort.\n• Pagkagambala sa tulog.\n• Dali at lawak ng mga flare-ups ng eczema.\n\nAng iyong mga sagot ay magbibigay ng isang score, na makakatulong sa iyo at sa iyong healthcare provider upang malaman kung gaano kaepektibo ang paggamot at kung kailangan bang baguhin ang iyong plano.",
+    "how_can_i_get_treatment": "Paano Ako Makakakuha ng Gamot o Paggamot?",
+    "how_can_i_get_treatment_description": "Para sa mga opsyon sa paggamot:\n1. Pumunta sa seksyon ng Treatment sa app, kung saan makikita mo ang mga personalisadong rekomendasyon batay sa iyong POEM score at mga datos mula sa tracker.\n2. Mag-schedule ng appointment sa iyong dermatologist gamit ang integrated na telehealth feature ng app, o kumonsulta sa iyong healthcare provider ng personal.\n3. Siguraduhing sundin ang iyong iniresetang plano sa paggamot, kabilang ang mga gamot, moisturizer, at mga pagbabago sa lifestyle.\n\nTandaan: Laging kumonsulta sa isang healthcare professional bago baguhin ang iyong plano sa paggamot."
+  },
+
+  "doctors": {
+    "heading": "MGA DOKTOR",
+    "subheading": "Maghanap ng allergy/immunology specialist",
+    "info_section": {
+      "text": "Ang mga allergy at Immunology specialists ay mga eksperto sa pagsusuri at paggamot ng mga allergic na sakit at mga disorder ng immune system. Kasama dito ang asthma, food allergies, eczema, allergic rhinitis, at mga autoimmune na kondisyon."
+    },
+    "carousel": {
+      "scroll_down": "Mag-scroll pababa upang malaman pa ang tungkol sa mga doktor."
+    },
+    "psaai_source": "Ang PSAAI ay isang globally recognized na organisasyon ng mga moral at ethical na mga doktor na may malasakit sa kahusayan sa larangan ng Allergy at Immunology. Nakatuon ito sa dedikadong serbisyo, patuloy na edukasyon, pagsasanay, at pananaliksik, na may layunin na magbigay ng pinakamahusay na healthcare para sa lahat ng tao.",
+    "search_bar": {
+      "placeholder": "Maghanap ng doktor, lungsod, ospital, yunit, kontak, o platform..."
+    },
+    "no_results": "Walang mga doktor na natagpuan na tumutugma sa iyong paghahanap.",
+    "doctor_source": "Ang listahan ng doktor ay galing sa"
+  },
+
+  "poem_survey": {
+    "title": "POEM",
+    "description": "Kumpletuhin ang POEM questionnaire isang beses sa isang linggo upang masubaybayan ang pagbabago sa kondisyon ng iyong balat. Pakisagot nang maingat ang mga sumusunod na tanong, at bigyan ng marka mula 0 (pinakamababa) hanggang 7 (pinakamataas). Ang kabuuang puntos ay magpapakita ng kalubhaan ng iyong eczema.",
+    "questions": [
+      "Sa nakaraang linggo, ilang araw ang naging makati ang iyong/iyong anak na balat dahil sa eczema?",
+      "Sa nakaraang linggo, ilang gabi ang naging sagabal sa iyong/iyong anak na pagtulog dahil sa eczema?",
+      "Sa nakaraang linggo, ilang araw ang dumugo ang iyong/iyong anak na balat dahil sa eczema?",
+      "Sa nakaraang linggo, ilang araw ang naglabas ng malinaw na likido ang iyong/iyong anak na balat dahil sa eczema?",
+      "Sa nakaraang linggo, ilang araw ang nagbitak ang iyong/iyong anak na balat dahil sa eczema?",
+      "Sa nakaraang linggo, ilang araw ang nagtuklap ang iyong/iyong anak na balat dahil sa eczema?",
+      "Sa nakaraang linggo, ilang araw ang naging magaspang o tuyo ang iyong/iyong anak na balat dahil sa eczema?"
+    ],
+    "submit_button": "Ipasa",
+    "alerts": {
+      "incomplete_survey": {
+        "title": "Hindi Kumpletong Survey",
+        "message": "Pakisagutan lahat ng tanong bago isumite."
+      },
+      "success": {
+        "title": "Success",
+        "message": "Matagumpay na na-save ang mga sagot!"
+      },
+      "error": {
+        "title": "Error",
+        "message": "Hindi naisave ang mga sagot."
+      }
+    }
+  },
+
+  "poem_result": {
+    "poem_result": "RESULTA NG POEM",
+    "score": "Ang iyong POEM score ay",
+    "severity_level": "Antas ng Kalubhaan"
+  },
+
+  "camera": {
+    "title": "CAMERA",
+    "description": "Gamitin ang camera upang kumuha ng mga larawan para sa pagkilala ng kondisyon ng balat. Sundin ang mga tagubilin sa ibaba para sa mas mahusay na katumpakan.",
+    "steps": {
+      "step1": {
+        "title": "Step 1: Ilaw",
+        "description": "Siguraduhing maliwanag ang lugar. Mas mainam ang natural na ilaw para sa mas mahusay na pagkilala ng kondisyon ng balat."
+      },
+      "step2": {
+        "title": "Step 2: Posisyon",
+        "description": "Hawakan ang camera nang matatag at tiyaking ang apektadong balat ay nasa gitna ng frame. Panatilihing 6-8 pulgada ang layo ng telepono."
+      },
+      "step3": {
+        "title": "Step 3: Pokus",
+        "description": "Tiyaking malinaw at hindi malabo ang larawan. I-tap ang screen upang magpokus sa bahagi ng interes."
+      }
+    },
+    "proceed_button": "Magpatuloy",
+    "placeholder_text": "PINDUTIN UPANG BUKSAN ANG CAMERA",
+    "retake_button": "Ulitin",
+    "image_upload_button": "Mag-upload ng Larawan",
+    "save_button": "I-save",
+    "gallery_button": "Gallery",
+    "alerts": {
+      "camera_permission_not_granted": "Hindi nabigyan ng pahintulot ang camera",
+      "camera_cancelled": "Kinansela o nabigo ang pagkuha ng larawan.",
+      "gallery_permission_not_granted": "Hindi nabigyan ng pahintulot ang media library",
+      "image_selection_cancelled": "Kinansela o nabigo ang pagpili ng larawan.",
+      "no_image_selected": "Walang napiling larawan",
+      "user_not_logged_in": "Walang kasalukuyang naka-log in na user.",
+      "image_saved": "Matagumpay na na-save ang larawan!",
+      "image_save_failed": "Nabigo ang pag-save ng larawan"
+    }
+  },
+
+  "settings": {
+    "settings": "Mga Setting",
+    "language_setting": "Setting ng Wika",
+    "change_language": "Baguhin ang Setting ng Wika",
+    "notification_setting": "Setting ng Notipikasyon",
+    "general_notification": "Pangkalahatang Notipikasyon",
+    "sound": "Tunog",
+    "vibrate": "Mag-vibrate",
+    "change_password": "Baguhin ang Password",
+    "current_password": "Kasalukuyang Password",
+    "new_password": "Bagong Password",
+    "confirm_new_password": "Kumpirmahin ang Bagong Password",
+    "password_changed_successfully": "Matagumpay na nabago ang password!",
+    "new_password_same_as_current": "Ang bagong password ay hindi maaaring pareho ng kasalukuyang password",
+    "new_passwords_do_not_match": "Hindi magkatugma ang mga bagong password!",
+    "please_fill_in_all_fields": "Paki-puno ang lahat ng mga field.",
+    "delete_account": "Burahin ang Account",
+    "confirm_deletion": "Kumpirmahin ang Pagbura",
+    "confirm_deletion_message": "Sigurado ka bang nais mong burahin ang iyong account? Ang hakbang na ito ay hindi maibabalik, at lahat ng iyong data at mga file ay permanenteng mabubura.",
+    "delete": "Burahin",
+    "cancel": "Kanselahin"
+  },
+
+  "account": {
+    "age": "Edad",
+    "my_account": "Aking account",
+    "personal_information": "Personal na Impormasyon",
+    "profile": "Profile",
+    "my_record": "Aking Record",
+    "privacy_policy": "Patakaran sa Privacy",
+    "logout": "Mag-logout",
+    "first_name": "Pangalan",
+    "last_name": "Apelyido",
+    "phone_number": "Numero ng Telepono",
+    "email": "Email",
+    "edit_profile": "I-edit ang Profile",
+    "verified_user": "Beripikadong User",
+    "not_verified": "Hindi Beripikado",
+    "save": "I-save",
+    "logged_out": "Matagumpay kang nag-log out.",
+    "no_first_name": "Walang Available na Pangalan",
+    "no_last_name": "Walang Available na Apelyido",
+    "no_phone_number": "Walang Available na Numero ng Telepono",
+    "poem_score_trend": "POEM Score Trend",
+    "medications_and_treatment": "Mga Gamot at Paggamot",
+    "previous_survey_info": "Nakaraang Impormasyon ng Survey",
+    "no_previous_survey": "Walang Nakaraang Survey",
+    "score": "Puntos",
+    "severity_level": "Antas ng Kalubhaan",
+    "clear": "Malinaw",
+    "mild": "Banayad",
+    "moderate": "Katamtaman",
+    "severe": "Matindi",
+    "very_severe": "Napakatindi",
+    "unknown": "Hindi Kilala",
+    "clear_message": "Malinaw ang iyong balat, may kaunting sintomas ng eksema.",
+    "mild_message": "Banayad na sintomas ng eksema. Patuloy na subaybayan ang iyong kondisyon ng balat.",
+    "moderate_message": "Katamtamang sintomas ng eksema. Isaalang-alang ang pagkonsulta sa isang healthcare provider.",
+    "severe_message": "Matinding sintomas ng eksema. Inirerekomenda na kumonsulta sa doktor.",
+    "very_severe_message": "Napakatinding sintomas ng eksema. Mangyaring kumonsulta agad sa healthcare provider.",
+    "unknown_message": "Ang puntos ay labas ng saklaw. Pakisuri ang iyong input.",
+    "no_survey_found": "Walang nakaraang survey na natagpuan.",
+    "no_data": "Walang Data"
+  },
+
+  "privacy_policy": {
+    "heading": "Patakaran sa Privacy",
+    "intro_paragraph": "Ang EczemaCare ay nakatuon sa pagprotekta ng iyong privacy. Ang Patakaran sa Privacy na ito ay naglalahad kung paano namin kinokolekta, ginagamit, ibinabahagi, at pinoprotektahan ang iyong personal na impormasyon. Sa paggamit ng EczemaCare, sumasang-ayon ka sa pagkolekta at paggamit ng impormasyon ayon sa inilalarawan sa patakarang ito.",
+    "information_we_collect": {
+      "title": "1. Impormasyon na Kinokolekta Namin",
+      "personal_information": {
+        "title": "Personal na Impormasyon",
+        "items": [
+          "Pangalan at Apelyido",
+          "Petsa ng Kapanganakan",
+          "Numero ng Telepono",
+          "Email Address"
+        ]
+      },
+      "medical_information": {
+        "title": "Medikal na Impormasyon",
+        "items": [
+          "Mga Larawan ng apektadong bahagi ng balat (na in-upload ng gumagamit)",
+          "Mga sagot at iskor mula sa POEM (Patient-Oriented Eczema Measure) survey"
+        ]
+      }
+    },
+    "how_we_use_information": {
+      "title": "2. Paano Namin Ginagamit ang Iyong Impormasyon",
+      "paragraph": "Ginagamit ng EczemaCare ang iyong impormasyon para sa mga sumusunod na layunin:",
+      "purposes": [
+        "PAGMOMONITOR NG PAGGAMIT: Ang iyong POEM survey scores ay tumutulong sa amin na subaybayan ang pagbabago ng iyong kondisyon sa paglipas ng panahon.",
+        "KOMUNIKASYON: Maaaring gamitin ang iyong contact details upang ipaalam sa iyo ang mga mahalagang update, sagot, o rekomendasyon ukol sa iyong pangangalaga sa eczema.",
+        "PANANALIKSIK AT ANALISIS: Ang pinagsamang, anonymized na data ay maaaring gamitin para sa internal na pananaliksik upang mapabuti ang aming mga serbisyo. Hindi ibabahagi ang iyong personal na impormasyon nang walang iyong explicit na pahintulot."
+      ]
+    },
+    "data_sharing_and_disclosure": {
+      "title": "3. Pagbabahagi at Pagpapahayag ng Data",
+      "paragraph": "Hindi namin ibabahagi ang iyong personal na impormasyon sa mga third parties maliban kung:",
+      "conditions": [
+        "SA IYONG PAHINTULOT: Maaaring ibahagi ang impormasyon sa mga third parties kapag ikaw ay nagbigay ng explicit na pahintulot.",
+        "PAMAMAGITAN NG LEGAL NA PAGPAPAGAMIT: Maaaring ibunyag ang impormasyon kung kinakailangan ng batas, kautusan ng hukuman, o regulasyon ng gobyerno.",
+        "SA AMING MEDICAL VALIDATOR: Nakikipagtulungan ang EczemaCare sa isang medikal na eksperto upang tiyakin ang bisa at kawastuhan ng mga rekomendasyon sa paggamot. Ang iyong anonymized na data ay maaaring ibahagi sa eksperto para sa layunin ng beripikasyon."
+      ]
+    },
+    "data_security": {
+      "title": "4. Seguridad ng Data",
+      "paragraph": "Nagpapatupad kami ng matibay na hakbang sa seguridad upang protektahan ang iyong personal na impormasyon mula sa hindi awtorisadong pag-access, paggamit, o pagpapahayag. Gayunpaman, walang paraan ng pag-transmit ng data sa internet ang 100% na secure, at hindi namin matitiyak ang ganap na seguridad."
+    },
+    "data_retention": {
+      "title": "5. Pagpapanatili ng Data",
+      "paragraph": "Itatago namin ang iyong impormasyon hangga't kinakailangan upang matugunan ang mga layunin na inilalahad sa Patakaran sa Privacy na ito o ayon sa kinakailangan ng batas. Maaaring hilingin mong tanggalin ang iyong personal na data sa pamamagitan ng direktang pakikipag-ugnayan sa amin, at iproseso namin ang iyong hiling alinsunod sa mga naaangkop na batas."
+    },
+    "your_rights": {
+      "title": "6. Ang Iyong Mga Karapatan",
+      "paragraph": "May karapatan kang ma-access, itama, o hilingin ang pagtanggal ng iyong personal na impormasyon. Kung nais mong gamitin ang alinman sa mga karapatang ito, mangyaring makipag-ugnayan sa amin sa pamamagitan ng aming support email sa [Support Email]."
+    }
+  }
+}

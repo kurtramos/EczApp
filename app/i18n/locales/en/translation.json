@@ -1,0 +1,264 @@
+{
+  "language": "English",
+  "home": {
+    "welcome": "Hi, Welcome Back",
+    "learn": {
+      "title": "LEARN",
+      "description": "Everything to know about Eczema."
+    },
+    "how_to_use": {
+      "title": "HOW TO USE",
+      "description": "How to use specific features and navigate the app."
+    },
+    "doctors": {
+      "title": "DOCTORS",
+      "description": "Find a specialist in your area for skin consultation."
+    },
+    "eczema_care": {
+      "title": "EczemaCare",
+      "description": "A Mobile Application for Monitoring and Tracking the Severity of Atopic Dermatitis."
+    }
+  },
+
+  "learn": {
+    "learn": "Learn",
+    "what_is_eczema": "What is Eczema?",
+    "is_eczema_curable": "Is Eczema Curable?",
+    "types_of_eczema": "Types of Eczema",
+    "symptoms": "Symptoms",
+    "remedies": "Remedies",
+    "what_to_do": "What to Do",
+    "what_to_avoid": "What to Avoid",
+    "disclaimer": "Disclaimer",
+    "eczema_description": "Eczema, also known as atopic dermatitis, is a chronic skin condition that causes inflamed, itchy, and red skin. It occurs when the skin's protective barrier is weakened, making it more sensitive to irritants and allergens. Eczema often starts in childhood but can affect people of all ages.",
+    "eczema_curable_description": "Unfortunately, there is no cure for eczema. However, it can be managed with proper treatment and care. Symptoms can come and go, with periods of flare-ups followed by times of remission. Long-term management focuses on reducing flare-ups and controlling symptoms.",
+    "types_of_eczema_description": "There are several types of eczema, including Atopic Dermatitis, Contact Dermatitis, Dyshidrotic Eczema, Nummular Eczema, Seborrheic Dermatitis, and Stasis Dermatitis.",
+    "symptoms_description": "Eczema symptoms can vary, but common signs include dry, scaly, or cracked skin, itching, red or inflamed skin, small raised bumps that may leak fluid, thickened skin, and sensitive skin that reacts to irritants.",
+    "remedies_description": "Eczema treatment typically involves Moisturizers, Topical Steroids, Antihistamines, Wet Wrap Therapy, Phototherapy, and Lifestyle Adjustments.",
+    "what_to_do_description": "Keep Skin Moisturized, Use Gentle Skincare Products, Wear Soft, Breathable Fabrics, Manage Stress, and See a Dermatologist.",
+    "what_to_avoid_description": "Avoid Harsh Soaps and Detergents, Hot Showers or Baths, Scratching, Environmental Triggers, and Rough or Synthetic Fabrics.",
+    "disclaimer_description": "This application is designed to help track and monitor the severity of a patient’s eczema. It is not intended to replace professional medical advice or treatment. If symptoms persist or worsen, please consult your doctor for further evaluation and care."
+  },
+
+  "how_to_use": {
+    "how_to_use": "How to Use",
+    "how_to_use_the_camera": "How to Use the Camera",
+    "how_to_use_the_camera_description": "To use the camera in the EczemaCare app:\n1. Navigate to the “Camera” section from the app menu.\n2. Point your camera at the affected skin area you want to monitor.\n3. Tap the shutter button to take a clear photo.\n4. Save the image, which will be stored in your personal health records for easy reference.\n\nTip: Ensure good lighting and a close-up shot for better accuracy.",
+    "what_is_the_camera_for": "What Is the Camera For",
+    "what_is_the_camera_for_description": "The camera feature in the EczemaCare app allows you to:\n• Take photos of your skin condition to track changes over time.\n• Compare current skin health with past images to observe improvements or flare-ups.\n• Store the images in the app for the healthcare provider to view and provide better diagnosis and management.",
+    "when_to_answer_poem": "When to Answer the POEM Survey",
+    "when_to_answer_poem_description": "You should complete the POEM (Patient-Oriented Eczema Measure) survey:\n• Once a week to monitor your eczema symptoms. The survey can be taken as needed for when the case gets worse.\n• After significant changes in your condition or treatment adjustments.\n• Before a scheduled check-up with your healthcare provider to give them updated information about your symptoms.",
+    "how_to_use_the_tracker": "How to Use the Tracker",
+    "how_to_use_the_tracker_description": "To use the tracker effectively:\n1. Access the Tracker section from the menu.\n2. Input details about your symptoms, medications, and daily skin care routine.\n3. Use the tracker to log any changes in your skin condition or flare-ups.\n4. Review your progress by checking the weekly or monthly summaries to see patterns or improvements.",
+    "what_is_the_poem_score": "What Is the POEM Score",
+    "what_is_the_poem_score_description": "The POEM score is a measure used to assess the severity of your eczema symptoms. It’s based on a series of questions related to:\n• Itching and discomfort.\n• Sleep disturbance.\n• Frequency and extent of eczema flare-ups.\n\nYour responses generate a score, which helps both you and your healthcare provider understand how well your eczema is being managed and whether treatment adjustments are needed.",
+    "how_can_i_get_treatment": "How Can I Get Treatment",
+    "how_can_i_get_treatment_description": "For treatment options:\n1. Visit the Treatment section in the app, where you’ll find personalized recommendations based on your POEM score and tracking data.\n2. Schedule an appointment with your dermatologist through the app's integrated telehealth feature, or consult your healthcare provider in person.\n3. Ensure you follow the prescribed treatment plan, including medications, moisturizers, and lifestyle adjustments.\n\nNote: Always consult a healthcare professional before making any changes to your treatment plan."
+  },
+
+  "doctors": {
+    "heading": "DOCTORS",
+    "subheading": "Find an allergy/immunology specialist",
+    "info_section": {
+      "text": "Allergy and Immunology specialists are experts in diagnosing and treating allergic diseases and immune system disorders. These may include asthma, food allergies, eczema, allergic rhinitis, and autoimmune conditions."
+    },
+    "carousel": {
+      "scroll_down": "Scroll down to know more about the doctors."
+    },
+    "psaai_source": "PSAAI is a globally recognized organization of moral and ethical physicians with a passion for excellence in the field of Allergy and Immunology. It is committed to dedicated service, continuing education, training, and research, with the ultimate goal of providing the best healthcare for all people.",
+    "search_bar": {
+      "placeholder": "Search for a doctor, city, hospital, unit, contact, or platform..."
+    },
+    "no_results": "No doctors found matching your search.",
+    "doctor_source": "The doctor list is sourced from"
+  },
+
+  "poem_survey": {
+    "title": "POEM",
+    "description": "Complete the POEM questionnaire once a week to monitor changes in your skin condition. Please answer the following questions carefully, rating each on a scale from 0 (lowest) to 7 (highest). Your responses will be totaled at the end to indicate the severity of your eczema.",
+    "questions": [
+      "Over the last week, on how many days has your/your child’s skin been itchy because of the eczema?",
+      "Over the last week, on how many nights has your/your child's sleep been disturbed because of the eczema?",
+      "Over the last week, on how many days has your/your child’s skin been bleeding because of the eczema?",
+      "Over the last week, on how many days has your/your child’s skin been weeping or oozing clear fluid because of the eczema?",
+      "Over the last week, on how many days has your/your child’s skin been cracked because of the eczema?",
+      "Over the last week, on how many days has your/your child’s skin been flaking off because of the eczema?",
+      "Over the last week, on how many days has your/your child’s skin felt dry or rough because of the eczema?"
+    ],
+    "submit_button": "Submit",
+    "alerts": {
+      "incomplete_survey": {
+        "title": "Incomplete Survey",
+        "message": "Please answer all questions before submitting."
+      },
+      "success": {
+        "title": "Success",
+        "message": "Responses saved successfully!"
+      },
+      "error": {
+        "title": "Error",
+        "message": "Failed to save responses."
+      }
+    }
+  },
+
+  "poem_result": {
+    "poem_result": "POEM RESULT",
+    "score": "Your POEM score is",
+    "severity_level": "Severity Level"
+  },
+
+  "camera": {
+    "title": "CAMERA",
+    "description": "Use the camera to capture images for skin condition recognition. Follow the instructions below for better accuracy.",
+    "steps": {
+      "step1": {
+        "title": "Step 1: Lighting",
+        "description": "Ensure the area is well-lit. Natural lighting is preferred for better accuracy in recognizing skin conditions."
+      },
+      "step2": {
+        "title": "Step 2: Positioning",
+        "description": "Hold the camera steady and ensure the affected skin is centered in the frame. Keep the phone 6-8 inches away."
+      },
+      "step3": {
+        "title": "Step 3: Focus",
+        "description": "Make sure the image is clear and not blurry. Tap on the screen to focus on the area of interest."
+      }
+    },
+    "proceed_button": "Proceed",
+    "placeholder_text": "CLICK TO OPEN CAMERA",
+    "retake_button": "Retake",
+    "image_upload_button": "Image Upload",
+    "save_button": "Save",
+    "gallery_button": "Gallery",
+    "alerts": {
+      "camera_permission_not_granted": "Camera permission not granted",
+      "camera_cancelled": "Camera capture was cancelled or failed.",
+      "gallery_permission_not_granted": "Media library permission not granted",
+      "image_selection_cancelled": "Image selection was cancelled or failed.",
+      "no_image_selected": "No image selected",
+      "user_not_logged_in": "No user is currently logged in.",
+      "image_saved": "Image saved successfully!",
+      "image_save_failed": "Failed to save image"
+    }
+  },
+
+  "settings": {
+    "settings": "Settings",
+    "language_setting": "Language Setting",
+    "change_language": "Change Language Setting",
+    "notification_setting": "Notification Setting",
+    "general_notification": "General Notification",
+    "sound": "Sound",
+    "vibrate": "Vibrate",
+    "change_password": "Change Password",
+    "current_password": "Current Password",
+    "new_password": "New Password",
+    "confirm_new_password": "Confirm New Password",
+    "password_changed_successfully": "Password changed successfully!",
+    "new_password_same_as_current": "New password cannot be the same as the current password",
+    "new_passwords_do_not_match": "New passwords do not match!",
+    "please_fill_in_all_fields": "Please fill in all fields.",
+    "delete_account": "Delete Account",
+    "confirm_deletion": "Confirm Deletion",
+    "confirm_deletion_message": "Are you sure you want to delete your account? This action is irreversible, and all your data and files will be permanently deleted.",
+    "delete": "Delete",
+    "cancel": "Cancel"
+  },
+
+  "account": {
+    "age": "Age",
+    "my_account": "My account",
+    "personal_information": "Personal Information",
+    "profile": "Profile",
+    "my_record": "My Record",
+    "privacy_policy": "Privacy Policy",
+    "logout": "Logout",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "phone_number": "Phone Number",
+    "email": "Email",
+    "edit_profile": "Edit Profile",
+    "verified_user": "Verified User",
+    "not_verified": "Not Verified",
+    "save": "Save",
+    "logged_out": "You have been successfully logged out.",
+    "no_first_name": "No First Name Available",
+    "no_last_name": "No Last Name Available",
+    "no_phone_number": "No Phone Number Available",
+    "poem_score_trend": "POEM Score Trend",
+    "medications_and_treatment": "Medications & Treatment",
+    "previous_survey_info": "Previous Survey Info",
+    "no_previous_survey": "No Previous Survey",
+    "score": "Score",
+    "severity_level": "Severity Level",
+    "clear": "Clear",
+    "mild": "Mild",
+    "moderate": "Moderate",
+    "severe": "Severe",
+    "very_severe": "Very Severe",
+    "unknown": "Unknown",
+    "clear_message": "Your skin is clear, with minimal eczema symptoms.",
+    "mild_message": "Mild eczema symptoms detected. Keep monitoring your skin condition.",
+    "moderate_message": "Moderate eczema symptoms are present. Consider consulting a healthcare provider.",
+    "severe_message": "Severe eczema symptoms detected. It’s recommended to seek medical advice.",
+    "very_severe_message": "Very severe eczema symptoms. Please consult a healthcare provider immediately.",
+    "unknown_message": "Score out of range. Please check your input.",
+    "no_survey_found": "No previous survey found.",
+    "no_data": "No Data"
+  },
+
+  "privacy_policy": {
+    "heading": "Privacy Policy",
+    "intro_paragraph": "EczemaCare is committed to protecting your privacy. This Privacy Policy outlines how we collect, use, share, and protect your personal information. By using EczemaCare, you agree to the collection and use of information as described in this policy.",
+    "information_we_collect": {
+      "title": "1. Information We Collect",
+      "personal_information": {
+        "title": "Personal Information",
+        "items": [
+          "First and Last Name",
+          "Date of Birth",
+          "Contact Number",
+          "Email Address"
+        ]
+      },
+      "medical_information": {
+        "title": "Medical Information",
+        "items": [
+          "Images of affected skin areas (uploaded by the user)",
+          "Responses and scores from the POEM (Patient-Oriented Eczema Measure) survey"
+        ]
+      }
+    },
+    "how_we_use_information": {
+      "title": "2. How We Use Your Information",
+      "paragraph": "EczemaCare uses your information for the following purposes:",
+      "purposes": [
+        "TREATMENT TRACKING: Your POEM survey scores allow us to monitor changes in your condition over time.",
+        "COMMUNICATION: We may use your contact details to notify you about important updates, responses, or recommendations regarding your eczema care.",
+        "RESEARCH AND ANALYSIS: Aggregated, anonymized data may be used for internal research to improve our services. Individual information will not be shared without your explicit consent."
+      ]
+    },
+    "data_sharing_and_disclosure": {
+      "title": "3. Data Sharing and Disclosure",
+      "paragraph": "We will not share your personal information with third parties except:",
+      "conditions": [
+        "WITH YOUR CONSENT: We may share information with third parties when you explicitly consent.",
+        "FOR LEGAL REQUIREMENTS: We may disclose information if required by law, court order, or government regulation.",
+        "WITH OUR MEDICAL VALIDATOR: EczemaCare collaborates with a medical expert to ensure the effectiveness and accuracy of treatment recommendations. Your anonymized data may be shared with the medical expert for validation purposes."
+      ]
+    },
+    "data_security": {
+      "title": "4. Data Security",
+      "paragraph": "We implement robust security measures to protect your personal information from unauthorized access, use, or disclosure. However, no method of data transmission over the internet is 100% secure, and we cannot guarantee absolute security."
+    },
+    "data_retention": {
+      "title": "5. Data Retention",
+      "paragraph": "We will retain your information as long as necessary to fulfill the purposes outlined in this Privacy Policy or as required by law. You may request deletion of your personal data by contacting us directly, and we will process your request per applicable laws."
+    },
+    "your_rights": {
+      "title": "6. Your Rights",
+      "paragraph": "You have the right to access, correct, or request deletion of your personal information. If you would like to exercise any of these rights, please contact us through our support email at [Support Email]."
+    }
+  }
+}

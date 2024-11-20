@@ -16,8 +16,10 @@ import BottomNav from "../components/BottomNav";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { firestore } from "../firebaseConfig";
+import { useTranslation } from "react-i18next";
 
 export default function HomeScreen() {
+  const { t, i18n } = useTranslation();
   const router = useRouter();
   const [userEmail, setUserEmail] = useState("");
   const [profileImage, setProfileImage] = useState("");
@@ -28,32 +30,36 @@ export default function HomeScreen() {
       const fetchUserData = async () => {
         const auth = getAuth();
         const user = auth.currentUser;
-  
+
         if (user) {
           setUserEmail(user.email ?? "Unknown Email");
           setProfileImage(user.photoURL || "https://via.placeholder.com/72x72");
-  
+
           try {
             const userDocRef = doc(firestore, "users", user.email ?? "");
             const userDocSnap = await getDoc(userDocRef);
-  
+
             if (userDocSnap.exists()) {
               const userData = userDocSnap.data();
               setFullName(`${userData.firstName} ${userData.lastName}`);
+              i18n.changeLanguage(userData.language);
             } else {
               Alert.alert("Error", "No user data found in Firestore.");
             }
           } catch (error) {
             console.error("Error fetching user data:", error);
-            Alert.alert("Error", "Failed to retrieve user data from Firestore.");
+            Alert.alert(
+              "Error",
+              "Failed to retrieve user data from Firestore."
+            );
           }
         }
       };
-  
+
       fetchUserData();
     }, [])
   );
-  
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
@@ -61,10 +67,10 @@ export default function HomeScreen() {
         <View style={styles.header}>
           <Image
             style={styles.profileImage}
-        source={require('../../assets/logos/EczemaCareLogoG.png')} 
+            source={require("../../assets/logos/EczemaCareLogoG.png")}
           />
           <View style={styles.greeting}>
-            <Text style={styles.welcomeText}>Hi, Welcome Back</Text>
+            <Text style={styles.welcomeText}>{t("home.welcome")}</Text>
             <Text style={styles.welcomeText}>{fullName || "Guest"}</Text>
           </View>
           <View style={styles.iconContainer}>
@@ -83,13 +89,11 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        
-
         {/* Header Title Section */}
         <View style={styles.titleCard}>
-          <Text style={styles.headerTitle}>EczemaCare</Text>
+          <Text style={styles.headerTitle}>{t("home.eczema_care.title")}</Text>
           <Text style={styles.headerInfo}>
-          A Mobile Application for Monitoring and Tracking the Severity of Atopic Dermatitis.
+            {t("home.eczema_care.description")}
           </Text>
         </View>
 
@@ -98,14 +102,17 @@ export default function HomeScreen() {
           style={styles.infoCard}
           onPress={() => router.push("/learn")}
         >
-          <Text style={styles.infoTitle}>LEARN</Text>
-          <Text style={styles.infoText}>Everything to know about Eczema.</Text>
+          <Text style={styles.infoTitle}>{t("home.learn.title")}</Text>
+          <Text style={styles.infoText}>{t("home.learn.description")}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.infoCard} onPress={() => router.push('/faqs')}>
-          <Text style={styles.infoTitle}>HOW TO USE</Text>
+        <TouchableOpacity
+          style={styles.infoCard}
+          onPress={() => router.push("/faqs")}
+        >
+          <Text style={styles.infoTitle}>{t("home.how_to_use.title")}</Text>
           <Text style={styles.infoText}>
-            How to use specific features and navigate the app.
+            {t("home.how_to_use.description")}
           </Text>
         </TouchableOpacity>
 
@@ -113,14 +120,12 @@ export default function HomeScreen() {
           style={styles.infoCard}
           onPress={() => router.push("/aboutus")}
         >
-          <Text style={styles.infoTitle}>DOCTORS</Text>
-          <Text style={styles.infoText}>
-            Find a specialist in your area for skin consultation.
-          </Text>
+          <Text style={styles.infoTitle}>{t("home.doctors.title")}</Text>
+          <Text style={styles.infoText}>{t("home.doctors.description")}</Text>
         </TouchableOpacity>
       </ScrollView>
 
-      <BottomNav/>
+      <BottomNav />
     </View>
   );
 }
@@ -174,13 +179,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  
+
   Container: {
     flexDirection: "row",
     paddingHorizontal: 20,
     marginVertical: 20,
   },
-  
+
   titleCard: {
     backgroundColor: "#74BDB3",
     padding: 20,
@@ -204,7 +209,7 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     marginBottom: 10,
   },
-  
+
   infoCard: {
     backgroundColor: "#C3EFE5",
     padding: 20,

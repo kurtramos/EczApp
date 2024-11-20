@@ -12,9 +12,11 @@ import BackArrow from "../components/BackArrow";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { firestore } from "../firebaseConfig";
-import { FontAwesome } from '@expo/vector-icons'; // Using FontAwesome for badge icon
+import { FontAwesome } from "@expo/vector-icons"; // Using FontAwesome for badge icon
+import { useTranslation } from "react-i18next";
 
 const ProfileScreen = () => {
+  const { t } = useTranslation();
   const router = useRouter();
 
   // States for profile fields
@@ -36,9 +38,11 @@ const ProfileScreen = () => {
 
           if (userDocSnap.exists()) {
             const userData = userDocSnap.data();
-            setFirstName(userData.firstName ?? "No First Name Available");
-            setLastName(userData.lastName ?? "No Last Name Available");
-            setPhoneNumber(userData.mobileNumber ?? "No Phone Number Available");
+            setFirstName(userData.firstName ?? t("account.no_first_name"));
+            setLastName(userData.lastName ?? t("account.no_last_name"));
+            setPhoneNumber(
+              userData.mobileNumber ?? t("account.no_phone_number")
+            );
             setEmail(userData.email ?? user?.email);
             setIsVerified(userData.isVerified ?? false); // Set verification status
           } else {
@@ -56,41 +60,45 @@ const ProfileScreen = () => {
       <BackArrow onPress={() => router.push("/myaccount")} />
       <ScrollView>
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Profile</Text>
+          <Text style={styles.headerTitle}>{t("account.profile")}</Text>
 
           {/* Verification Badge */}
           <View style={styles.badgeContainer}>
             {isVerified ? (
               <View style={styles.verifiedBadge}>
                 <FontAwesome name="check-circle" size={20} color="#4CAF50" />
-                <Text style={styles.badgeText}>Verified User</Text>
+                <Text style={styles.badgeText}>
+                  {t("account.verified_user")}
+                </Text>
               </View>
             ) : (
               <View style={styles.notVerifiedBadge}>
                 <FontAwesome name="times-circle" size={20} color="#F44336" />
-                <Text style={styles.badgeText}>Not Yet Verified</Text>
+                <Text style={styles.badgeText}>
+                  {t("account.not_verified")}
+                </Text>
               </View>
             )}
           </View>
         </View>
 
         <View style={styles.field}>
-          <Text style={styles.label}>First Name</Text>
+          <Text style={styles.label}>{t("account.first_name")}</Text>
           <Text style={styles.value}>{firstName}</Text>
         </View>
 
         <View style={styles.field}>
-          <Text style={styles.label}>Last Name</Text>
+          <Text style={styles.label}>{t("account.last_name")}</Text>
           <Text style={styles.value}>{lastName}</Text>
         </View>
 
         <View style={styles.field}>
-          <Text style={styles.label}>Phone Number</Text>
+          <Text style={styles.label}>{t("account.phone_number")}</Text>
           <Text style={styles.value}>{phoneNumber}</Text>
         </View>
 
         <View style={styles.field}>
-          <Text style={styles.label}>Email</Text>
+          <Text style={styles.label}>{t("account.email")}</Text>
           <Text style={styles.value}>{email}</Text>
         </View>
 
@@ -99,7 +107,7 @@ const ProfileScreen = () => {
           style={styles.button}
           onPress={() => router.push("/editprofile")}
         >
-          <Text style={styles.buttonText}>Edit Profile</Text>
+          <Text style={styles.buttonText}>{t("account.edit_profile")}</Text>
         </TouchableOpacity>
       </ScrollView>
       {/* <BottomNav /> */}

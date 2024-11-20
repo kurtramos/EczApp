@@ -1,17 +1,18 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions, Image } from 'react-native';
-import { useFonts } from 'expo-font';
-import { useRouter } from 'expo-router'; // useRouter from expo-router
+import React, { useEffect } from "react";
+import { View, Text, StyleSheet, Dimensions, Image } from "react-native";
+import { useFonts } from "expo-font";
+import { useRouter } from "expo-router"; // useRouter from expo-router
+import "../i18n";
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
 export default function SplashScreen() {
   const router = useRouter(); // use useRouter for navigation
-  
+
   useEffect(() => {
     // Set a timer to automatically navigate after 3 seconds
     const timer = setTimeout(() => {
-      router.push('/Homescreen');
+      router.push("/Homescreen");
     }, 1200); // 3000ms = 3 seconds
 
     // Clear the timer if the component is unmounted
@@ -21,7 +22,7 @@ export default function SplashScreen() {
   return (
     <View style={styles.container}>
       <Image
-        source={require('../../assets/logos/EczemaCareLogoW.png')} 
+        source={require("../../assets/logos/EczemaCareLogoW.png")}
         style={styles.logo}
       />
 
@@ -33,33 +34,31 @@ export default function SplashScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
-    backgroundColor: '#85D3C0', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
+    flex: 1,
+    backgroundColor: "#85D3C0",
+    justifyContent: "center",
+    alignItems: "center",
   },
   logo: {
-    width: 130, 
-    height: 130, 
-    resizeMode: 'contain', 
-    marginBottom: 20, 
+    width: 130,
+    height: 130,
+    resizeMode: "contain",
+    marginBottom: 20,
   },
   titleText: {
-    fontSize: 48, 
-    color: 'white',
-    fontFamily: 'League Spartan',
-    fontWeight: '100',
-    textAlign: 'center',
-    marginBottom: 10, 
+    fontSize: 48,
+    color: "white",
+    fontFamily: "League Spartan",
+    fontWeight: "100",
+    textAlign: "center",
+    marginBottom: 10,
   },
   subtitleText: {
-    fontSize: 48, 
-    color: 'white',
-    fontFamily: 'League Spartan',
-    fontWeight: '100',
-    textAlign: 'center',
-    marginBottom: 30, 
+    fontSize: 48,
+    color: "white",
+    fontFamily: "League Spartan",
+    fontWeight: "100",
+    textAlign: "center",
+    marginBottom: 30,
   },
 });
-
-
