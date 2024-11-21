@@ -12,11 +12,21 @@ import { useRouter } from "expo-router";
 import BottomNav from "../components/BottomNav";
 import { firestore } from "../firebaseConfig";
 import { getAuth } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  collection,
+  query,
+  orderBy,
+  limit,
+  getDocs,
+} from "firebase/firestore";
+import { useFocusEffect } from "expo-router";
 import { useTranslation } from "react-i18next";
 
 const POEMScreen = () => {
   const { t } = useTranslation();
+  const [surveyAvailable, setSurveyAvailable] = useState(false);
   const router = useRouter();
   const [response, setResponse] = useState({
     question1: null,
@@ -27,6 +37,65 @@ const POEMScreen = () => {
     question6: null,
     question7: null,
   });
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const checkLastSurvey = async () => {
+        const auth = getAuth();
+        const user = auth.currentUser;
+
+        if (user) {
+          try {
+            // Get latest survey
+            const poemScoresRef = collection(
+              firestore,
+              "users",
+              user.email,
+              "POEMScores"
+            );
+
+            const latestSurveyQuery = query(
+              poemScoresRef,
+              orderBy("timestamp", "desc"),
+              limit(1)
+            );
+            const querySnapshot = await getDocs(latestSurveyQuery);
+
+            // Get latest survey timestamp
+            if (!querySnapshot.empty) {
+              const latestDoc = querySnapshot.docs[0].data();
+              const latestTimestamp = latestDoc.timestamp.toDate();
+
+              // Check if the timestamp is within the current week
+              const now = new Date();
+              const startOfWeek = new Date(
+                now.getFullYear(),
+                now.getMonth(),
+                now.getDate() - now.getDay()
+              );
+
+              if (latestTimestamp >= startOfWeek) {
+                setSurveyAvailable(false);
+              } else {
+                setSurveyAvailable(true);
+              }
+            } else {
+              // No surveys found
+              setSurveyAvailable(true);
+            }
+          } catch (error) {
+            console.error("Error fetching user data:", error);
+            Alert.alert(
+              "Error",
+              "Failed to retrieve user data from Firestore."
+            );
+          }
+        }
+      };
+
+      checkLastSurvey();
+    }, [])
+  );
 
   const selectOption = (question, option) => {
     setResponse((prev) => ({ ...prev, [question]: option }));
@@ -125,45 +194,61 @@ const POEMScreen = () => {
   return (
     <View style={styles.container}>
       <BackArrow onPress={() => router.push("/home")} />
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+
+      {!surveyAvailable ? (
         <View style={styles.header}>
           <Text style={styles.title}>{t("poem_survey.title")}</Text>
-          <Text style={styles.description}>{t("poem_survey.description")}</Text>
+          <Text style={styles.description}>{t("poem_survey.unavailable")}</Text>
         </View>
-
-        {/* Survey Questions */}
-        {t("poem_survey.questions", { returnObjects: true }).map(
-          (question, index) => (
-            <View key={index} style={styles.questionContainer}>
-              <Text style={styles.question}>{question}</Text>
-              <View style={styles.optionsContainer}>
-                {["0", "1-2", "3-4", "5-6", "7"].map((option, idx) => (
-                  <TouchableOpacity
-                    key={idx}
-                    style={[
-                      styles.option,
-                      response[`question${index + 1}`] === option &&
-                        styles.selectedOption,
-                    ]}
-                    onPress={() => selectOption(`question${index + 1}`, option)}
-                  >
-                    <Text style={styles.optionText}>{option}</Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </View>
-          )
-        )}
-
-        {/* Submit Button */}
-        <View style={styles.submitButtonContainer}>
-          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-            <Text style={styles.submitButtonText}>
-              {t("poem_survey.submit_button")}
+      ) : (
+        <ScrollView contentContainerStyle={styles.scrollViewContent}>
+          <View style={styles.header}>
+            <Text style={styles.title}>{t("poem_survey.title")}</Text>
+            <Text style={styles.description}>
+              {t("poem_survey.description")}
             </Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+          </View>
+
+          {/* Survey Questions */}
+          {t("poem_survey.questions", { returnObjects: true }).map(
+            (question, index) => (
+              <View key={index} style={styles.questionContainer}>
+                <Text style={styles.question}>{question}</Text>
+                <View style={styles.optionsContainer}>
+                  {["0", "1-2", "3-4", "5-6", "7"].map((option, idx) => (
+                    <TouchableOpacity
+                      key={idx}
+                      style={[
+                        styles.option,
+                        response[`question${index + 1}`] === option &&
+                          styles.selectedOption,
+                      ]}
+                      onPress={() =>
+                        selectOption(`question${index + 1}`, option)
+                      }
+                    >
+                      <Text style={styles.optionText}>{option}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+            )
+          )}
+
+          {/* Submit Button */}
+          <View style={styles.submitButtonContainer}>
+            <TouchableOpacity
+              style={styles.submitButton}
+              onPress={handleSubmit}
+            >
+              <Text style={styles.submitButtonText}>
+                {t("poem_survey.submit_button")}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      )}
+
       <BottomNav />
     </View>
   );
