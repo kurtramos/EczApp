@@ -14,7 +14,16 @@ import { useRouter } from "expo-router";
 import { useFocusEffect } from "expo-router";
 import BottomNav from "../components/BottomNav";
 import { getAuth } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  query,
+  collection,
+  orderBy,
+  getDocs,
+  limit,
+  where,
+} from "firebase/firestore";
 import { firestore } from "../firebaseConfig";
 import { useTranslation } from "react-i18next";
 
@@ -24,12 +33,20 @@ export default function HomeScreen() {
   const [userEmail, setUserEmail] = useState("");
   const [profileImage, setProfileImage] = useState("");
   const [fullName, setFullName] = useState("");
+  const [user, setUser] = useState<any>(null);
+  const [hasNotif, setHasNotif] = useState(false);
+
+  interface User {
+    id: string;
+    name: string;
+    email: string;
+  }
 
   useFocusEffect(
     React.useCallback(() => {
       const fetchUserData = async () => {
         const auth = getAuth();
-        const user = auth.currentUser;
+        setUser(auth.currentUser);
 
         if (user) {
           setUserEmail(user.email ?? "Unknown Email");
@@ -60,6 +77,55 @@ export default function HomeScreen() {
     }, [])
   );
 
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchNotifications = async () => {
+        console.log("Fetching notifs");
+        if (user) {
+          try {
+            // Get latest notification
+            const notifsRef = collection(
+              firestore,
+              "users",
+              user.email,
+              "notifications"
+            );
+
+            const hasNotifQuery = query(
+              notifsRef,
+              where("opened", "==", false),
+              limit(1)
+            );
+
+            const querySnapshot = await getDocs(hasNotifQuery);
+            console.log(1);
+
+            // Get latest survey timestamp
+            if (!querySnapshot.empty) {
+              console.log(2);
+              const notifDoc = querySnapshot.docs[0].data();
+              console.log(notifDoc);
+
+              setHasNotif(true);
+            } else {
+              setHasNotif(false);
+              console.log(3);
+            }
+            console.log(`Has notif: ${hasNotif}`);
+          } catch (error) {
+            console.error("Error fetching user data:", error);
+            Alert.alert(
+              "Error",
+              "Failed to retrieve user data from Firestore."
+            );
+          }
+        }
+      };
+
+      fetchNotifications();
+    }, [user])
+  );
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
@@ -79,6 +145,7 @@ export default function HomeScreen() {
               onPress={() => router.push("/notification")}
             >
               <Icon name="bell" size={20} color="#5A5858" />
+              {hasNotif && <View style={styles.notificationDot} />}
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.iconCircle}
@@ -178,6 +245,17 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     justifyContent: "center",
     alignItems: "center",
+    position: "relative",
+  },
+
+  notificationDot: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    width: 12,
+    height: 12,
+    borderRadius: 50,
+    backgroundColor: "red",
   },
 
   Container: {
