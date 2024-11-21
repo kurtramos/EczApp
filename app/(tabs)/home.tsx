@@ -21,8 +21,8 @@ import {
   collection,
   orderBy,
   getDocs,
-  limit,
-  where,
+  Timestamp,
+  setDoc,
 } from "firebase/firestore";
 import { firestore } from "../firebaseConfig";
 import { useTranslation } from "react-i18next";
@@ -34,13 +34,7 @@ export default function HomeScreen() {
   const [profileImage, setProfileImage] = useState("");
   const [fullName, setFullName] = useState("");
   const [user, setUser] = useState<any>(null);
-  const [hasNotif, setHasNotif] = useState(false);
-
-  interface User {
-    id: string;
-    name: string;
-    email: string;
-  }
+  const [hasUnopened, setHasUnopened] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -80,45 +74,86 @@ export default function HomeScreen() {
   useFocusEffect(
     React.useCallback(() => {
       const fetchNotifications = async () => {
-        console.log("Fetching notifs");
-        if (user) {
-          try {
-            // Get latest notification
-            const notifsRef = collection(
+        const user = getAuth().currentUser;
+        const userEmail = user?.email;
+        if (!userEmail) return;
+
+        try {
+          const notificationsRef = collection(
+            firestore,
+            "users",
+            userEmail,
+            "notifications"
+          );
+
+          // Fetch notifications sorted by timestamp
+          const notificationsQuery = query(
+            notificationsRef,
+            orderBy("timestamp", "desc")
+          );
+          const querySnapshot = await getDocs(notificationsQuery);
+
+          // Parse fetched notifications
+          const fetchedNotifications = querySnapshot.docs.map((doc) => {
+            const data = doc.data();
+            return {
+              id: doc.id,
+              title: data.title || "Untitled Notification",
+              details: data.details || "No Details",
+              opened: data.opened || false,
+              timestamp:
+                data.timestamp instanceof Timestamp
+                  ? data.timestamp.toDate()
+                  : new Date(),
+            };
+          });
+
+          // Start of the current week
+          const now = new Date();
+          const startOfWeek = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate() - now.getDay()
+          );
+
+          // Check if there's a "POEM Survey" notification from this week
+          const hasThisWeekPOEMNotif = fetchedNotifications.some(
+            (notif) =>
+              notif.title === "POEM Survey" && notif.timestamp >= startOfWeek
+          );
+
+          if (!hasThisWeekPOEMNotif) {
+            // Increment id
+            const latestId = fetchedNotifications.length
+              ? Math.max(...fetchedNotifications.map((notif) => notif.id))
+              : 0;
+            const newDocId = latestId + 1;
+
+            const newDocRef = doc(
               firestore,
               "users",
-              user.email,
-              "notifications"
+              userEmail,
+              "notifications",
+              newDocId.toString()
             );
+            await setDoc(newDocRef, {
+              id: newDocId,
+              title: "POEM Survey",
+              details: "POEM Survey has been reset. Please answer it now.",
+              timestamp: Timestamp.fromDate(new Date()),
+              opened: false,
+            });
 
-            const hasNotifQuery = query(
-              notifsRef,
-              where("opened", "==", false),
-              limit(1)
+            setHasUnopened(true);
+          } else {
+            // Check if there are any unopened notifications
+            const hasUnopenedNotif = fetchedNotifications.some(
+              (notif) => !notif.opened
             );
-
-            const querySnapshot = await getDocs(hasNotifQuery);
-            console.log(1);
-
-            // Get latest survey timestamp
-            if (!querySnapshot.empty) {
-              console.log(2);
-              const notifDoc = querySnapshot.docs[0].data();
-              console.log(notifDoc);
-
-              setHasNotif(true);
-            } else {
-              setHasNotif(false);
-              console.log(3);
-            }
-            console.log(`Has notif: ${hasNotif}`);
-          } catch (error) {
-            console.error("Error fetching user data:", error);
-            Alert.alert(
-              "Error",
-              "Failed to retrieve user data from Firestore."
-            );
+            setHasUnopened(hasUnopenedNotif);
           }
+        } catch (error) {
+          console.error("Error fetching notifications:", error);
         }
       };
 
@@ -145,7 +180,7 @@ export default function HomeScreen() {
               onPress={() => router.push("/notification")}
             >
               <Icon name="bell" size={20} color="#5A5858" />
-              {hasNotif && <View style={styles.notificationDot} />}
+              {hasUnopened && <View style={styles.notificationDot} />}
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.iconCircle}

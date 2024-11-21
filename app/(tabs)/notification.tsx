@@ -4,14 +4,17 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import BackArrow from "../components/BackArrow";
 import NotificationBell from "../components/notificationbell";
 import { useRouter } from "expo-router";
+import { useFocusEffect } from "expo-router";
 import { firestore } from "../firebaseConfig";
 import { getAuth } from "firebase/auth";
 import {
+  doc,
   collection,
   getDocs,
   orderBy,
   query,
   Timestamp,
+  updateDoc,
 } from "firebase/firestore";
 
 interface Notification {
@@ -26,46 +29,60 @@ const NotificationScreen: React.FC = () => {
   const router = useRouter();
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      const user = getAuth().currentUser;
-      const userEmail = user?.email;
-      if (!userEmail) return;
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchNotifications = async () => {
+        const user = getAuth().currentUser;
+        const userEmail = user?.email;
+        if (!userEmail) return;
 
-      try {
-        const notificationsRef = collection(
-          firestore,
-          "users",
-          userEmail,
-          "notifications"
-        );
-        const notificationsQuery = query(
-          notificationsRef,
-          orderBy("timestamp", "desc")
-        );
-        const querySnapshot = await getDocs(notificationsQuery);
+        try {
+          const notificationsRef = collection(
+            firestore,
+            "users",
+            userEmail,
+            "notifications"
+          );
+          const notificationsQuery = query(
+            notificationsRef,
+            orderBy("timestamp", "desc")
+          );
+          const querySnapshot = await getDocs(notificationsQuery);
 
-        const fetchedNotifications = querySnapshot.docs.map((doc) => {
-          const data = doc.data();
-          return {
-            id: doc.id,
-            title: data.title || "Untitled Notification",
-            details: data.details || "No Details",
-            timestamp:
-              data.timestamp instanceof Timestamp
-                ? data.timestamp.toDate()
-                : new Date(),
-          };
-        });
+          const fetchedNotifications = querySnapshot.docs.map((doc) => {
+            const data = doc.data();
+            return {
+              id: doc.id,
+              title: data.title || "Untitled Notification",
+              details: data.details || "No Details",
+              timestamp:
+                data.timestamp instanceof Timestamp
+                  ? data.timestamp.toDate()
+                  : new Date(),
+            };
+          });
 
-        setNotifications(fetchedNotifications);
-      } catch (error) {
-        console.error("Error fetching notifications:", error);
-      }
-    };
+          setNotifications(fetchedNotifications);
 
-    fetchNotifications();
-  }, []);
+          // Opened all notifs
+          querySnapshot.forEach(async (notifDoc) => {
+            const docRef = doc(
+              firestore,
+              "users",
+              userEmail,
+              "notifications",
+              notifDoc.id.toString()
+            );
+            await updateDoc(docRef, { opened: true });
+          });
+        } catch (error) {
+          console.error("Error fetching notifications:", error);
+        }
+      };
+
+      fetchNotifications();
+    }, [])
+  );
 
   const formatTimeAgo = (date: Date): string => {
     if (!(date instanceof Date)) {
