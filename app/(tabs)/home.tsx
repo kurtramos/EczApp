@@ -32,7 +32,7 @@ export default function HomeScreen() {
   const router = useRouter();
   const [userEmail, setUserEmail] = useState("");
   const [profileImage, setProfileImage] = useState("");
-  const [fullName, setFullName] = useState("");
+  const [fullName, setFullName] = useState<string | null>(null);
   const [user, setUser] = useState<any>(null);
   const [hasUnopened, setHasUnopened] = useState(false);
 
@@ -40,6 +40,7 @@ export default function HomeScreen() {
     React.useCallback(() => {
       const fetchUserData = async () => {
         const auth = getAuth();
+        let user = auth.currentUser;
         setUser(auth.currentUser);
 
         if (user) {
@@ -172,7 +173,7 @@ export default function HomeScreen() {
           />
           <View style={styles.greeting}>
             <Text style={styles.welcomeText}>{t("home.welcome")}</Text>
-            <Text style={styles.welcomeText}>{fullName || "Guest"}</Text>
+            <Text style={styles.welcomeText}>{fullName ?? "Guest"}</Text>
           </View>
           <View style={styles.iconContainer}>
             <TouchableOpacity
