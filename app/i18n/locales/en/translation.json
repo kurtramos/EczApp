@@ -77,6 +77,7 @@
   "poem_survey": {
     "title": "POEM",
     "description": "Complete the POEM questionnaire once a week to monitor changes in your skin condition. Please answer the following questions carefully, rating each on a scale from 0 (lowest) to 7 (highest). Your responses will be totaled at the end to indicate the severity of your eczema.",
+    "unavailable": "You have already answered the POEM questionnaire this week. Please return next week.",
     "questions": [
       "Over the last week, on how many days has your/your child’s skin been itchy because of the eczema?",
       "Over the last week, on how many nights has your/your child's sleep been disturbed because of the eczema?",

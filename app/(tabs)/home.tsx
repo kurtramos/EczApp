@@ -14,7 +14,16 @@ import { useRouter } from "expo-router";
 import { useFocusEffect } from "expo-router";
 import BottomNav from "../components/BottomNav";
 import { getAuth } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  query,
+  collection,
+  orderBy,
+  getDocs,
+  Timestamp,
+  setDoc,
+} from "firebase/firestore";
 import { firestore } from "../firebaseConfig";
 import { useTranslation } from "react-i18next";
 
@@ -23,13 +32,16 @@ export default function HomeScreen() {
   const router = useRouter();
   const [userEmail, setUserEmail] = useState("");
   const [profileImage, setProfileImage] = useState("");
-  const [fullName, setFullName] = useState("");
+  const [fullName, setFullName] = useState<string | null>(null);
+  const [user, setUser] = useState<any>(null);
+  const [hasUnopened, setHasUnopened] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
       const fetchUserData = async () => {
         const auth = getAuth();
-        const user = auth.currentUser;
+        let user = auth.currentUser;
+        setUser(auth.currentUser);
 
         if (user) {
           setUserEmail(user.email ?? "Unknown Email");
@@ -60,6 +72,96 @@ export default function HomeScreen() {
     }, [])
   );
 
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchNotifications = async () => {
+        const user = getAuth().currentUser;
+        const userEmail = user?.email;
+        if (!userEmail) return;
+
+        try {
+          const notificationsRef = collection(
+            firestore,
+            "users",
+            userEmail,
+            "notifications"
+          );
+
+          // Fetch notifications sorted by timestamp
+          const notificationsQuery = query(
+            notificationsRef,
+            orderBy("timestamp", "desc")
+          );
+          const querySnapshot = await getDocs(notificationsQuery);
+
+          // Parse fetched notifications
+          const fetchedNotifications = querySnapshot.docs.map((doc) => {
+            const data = doc.data();
+            return {
+              id: doc.id,
+              title: data.title || "Untitled Notification",
+              details: data.details || "No Details",
+              opened: data.opened || false,
+              timestamp:
+                data.timestamp instanceof Timestamp
+                  ? data.timestamp.toDate()
+                  : new Date(),
+            };
+          });
+
+          // Start of the current week
+          const now = new Date();
+          const startOfWeek = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate() - now.getDay()
+          );
+
+          // Check if there's a "POEM Survey" notification from this week
+          const hasThisWeekPOEMNotif = fetchedNotifications.some(
+            (notif) =>
+              notif.title === "POEM Survey" && notif.timestamp >= startOfWeek
+          );
+
+          if (!hasThisWeekPOEMNotif) {
+            // Increment id
+            const latestId = fetchedNotifications.length
+              ? Math.max(...fetchedNotifications.map((notif) => notif.id))
+              : 0;
+            const newDocId = latestId + 1;
+
+            const newDocRef = doc(
+              firestore,
+              "users",
+              userEmail,
+              "notifications",
+              newDocId.toString()
+            );
+            await setDoc(newDocRef, {
+              id: newDocId,
+              title: "POEM Survey",
+              details: "POEM Survey has been reset. Please answer it now.",
+              timestamp: Timestamp.fromDate(new Date()),
+              opened: false,
+            });
+
+            setHasUnopened(true);
+          } else {
+            // Check if there are any unopened notifications
+            const hasUnopenedNotif = fetchedNotifications.some(
+              (notif) => !notif.opened
+            );
+            setHasUnopened(hasUnopenedNotif);
+          }
+        } catch (error) {
+          console.error("Error fetching notifications:", error);
+        }
+      };
+
+      fetchNotifications();
+    }, [user])
+  );
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
@@ -71,7 +173,7 @@ export default function HomeScreen() {
           />
           <View style={styles.greeting}>
             <Text style={styles.welcomeText}>{t("home.welcome")}</Text>
-            <Text style={styles.welcomeText}>{fullName || "Guest"}</Text>
+            <Text style={styles.welcomeText}>{fullName ?? "Guest"}</Text>
           </View>
           <View style={styles.iconContainer}>
             <TouchableOpacity
@@ -79,6 +181,7 @@ export default function HomeScreen() {
               onPress={() => router.push("/notification")}
             >
               <Icon name="bell" size={20} color="#5A5858" />
+              {hasUnopened && <View style={styles.notificationDot} />}
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.iconCircle}
@@ -178,6 +281,17 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     justifyContent: "center",
     alignItems: "center",
+    position: "relative",
+  },
+
+  notificationDot: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    width: 12,
+    height: 12,
+    borderRadius: 50,
+    backgroundColor: "red",
   },
 
   Container: {
