@@ -15,7 +15,7 @@ import { useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import { getAuth } from "firebase/auth";
 import { firestore, storage } from "../firebaseConfig";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, setDoc, doc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useTranslation } from "react-i18next";
 
@@ -36,8 +36,11 @@ const CameraScreen = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const [imageUri, setImageUri] = useState(null);
-  const [resultModalVisible, setResultModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const [analysisResult, setAnalysisResult] = useState(null);
+  const [modalTitle, setModalTitle] = useState<any | string>("Processing");
+  const [modalMessage, setModalMessage] = useState<any | string>(null);
+  const [closeButtonVisible, setCloseButtonVisible] = useState(false);
 
   // Function to open the camera
   const openCamera = async () => {
@@ -88,6 +91,12 @@ const CameraScreen = () => {
         return;
       }
 
+      setModalVisible(true);
+      setModalTitle("Processing...");
+      setCloseButtonVisible(false);
+      setModalMessage("Saving image...");
+      setAnalysisResult(null);
+
       // Create a unique path for each image
       const imageName = `images/${userEmail}/${Date.now()}_image.jpg`;
       const storageRef = ref(storage, imageName);
@@ -126,40 +135,91 @@ const CameraScreen = () => {
   };
 
   const analyzeSeverity = async (base64Image) => {
-    setResultModalVisible(true);
-    setAnalysisResult(null);
-    const PROJECT_ID = "53407213745";
-    const ENDPOINT_ID = "4907781201252581376";
-
-    const API_URL = `https://us-central1-aiplatform.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/endpoints/${ENDPOINT_ID}:predict`;
+    setModalMessage("Analyzing image...");
+    const BACKEND_URL =
+      "https://us-central1-eczemacare-1195e.cloudfunctions.net/predictImage";
 
     const body = {
-      instances: [
-        {
-          content: base64Image,
-        },
-      ],
-      parameters: {
-        confidenceThreshold: 0.5,
-        maxPredictions: 5,
-      },
+      base64Image: base64Image,
     };
 
     try {
-      const response = await fetch(API_URL, {
+      const token = await getAccessToken(); // Firebase Auth token
+
+      const response = await fetch(BACKEND_URL, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${await getAccessToken()}`,
-          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(body),
       });
 
+      if (!response.ok) {
+        setModalTitle("Error");
+        setModalMessage(`Cloud Run response error: ${response.statusText}`);
+        setCloseButtonVisible(true);
+        throw new Error(`Cloud Run response error: ${response.statusText}`);
+      }
+
       const result = await response.json();
-      setAnalysisResult(result);
-      console.log("Prediction results:", result);
+
+      setModalTitle("Success");
+      setModalMessage(`Saved and analyzed image.`);
+      saveAnalysis(result);
+      console.log("Cloud Run results:", result);
     } catch (error) {
-      console.error("Error making prediction:", error);
+      setModalTitle("Error");
+      setModalMessage(
+        `Something went wrong in connecting to Cloud Run: ${error}`
+      );
+      setCloseButtonVisible(true);
+      console.error("Something went wrong in connecting to Cloud Run:", error);
+      Alert.alert("Prediction Error", "Failed to analyze image.");
+    }
+  };
+
+  const saveAnalysis = async (analysisResult) => {
+    try {
+      const user = getAuth().currentUser;
+      const userEmail = user?.email;
+
+      if (!userEmail) {
+        console.error("No user is logged in.");
+        Alert.alert("Error", "No user is currently logged in.");
+        return;
+      }
+
+      const timestamp = new Date();
+      const timestampString = timestamp.toISOString();
+
+      const docRef = doc(
+        firestore,
+        "users",
+        userEmail,
+        "skinAnalysis",
+        timestampString
+      );
+
+      // Save analysis result to Firestore
+      await setDoc(docRef, {
+        result: analysisResult,
+        timestamp: timestamp,
+      });
+
+      console.log("Analysis saved successfully:", analysisResult);
+
+      // Update modal and navigate
+      setModalTitle("Success");
+      setModalMessage("Analysis saved successfully.");
+      setModalVisible(false);
+      router.push("/treatment");
+    } catch (error) {
+      console.error("Error saving analysis to Firestore:", error);
+      setModalTitle("Error");
+      setModalMessage("Failed to save analysis. Please try again.");
+      setCloseButtonVisible(true);
+      Alert.alert("Error", "Failed to save analysis to Firestore.");
     }
   };
 
@@ -229,24 +289,20 @@ const CameraScreen = () => {
       <BottomNav />
 
       {/* Result modal */}
-      <Modal
-        visible={resultModalVisible}
-        transparent={true}
-        animationType="slide"
-      >
+      <Modal visible={modalVisible} transparent={true} animationType="slide">
         <View style={styles.modalContainer}>
-          <Text>Result:</Text>
-          <Text>
-            {analysisResult ? JSON.stringify(analysisResult) : "Please wait..."}
-          </Text>
-          <TouchableOpacity
-            style={styles.closeModalButton}
-            onPress={() => {
-              setResultModalVisible(false);
-            }}
-          >
-            <Text style={styles.buttonText}>Close</Text>
-          </TouchableOpacity>
+          <Text style={styles.headerText}>{modalTitle}</Text>
+          <Text style={styles.message}>{modalMessage}</Text>
+          {closeButtonVisible && (
+            <TouchableOpacity
+              style={styles.closeModalButton}
+              onPress={() => {
+                setModalVisible(false);
+              }}
+            >
+              <Text style={styles.buttonText}>Close</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </Modal>
     </View>
@@ -342,6 +398,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#fff",
     gap: 4,
+  },
+  message: {
+    fontSize: 16,
+    color: "grey",
+    textAlign: "center",
+    marginTop: 10,
+    paddingHorizontal: 10,
   },
   closeModalButton: {
     backgroundColor: "#85D3C0",

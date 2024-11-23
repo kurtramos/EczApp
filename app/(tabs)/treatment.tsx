@@ -19,6 +19,7 @@ const Treatment = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const [poemScore, setPoemScore] = useState(0);
+  const [analysisLabel, setAnalysisLabel] = useState(null);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -60,7 +61,53 @@ const Treatment = () => {
         }
       };
 
+      const fetchAnalysis = async () => {
+        const user = getAuth().currentUser;
+        const userEmail = user?.email;
+
+        if (!userEmail) {
+          console.error("No user is currently logged in.");
+          alert("No user is currently logged in.");
+          return;
+        }
+
+        const analysisRef = collection(
+          firestore,
+          "users",
+          userEmail,
+          "skinAnalysis"
+        );
+
+        try {
+          const analysisQuery = query(
+            analysisRef,
+            orderBy("timestamp", "desc"),
+            limit(1)
+          );
+          const querySnapshot = await getDocs(analysisQuery);
+
+          if (!querySnapshot.empty) {
+            const latestDoc = querySnapshot.docs[0];
+            const { result } = latestDoc.data();
+
+            // Safely extract the label
+            const label = result?.predictions?.[0]?.label
+              ? result.predictions[0].label
+                  .replace(/_/g, " ")
+                  .replace(/\b\w/g, (char) => char.toUpperCase())
+              : "No result available";
+
+            setAnalysisLabel(label);
+          } else {
+            console.log("No result found.");
+          }
+        } catch (error) {
+          console.error("Error fetching score: ", error);
+        }
+      };
+
       fetchScore();
+      fetchAnalysis();
     }, [])
   );
 
@@ -109,11 +156,19 @@ const Treatment = () => {
         <View style={styles.squareBackground}>
           <Text style={styles.subheading}>{t("poem_result.score")}:</Text>
           <Text style={styles.poemScore}>{poemScore}</Text>
+
           <Text style={styles.severityLabel}>
             {t("poem_result.severity_level")}
           </Text>
+          <Text style={styles.message}>Based on POEM score</Text>
           <Text style={styles.severityValue}>{level}</Text>
           <Text style={styles.message}>{message}</Text>
+
+          <Text style={styles.severityLabel}>
+            {t("poem_result.severity_level")}
+          </Text>
+          <Text style={styles.message}>Based on skin analysis</Text>
+          <Text style={styles.severityValue}>{analysisLabel}</Text>
         </View>
       </ScrollView>
 
