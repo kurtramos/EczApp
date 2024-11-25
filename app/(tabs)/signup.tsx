@@ -326,7 +326,7 @@ const SignUpScreen = () => {
           <Text style={styles.signUpButtonText}>Sign Up</Text>
         </TouchableOpacity>
 
-        <Text style={styles.orSignUpText}>or sign up with</Text>
+        {/* <Text style={styles.orSignUpText}>or sign up with</Text>
 
         <View style={styles.socialIconsContainer}>
           <View style={styles.circle}>
@@ -338,7 +338,7 @@ const SignUpScreen = () => {
           <View style={styles.circle}>
             <MaterialIcons name="fingerprint" size={24} color="#85D3C0" />
           </View>
-        </View>
+        </View> */}
 
         <View style={styles.loginTextContainer}>
           <Text style={styles.loginText}>already have an account? </Text>

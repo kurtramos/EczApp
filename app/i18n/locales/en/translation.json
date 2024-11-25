@@ -11,8 +11,8 @@
       "description": "How to use specific features and navigate the app."
     },
     "doctors": {
-      "title": "DOCTORS",
-      "description": "Find a specialist in your area for skin consultation."
+      "title": "ALLERGISTS",
+      "description": "Find an allergist in your area for skin consultation."
     },
     "eczema_care": {
       "title": "EczemaCare",
@@ -34,7 +34,7 @@
     "eczema_curable_description": "Unfortunately, there is no cure for eczema. However, it can be managed with proper treatment and care. Symptoms can come and go, with periods of flare-ups followed by times of remission. Long-term management focuses on reducing flare-ups and controlling symptoms.",
     "types_of_eczema_description": "There are several types of eczema, including Atopic Dermatitis, Contact Dermatitis, Dyshidrotic Eczema, Nummular Eczema, Seborrheic Dermatitis, and Stasis Dermatitis.",
     "symptoms_description": "Eczema symptoms can vary, but common signs include dry, scaly, or cracked skin, itching, red or inflamed skin, small raised bumps that may leak fluid, thickened skin, and sensitive skin that reacts to irritants.",
-    "remedies_description": "Eczema treatment typically involves Moisturizers, Topical Steroids, Antihistamines, Wet Wrap Therapy, Phototherapy, and Lifestyle Adjustments.",
+    "remedies_description": "Eczema treatment typically involves Moisturizers, Wet Wrap Therapy, Cold Bath, and Lifestyle Adjustments.",
     "what_to_do_description": "Keep Skin Moisturized, Use Gentle Skincare Products, Wear Soft, Breathable Fabrics, Manage Stress, and See a Dermatologist.",
     "what_to_avoid_description": "Avoid Harsh Soaps and Detergents, Hot Showers or Baths, Scratching, Environmental Triggers, and Rough or Synthetic Fabrics.",
     "disclaimer_description": "This application is designed to help track and monitor the severity of a patient’s eczema. It is not intended to replace professional medical advice or treatment. If symptoms persist or worsen, please consult your doctor for further evaluation and care."
@@ -43,7 +43,7 @@
   "how_to_use": {
     "how_to_use": "How to Use",
     "how_to_use_the_camera": "How to Use the Camera",
-    "how_to_use_the_camera_description": "To use the camera in the EczemaCare app:\n1. Navigate to the “Camera” section from the app menu.\n2. Point your camera at the affected skin area you want to monitor.\n3. Tap the shutter button to take a clear photo.\n4. Save the image, which will be stored in your personal health records for easy reference.\n\nTip: Ensure good lighting and a close-up shot for better accuracy.",
+    "how_to_use_the_camera_description": "To use the camera in the EczemaCare app:\n1. Navigate to the “Camera” section from the app menu.\n2. Point your camera at the affected skin area you want to monitor.\n3. Tap the shutter button to take a clear photo.\n4. Save the image, which will be stored in your personal health records for easy reference.\n5. You can only utilize the camera once a week.\n\nTip: Ensure good lighting and a close-up shot for better accuracy.",
     "what_is_the_camera_for": "What Is the Camera For",
     "what_is_the_camera_for_description": "The camera feature in the EczemaCare app allows you to:\n• Take photos of your skin condition to track changes over time.\n• Compare current skin health with past images to observe improvements or flare-ups.\n• Store the images in the app for the healthcare provider to view and provide better diagnosis and management.",
     "when_to_answer_poem": "When to Answer the POEM Survey",
@@ -57,26 +57,27 @@
   },
 
   "doctors": {
-    "heading": "DOCTORS",
+    "heading": "ALLERGISTS",
     "subheading": "Find an allergy/immunology specialist",
     "info_section": {
       "text": "Allergy and Immunology specialists are experts in diagnosing and treating allergic diseases and immune system disorders. These may include asthma, food allergies, eczema, allergic rhinitis, and autoimmune conditions."
     },
     "carousel": {
-      "scroll_down": "Scroll down to know more about the doctors."
+      "scroll_down": "Scroll down to know more about the allergists."
     },
     "psaai_source": "PSAAI is a globally recognized organization of moral and ethical physicians with a passion for excellence in the field of Allergy and Immunology. It is committed to dedicated service, continuing education, training, and research, with the ultimate goal of providing the best healthcare for all people.",
     "search_bar": {
-      "placeholder": "Search for a doctor, city, hospital, unit, contact, or platform..."
+      "placeholder": "Search for an allergist, city, hospital, unit, contact, or platform..."
     },
-    "no_results": "No doctors found matching your search.",
-    "doctor_source": "The doctor list is sourced from"
+    "no_results": "No allergist found matching your search.",
+    "doctor_source": "The allergists list is sourced from"
   },
 
   "poem_survey": {
     "title": "POEM",
     "description": "Complete the POEM questionnaire once a week to monitor changes in your skin condition. Please answer the following questions carefully, rating each on a scale from 0 (lowest) to 7 (highest). Your responses will be totaled at the end to indicate the severity of your eczema.",
     "unavailable": "You have already answered the POEM questionnaire this week. Please return next week.",
+   
     "questions": [
       "Over the last week, on how many days has your/your child’s skin been itchy because of the eczema?",
       "Over the last week, on how many nights has your/your child's sleep been disturbed because of the eczema?",
@@ -86,6 +87,7 @@
       "Over the last week, on how many days has your/your child’s skin been flaking off because of the eczema?",
       "Over the last week, on how many days has your/your child’s skin felt dry or rough because of the eczema?"
     ],
+    
     "submit_button": "Submit",
     "alerts": {
       "incomplete_survey": {
@@ -206,7 +208,8 @@
     "very_severe_message": "Very severe eczema symptoms. Please consult a healthcare provider immediately.",
     "unknown_message": "Score out of range. Please check your input.",
     "no_survey_found": "No previous survey found.",
-    "no_data": "No Data"
+    "no_data": "No Data",
+    "taon": "years old"
   },
 
   "privacy_policy": {

@@ -97,7 +97,7 @@ const HowToUse = () => {
             )}
 
             {/* Section 6: How Can I Get Treatment */}
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => toggleSection("howToGetTreatment")}
             >
               <Text style={styles.sectionTitle}>
@@ -108,7 +108,7 @@ const HowToUse = () => {
               <Text style={styles.sectionContent}>
                 {t("how_to_use.how_can_i_get_treatment_description")}
               </Text>
-            )}
+            )} */}
           </View>
         </View>
       </ScrollView>

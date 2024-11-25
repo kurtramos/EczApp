@@ -238,10 +238,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
     // alignItems: 'center',
-    paddingTop: 20,
+
   },
   scrollViewContent: {
-    paddingBottom: 80, // Adjust this value to fit the height of your BottomNav
+    paddingBottom: 100, // Adjust this value to fit the height of your BottomNav
   },
   header: {
     flexDirection: "row",

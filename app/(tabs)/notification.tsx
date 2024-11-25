@@ -99,12 +99,11 @@ const NotificationScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <BackArrow onPress={() => router.push("/home")} />
-      </View>
+
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Notification</Text>
       </View>
+      <BackArrow onPress={() => router.push("/home")} />
       <ScrollView style={styles.scrollView}>
         {notifications.map((notification) => (
           <NotificationItem

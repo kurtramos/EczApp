@@ -92,7 +92,7 @@ const SettingsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <BackArrow onPress={() => router.push("/myaccount")} />
+      <BackArrow onPress={() => router.push("/home")} />
       <ScrollView style={styles.scrollView}>
         <Text style={styles.title}>{t("settings.settings")}</Text>
 

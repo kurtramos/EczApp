@@ -205,7 +205,7 @@ const MyRecordScreen = () => {
           {profile.firstName} {profile.lastName}
         </Text>
         <Text style={styles.age}>
-          {t("account.age")}: {profile.age} years
+          {t("account.age")}: {profile.age} {t("account.taon")}
         </Text>
         <Text style={styles.sectionTitle}>
           {t("account.personal_information")}
@@ -249,7 +249,7 @@ const MyRecordScreen = () => {
               {t("account.severity_level")}: {latestSurvey.severity.level}
             </Text>
             <Text style={styles.treatmentMessage}>
-              {latestSurvey.severity.message}
+            {latestSurvey.severity.message}
             </Text>
           </View>
         ) : (

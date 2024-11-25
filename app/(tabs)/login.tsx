@@ -148,7 +148,7 @@ export default function App() {
         <Text style={styles.logInButtonText}>Log In</Text>
       </TouchableOpacity>
 
-      <Text style={styles.orSignUpText}>or log in with</Text>
+      {/* <Text style={styles.orSignUpText}>or log in with</Text>
       <View style={styles.socialIconsContainer}>
         <View style={styles.circle}>
           <FontAwesome name="google" size={24} color="#85D3C0" />
@@ -159,7 +159,7 @@ export default function App() {
         <View style={styles.circle}>
           <MaterialIcons name="fingerprint" size={24} color="#85D3C0" />
         </View>
-      </View>
+      </View> */}
 
       <View style={styles.signUpTextContainer}>
         <Text style={styles.noAccountText}>Don’t have an account? </Text>
