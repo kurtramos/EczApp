@@ -19,7 +19,9 @@ const Treatment = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const [poemScore, setPoemScore] = useState(0);
+  const [poemDate, setPoemDate] = useState(""); // State to hold POEM survey date
   const [analysisLabel, setAnalysisLabel] = useState(null);
+  const [analysisDate, setAnalysisDate] = useState(""); // State to hold Skin Analysis date
 
   useFocusEffect(
     React.useCallback(() => {
@@ -50,9 +52,12 @@ const Treatment = () => {
 
           if (!querySnapshot.empty) {
             const latestDoc = querySnapshot.docs[0];
-            const { totalScore } = latestDoc.data();
+            const { totalScore, timestamp } = latestDoc.data();
 
             setPoemScore(totalScore ?? "No score available");
+            setPoemDate(
+              timestamp ? new Date(timestamp.seconds * 1000).toLocaleDateString() : "Unknown"
+            ); // Format the date
           } else {
             console.log("No scores found.");
           }
@@ -88,9 +93,8 @@ const Treatment = () => {
 
           if (!querySnapshot.empty) {
             const latestDoc = querySnapshot.docs[0];
-            const { result } = latestDoc.data();
+            const { result, timestamp } = latestDoc.data();
 
-            // Safely extract the label
             const label = result?.predictions?.[0]?.label
               ? result.predictions[0].label
                   .replace(/_/g, " ")
@@ -98,11 +102,14 @@ const Treatment = () => {
               : "No result available";
 
             setAnalysisLabel(label);
+            setAnalysisDate(
+              timestamp ? new Date(timestamp.seconds * 1000).toLocaleDateString() : "Unknown"
+            ); // Format the date
           } else {
             console.log("No result found.");
           }
         } catch (error) {
-          console.error("Error fetching score: ", error);
+          console.error("Error fetching analysis: ", error);
         }
       };
 
@@ -150,25 +157,55 @@ const Treatment = () => {
 
   return (
     <View style={styles.container}>
-      <BackArrow onPress={() => router.push("/tracker")} />
+      <BackArrow onPress={() => router.back()} />
       <Text style={styles.heading}>{t("poem_result.poem_result")}</Text>
       <ScrollView style={styles.scrollView}>
-        <View style={styles.squareBackground}>
-          <Text style={styles.subheading}>{t("poem_result.score")}:</Text>
-          <Text style={styles.poemScore}>{poemScore}</Text>
+        {/* Block for POEM Score */}
+        <View style={styles.sectionContainer}>
+          <View style={styles.squareBackground}>
+            <Text style={styles.sectionHeading}>{t("poem_result.heading")}</Text>
+            <Text style={styles.dateText}>
+              {t("poem_result.date_taken")}: {poemDate}
+            </Text>
+            <Text style={styles.subheading}>{t("poem_result.score")}:</Text>
+            <Text style={styles.poemScore}>{poemScore}</Text>
+            <Text style={styles.severityLabel}>
+              {t("poem_result.severity_level")}
+            </Text>
+            <Text style={styles.severityValue}>{level}</Text>
+            <Text style={styles.message}>{message}</Text>
+            {poemScore >= 8 && (
+              <View style={styles.redirectButtonContainer}>
+                <TouchableOpacity
+                  style={styles.redirectButton}
+                  onPress={() => router.push("/aboutus")}
+                >
+                  <Text style={styles.redirectButtonText}>
+                    {t("poem_result.consult_allergist")}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+        </View>
 
-          <Text style={styles.severityLabel}>
-            {t("poem_result.severity_level")}
-          </Text>
-          <Text style={styles.message}>Based on POEM score</Text>
-          <Text style={styles.severityValue}>{level}</Text>
-          <Text style={styles.message}>{message}</Text>
-
-          <Text style={styles.severityLabel}>
-            {t("poem_result.severity_level")}
-          </Text>
-          <Text style={styles.message}>Based on skin analysis</Text>
-          <Text style={styles.severityValue}>{analysisLabel}</Text>
+        {/* Block for Skin Analysis */}
+        <View style={styles.sectionContainer}>
+          <View style={styles.squareBackground}>
+            <Text style={styles.sectionHeading}>
+              {t("poem_result.heading2")}
+            </Text>
+            <Text style={styles.dateText}>
+              {t("poem_result.date_taken")}: {analysisDate}
+            </Text>
+            <Text style={styles.severityLabel}>
+              {t("poem_result.severity_level")}
+            </Text>
+            <Text style={styles.severityValue}>{analysisLabel}</Text>
+            <Text style={styles.message}>
+              {t("poem_result.imagemessage")}
+            </Text>
+          </View>
         </View>
       </ScrollView>
 
@@ -180,11 +217,11 @@ const Treatment = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: "#f4f4f4",
   },
   scrollView: {
     flex: 1,
     padding: 20,
+    marginBottom: 80,
   },
   backArrow: {
     position: "absolute",
@@ -198,43 +235,41 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 20,
-    marginTop: 20,
+    marginTop: -5,
+    marginBottom: 25,
     alignSelf: "stretch",
-    padding: 30,
+    padding: 20,
   },
   heading: {
     fontSize: 30,
     color: "#85D3C0",
     fontWeight: "bold",
-    textAlign: "left",
-    marginTop: 48,
-    marginLeft: 120,
+    textAlign: "center",
+    marginTop: 45,
+  },
+  dateText: {
+    fontSize: 16,
+    color: "#555",
+    textAlign: "center",
+    // marginVertical: 5,
   },
   subheading: {
     fontSize: 25,
     color: "#74BDB3",
     fontWeight: "bold",
     textAlign: "left",
-  },
-  paragraph: {
-    fontSize: 16,
-    lineHeight: 22,
-    textAlign: "justify",
-    marginBottom: 20,
-    marginTop: 30,
+    marginTop: 5
   },
   poemScore: {
     fontSize: 28,
     fontWeight: "bold",
     color: "#000",
-    marginVertical: 10,
+    marginVertical: 5,
   },
   severityLabel: {
     fontSize: 25,
     color: "#74BDB3",
     fontWeight: "bold",
-    marginTop: 20,
   },
   severityValue: {
     fontSize: 22,
@@ -246,8 +281,33 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "grey",
     textAlign: "center",
-    marginTop: 10,
+    marginTop: 5,
     paddingHorizontal: 10,
+  },
+  sectionContainer: {
+    marginTop: -10,
+  },
+  sectionHeading: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "black",
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  redirectButtonContainer: {
+    marginTop: 10,
+    alignItems: "center",
+  },
+  redirectButton: {
+    backgroundColor: "#85D3C0",
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 25,
+  },
+  redirectButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
   },
 });
 

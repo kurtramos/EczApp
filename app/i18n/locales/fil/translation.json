@@ -104,9 +104,16 @@
   },
 
   "poem_result": {
-    "poem_result": "RESULTA NG POEM",
+    "poem_result": "MGA RESULTA",
     "score": "Ang iyong POEM score ay",
-    "severity_level": "Antas ng Kalubhaan"
+    "severity_level": "Antas ng Kalubhaan",
+    "heading": "Batay sa POEM Score",
+    "heading2": "Batay sa Pagsusuri ng Balat",
+    "imagemessage": "Ang resulta na ito ay batay sa pinakabagong pagsusuri ng balat.",
+    "consult_allergist": "Kumonsulta sa Allergist",
+    "date_taken": "Petsa ng Pagkuha"
+
+
   },
 
   "camera": {

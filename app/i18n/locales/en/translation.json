@@ -106,9 +106,16 @@
   },
 
   "poem_result": {
-    "poem_result": "POEM RESULT",
+    "poem_result": "RESULTS",
     "score": "Your POEM score is",
-    "severity_level": "Severity Level"
+    "severity_level": "Severity Level",
+    "heading": "Based on POEM Survey",
+    "heading2": "Based on Skin Analysis",
+    "imagemessage": "This result is based on the latest skin analysis.",
+    "consult_allergist": "Consult an Allergist",
+    "date_taken": "Date Taken"
+
+
   },
 
   "camera": {

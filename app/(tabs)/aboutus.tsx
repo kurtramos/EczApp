@@ -73,7 +73,8 @@ const Doctors = () => {
 
   return (
     <View style={styles.container}>
-      <BackArrow onPress={() => router.push("/home")} />
+      <BackArrow onPress={() => router.back()} />
+
       <Text style={styles.heading}>{t("doctors.heading")}</Text>
       <Text style={styles.subheading}>{t("doctors.subheading")}</Text>
 
@@ -215,7 +216,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   subheading: {
-    fontSize: 20,
+    fontSize: 18,
     marginTop: 20,
     color: "#85D3C0",
     fontWeight: "bold",
