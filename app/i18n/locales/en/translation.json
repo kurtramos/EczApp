@@ -216,7 +216,8 @@
     "unknown_message": "Score out of range. Please check your input.",
     "no_survey_found": "No previous survey found.",
     "no_data": "No Data",
-    "taon": "years old"
+    "taon": "years old",
+    "date_of_birth": "Date Of Birth"
   },
 
   "privacy_policy": {

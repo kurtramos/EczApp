@@ -214,7 +214,8 @@
     "unknown_message": "Ang puntos ay labas ng saklaw. Pakisuri ang iyong input.",
     "no_survey_found": "Walang nakaraang survey na natagpuan.",
     "no_data": "Walang Data",
-    "taon": "taon"
+    "taon": "taon",
+    "date_of_birth": "Taon ng Kapanganakan"
   },
 
   "privacy_policy": {

@@ -12,7 +12,7 @@ import BackArrow from "../components/BackArrow";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { firestore } from "../firebaseConfig";
-import { FontAwesome } from "@expo/vector-icons"; // Using FontAwesome for badge icon
+import { FontAwesome } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 
 const ProfileScreen = () => {
@@ -24,7 +24,8 @@ const ProfileScreen = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [isVerified, setIsVerified] = useState(false); // New state for verification status
+  const [dateOfBirth, setDateOfBirth] = useState(""); // State for Date of Birth
+  const [isVerified, setIsVerified] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -44,7 +45,15 @@ const ProfileScreen = () => {
               userData.mobileNumber ?? t("account.no_phone_number")
             );
             setEmail(userData.email ?? user?.email);
-            setIsVerified(userData.isVerified ?? false); // Set verification status
+            setIsVerified(userData.isVerified ?? false);
+
+            // Format and set the Date of Birth
+            if (userData.dateOfBirth) {
+              const dob = new Date(userData.dateOfBirth.seconds * 1000); // Firestore Timestamp to JS Date
+              setDateOfBirth(dob.toLocaleDateString()); // Format to readable date
+            } else {
+              setDateOfBirth(t("account.no_data")); // Placeholder if no DOB
+            }
           } else {
             console.log("No user data found in Firestore.");
           }
@@ -93,16 +102,23 @@ const ProfileScreen = () => {
         </View>
 
         <View style={styles.field}>
-          <Text style={styles.label}>{t("account.phone_number")}</Text>
-          <Text style={styles.value}>{phoneNumber}</Text>
-        </View>
-
-        <View style={styles.field}>
           <Text style={styles.label}>{t("account.email")}</Text>
           <Text style={styles.value}>{email}</Text>
         </View>
 
-        {/* Navigate to EditProfile when the button is pressed */}
+        <View style={styles.field}>
+          <Text style={styles.label}>{t("account.phone_number")}</Text>
+          <Text style={styles.value}>{phoneNumber}</Text>
+        </View>
+
+      
+
+        {/* Date of Birth Field */}
+        <View style={styles.field}>
+          <Text style={styles.label}>{t("account.date_of_birth")}</Text>
+          <Text style={styles.value}>{dateOfBirth}</Text>
+        </View>
+
         <TouchableOpacity
           style={styles.button}
           onPress={() => router.push("/editprofile")}
@@ -110,7 +126,6 @@ const ProfileScreen = () => {
           <Text style={styles.buttonText}>{t("account.edit_profile")}</Text>
         </TouchableOpacity>
       </ScrollView>
-      {/* <BottomNav /> */}
     </View>
   );
 };
@@ -122,6 +137,7 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: "center",
+    marginTop: 30,
   },
   headerTitle: {
     fontSize: 24,
