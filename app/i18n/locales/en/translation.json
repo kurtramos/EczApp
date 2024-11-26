@@ -111,6 +111,7 @@
     "severity_level": "Severity Level",
     "heading": "Based on POEM Survey",
     "heading2": "Based on Skin Analysis",
+    "heading3": "Previous Skin Analysis",
     "imagemessage": "This result is based on the latest skin analysis.",
     "consult_allergist": "Consult an Allergist",
     "date_taken": "Date Taken"
@@ -197,7 +198,7 @@
     "no_last_name": "No Last Name Available",
     "no_phone_number": "No Phone Number Available",
     "poem_score_trend": "POEM Score Trend",
-    "medications_and_treatment": "Medications & Treatment",
+    "medications_and_treatment": "Results & Remedy",
     "previous_survey_info": "Previous Survey Info",
     "no_previous_survey": "No Previous Survey",
     "score": "Score",
@@ -217,7 +218,8 @@
     "no_survey_found": "No previous survey found.",
     "no_data": "No Data",
     "taon": "years old",
-    "date_of_birth": "Date Of Birth"
+    "date_of_birth": "Date Of Birth",
+    "select_data_point": "Point what survey you like to view"
   },
 
   "privacy_policy": {

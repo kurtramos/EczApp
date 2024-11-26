@@ -109,6 +109,7 @@
     "severity_level": "Antas ng Kalubhaan",
     "heading": "Batay sa POEM Score",
     "heading2": "Batay sa Pagsusuri ng Balat",
+    "heading3": "Ang Nakaraang Pagsusuri ng Balat",
     "imagemessage": "Ang resulta na ito ay batay sa pinakabagong pagsusuri ng balat.",
     "consult_allergist": "Kumonsulta sa Allergist",
     "date_taken": "Petsa ng Pagkuha"
@@ -195,7 +196,7 @@
     "no_last_name": "Walang Available na Apelyido",
     "no_phone_number": "Walang Available na Numero ng Telepono",
     "poem_score_trend": "POEM Score Trend",
-    "medications_and_treatment": "Mga Gamot at Paggamot",
+    "medications_and_treatment": "Mga Resulta at Lunas",
     "previous_survey_info": "Nakaraang Impormasyon ng Survey",
     "no_previous_survey": "Walang Nakaraang Survey",
     "score": "Puntos",
@@ -215,7 +216,8 @@
     "no_survey_found": "Walang nakaraang survey na natagpuan.",
     "no_data": "Walang Data",
     "taon": "taon",
-    "date_of_birth": "Taon ng Kapanganakan"
+    "date_of_birth": "Taon ng Kapanganakan",
+    "select_data_point": "Pumili ng survey na gusto tignan"
   },
 
   "privacy_policy": {

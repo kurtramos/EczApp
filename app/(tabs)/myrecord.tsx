@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import BackArrow from "../components/BackArrow";
-// import BottomNav from '../components/BottomNav';
 import { useRouter } from "expo-router";
 import { getAuth } from "firebase/auth";
 import {
@@ -29,6 +28,7 @@ const MyRecordScreen = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const screenWidth = Dimensions.get("window").width;
+
   const [profile, setProfile] = useState({
     firstName: "",
     lastName: "",
@@ -38,8 +38,10 @@ const MyRecordScreen = () => {
     isVerified: false,
   });
   const [poemScores, setPoemScores] = useState([]);
-  const [latestSurvey, setLatestSurvey] = useState(null);
+  const [selectedSurvey, setSelectedSurvey] = useState(null); // State for selected survey
   const [loading, setLoading] = useState(true);
+  const [analysisLabel, setAnalysisLabel] = useState(null);
+  const [analysisDate, setAnalysisDate] = useState(""); // State to hold Skin Analysis date
 
   const user = getAuth().currentUser;
 
@@ -53,7 +55,7 @@ const MyRecordScreen = () => {
         setLoading(true);
         await fetchUserProfile();
         await fetchPoemScores();
-        await fetchLatestSurvey();
+        await fetchAnalysis();
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -91,35 +93,16 @@ const MyRecordScreen = () => {
     const scoresQuery = query(scoresRef, orderBy("timestamp", "desc"));
     const querySnapshot = await getDocs(scoresQuery);
 
-    const scoresData = querySnapshot.docs
-      .map((doc) => {
-        const score = doc.data().totalScore;
-        return {
-          date: doc.data().timestamp?.toDate()?.toLocaleDateString() || "N/A",
-          score: !isNaN(score) ? score : 0,
-        };
-      })
-      .filter((item) => item.score !== undefined && item.score !== null);
+    const scoresData = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        date: data.timestamp?.toDate()?.toLocaleDateString() || "N/A",
+        score: data.totalScore,
+        severity: getSeverityLevel(data.totalScore),
+      };
+    });
 
     setPoemScores(scoresData.reverse());
-  };
-
-  const fetchLatestSurvey = async () => {
-    const surveyRef = collection(firestore, "users", user.email, "POEMScores");
-    const surveyQuery = query(
-      surveyRef,
-      orderBy("timestamp", "desc"),
-      limit(1)
-    );
-    const querySnapshot = await getDocs(surveyQuery);
-
-    if (!querySnapshot.empty) {
-      const latestSurveyData = querySnapshot.docs[0].data();
-      setLatestSurvey({
-        score: latestSurveyData.totalScore,
-        severity: getSeverityLevel(latestSurveyData.totalScore),
-      });
-    }
   };
 
   const getSeverityLevel = (score) => {
@@ -157,6 +140,37 @@ const MyRecordScreen = () => {
     }
   };
 
+  const fetchAnalysis = async () => {
+    const analysisRef = collection(firestore, "users", user.email, "skinAnalysis");
+    try {
+      const analysisQuery = query(analysisRef, orderBy("timestamp", "desc"), limit(1));
+      const querySnapshot = await getDocs(analysisQuery);
+
+      if (!querySnapshot.empty) {
+        const latestDoc = querySnapshot.docs[0];
+        const { result, timestamp } = latestDoc.data();
+
+        // Extract the severity label from the result
+        const label = result?.predictions?.[0]?.label
+          ? result.predictions[0].label
+              .replace(/_/g, " ")
+              .replace(/\b\w/g, (char) => char.toUpperCase())
+          : "No result available";
+
+        setAnalysisLabel(label); // Set severity level
+
+        // Format the date of analysis
+        setAnalysisDate(
+          timestamp ? new Date(timestamp.seconds * 1000).toLocaleDateString() : "Unknown"
+        );
+      } else {
+        console.log("No analysis result found.");
+      }
+    } catch (error) {
+      console.error("Error fetching analysis: ", error);
+    }
+  };
+
   const data = {
     labels: poemScores.length
       ? poemScores.map((score) => score.date)
@@ -179,12 +193,30 @@ const MyRecordScreen = () => {
     propsForDots: { r: "6", strokeWidth: "2", stroke: "#ffa726" },
   };
 
+  const handleDataPointClick = (data) => {
+    const index = data.index;
+    const selectedData = poemScores[index];
+    if (selectedData) {
+      setSelectedSurvey(selectedData); // Update selected survey
+    }
+  };
+
   return (
     <View style={styles.container}>
       <BackArrow onPress={() => router.push("/myaccount")} />
       <ScrollView>
         <Text style={styles.header}>{t("account.my_record")}</Text>
 
+
+        {/* Personal Information */}
+        <Text style={styles.name}>
+          {profile.firstName} {profile.lastName}
+        </Text>
+        <Text style={styles.age}>
+          {t("account.age")}: {profile.age} {t("account.taon")}
+        </Text>
+
+        
         {/* Verified Badge */}
         <View style={styles.badgeContainer}>
           {profile.isVerified ? (
@@ -200,13 +232,7 @@ const MyRecordScreen = () => {
           )}
         </View>
 
-        {/* Personal Information */}
-        <Text style={styles.name}>
-          {profile.firstName} {profile.lastName}
-        </Text>
-        <Text style={styles.age}>
-          {t("account.age")}: {profile.age} {t("account.taon")}
-        </Text>
+
         <Text style={styles.sectionTitle}>
           {t("account.personal_information")}
         </Text>
@@ -221,6 +247,7 @@ const MyRecordScreen = () => {
           </View>
         </View>
 
+        {/* Line Chart with Clickable Dots */}
         <Text style={styles.sectionTitle}>{t("account.poem_score_trend")}</Text>
         <LineChart
           data={data}
@@ -229,36 +256,53 @@ const MyRecordScreen = () => {
           chartConfig={chartConfig}
           bezier
           style={styles.chart}
+          onDataPointClick={handleDataPointClick}
         />
 
         {/* Treatment and Medication Section */}
         <Text style={styles.sectionTitle}>
           {t("account.medications_and_treatment")}
         </Text>
-        {loading ? (
-          <ActivityIndicator size="large" color="#85D3C0" />
-        ) : latestSurvey ? (
+        {selectedSurvey ? (
           <View style={styles.treatmentContainer}>
             <Text style={styles.treatmentHeader}>
-              {t("account.previous_survey_info")}
+              {t("account.previous_survey_info")} - {selectedSurvey.date}
             </Text>
             <Text style={styles.treatmentText}>
-              {t("account.score")}: {latestSurvey.score}
+              {t("account.score")}: {selectedSurvey.score}
             </Text>
             <Text style={styles.treatmentText}>
-              {t("account.severity_level")}: {latestSurvey.severity.level}
+              {t("account.severity_level")}: {selectedSurvey.severity.level}
             </Text>
             <Text style={styles.treatmentMessage}>
-            {latestSurvey.severity.message}
+              {selectedSurvey.severity.message}
             </Text>
           </View>
         ) : (
           <Text style={styles.noSurveyText}>
-            {t("account.no_previous_survey")}
+            {t("account.select_data_point")}
           </Text>
         )}
+
+         {/* Block for Skin Analysis */}
+         <View style={styles.sectionTitle}>
+          <View style={styles.treatmentContainer}>
+            <Text style={styles.treatmentHeader}>
+              {t("poem_result.heading3")}
+            </Text>
+            <Text style={styles.treatmentText}>
+              {t("poem_result.date_taken")}: {analysisDate}
+            </Text>
+            <Text style={styles.treatmentText}>
+              {t("poem_result.severity_level")}: {analysisLabel}
+            </Text>
+            {/* <Text style={styles.treatmentText}></Text> */}
+            <Text style={styles.treatmentMessage}>
+              {t("poem_result.imagemessage")}
+            </Text>
+          </View>
+        </View>
       </ScrollView>
-      {/* <BottomNav /> */}
     </View>
   );
 };
@@ -280,7 +324,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 5,
+    marginTop: -5,
   },
   verifiedBadge: {
     flexDirection: "row",
@@ -319,8 +363,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "black",
-    marginBottom: 10,
-    marginTop: 20,
+    marginBottom: 8,
+    marginTop: 24,
   },
   infoContainer: {
     flexDirection: "row",
@@ -357,7 +401,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#E8F4F2",
     padding: 15,
     borderRadius: 10,
-    marginVertical: 10,
+    marginVertical: 5,
+    marginBottom: -10
   },
   treatmentHeader: {
     fontSize: 18,
