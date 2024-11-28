@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  Modal,
 } from "react-native";
 import BackArrow from "../components/BackArrow";
 import { useRouter } from "expo-router";
@@ -27,6 +28,12 @@ import { useTranslation } from "react-i18next";
 const POEMScreen = () => {
   const { t } = useTranslation();
   const [surveyAvailable, setSurveyAvailable] = useState(false);
+  const [modalTitle, setModalTitle] = useState<any | string>("Processing");
+  const [modalMessage, setModalMessage] = useState<any | string>(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [responseButtonVisible, setresponseButtonVisible] = useState(false);
+  const [closeButtonVisible, setCloseButtonVisible] = useState(false);
+  const [nextButtonVisible, setNextButtonVisible] = useState(false);
   const router = useRouter();
   const [response, setResponse] = useState({
     question1: null,
@@ -115,15 +122,19 @@ const POEMScreen = () => {
       return;
     }
 
-    // Save the responses and redirect to treatment based on score
-    await handleSave();
-    const totalScore = calculateScore();
-    router.push(`/treatment?score=${totalScore}`); // Redirect to treatment page with the score
-
-    resetSurvey();
+    setModalTitle("Submit?");
+    setModalMessage("Are you sure you want to submit your answers?");
+    setresponseButtonVisible(true);
+    setCloseButtonVisible(false);
+    setNextButtonVisible(false);
+    setModalVisible(true);
   };
 
   const handleSave = async () => {
+    setModalTitle("Saving");
+    setModalMessage("Please wait...");
+    setresponseButtonVisible(false);
+
     const user = getAuth().currentUser;
     const userEmail = user?.email;
 
@@ -152,11 +163,15 @@ const POEMScreen = () => {
         timestamp: timestamp,
       });
 
-      Alert.alert(
-        t("poem_survey.alerts.success.title"),
-        t("poem_survey.alerts.success.message")
+      setModalTitle("Success");
+      setModalMessage(
+        "Your answers have been submitted. Please proceed to camera and take a picture of your skin."
       );
+      setCloseButtonVisible(false);
+      setNextButtonVisible(true);
+      resetSurvey();
     } catch (error) {
+      setCloseButtonVisible(true);
       console.error("Error saving responses: ", error);
       Alert.alert(
         t("poem_survey.alerts.error.title"),
@@ -250,6 +265,54 @@ const POEMScreen = () => {
       )}
 
       <BottomNav />
+
+      {/* modal */}
+      <Modal visible={modalVisible} transparent={true} animationType="slide">
+        <View style={styles.modalContainer}>
+          <Text style={styles.title}>{modalTitle}</Text>
+          <Text style={styles.message}>{modalMessage}</Text>
+          {responseButtonVisible && (
+            <View>
+              <TouchableOpacity
+                style={styles.closeModalButton}
+                onPress={() => {
+                  handleSave();
+                }}
+              >
+                <Text style={styles.submitButtonText}>Submit</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.cancelButton}
+                onPress={() => {
+                  setModalVisible(false);
+                }}
+              >
+                <Text style={styles.submitButtonText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+          {closeButtonVisible && (
+            <TouchableOpacity
+              style={styles.closeModalButton}
+              onPress={() => {
+                setModalVisible(false);
+              }}
+            >
+              <Text style={styles.submitButtonText}>Close</Text>
+            </TouchableOpacity>
+          )}
+          {nextButtonVisible && (
+            <TouchableOpacity
+              style={styles.closeModalButton}
+              onPress={() => {
+                router.push("/camera");
+              }}
+            >
+              <Text style={styles.submitButtonText}>Next</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -271,7 +334,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   title: {
-    fontSize: 40,
+    fontSize: 36,
     color: "#74BDB3",
     fontWeight: "700",
   },
@@ -329,6 +392,38 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  cancelButton: {
+    backgroundColor: "#DD6764",
+    borderRadius: 24,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    alignItems: "center",
+    width: 150,
+    marginTop: 20,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    gap: 4,
+  },
+  message: {
+    fontSize: 16,
+    color: "grey",
+    textAlign: "center",
+    marginTop: 10,
+    paddingHorizontal: 10,
+  },
+  closeModalButton: {
+    backgroundColor: "#85D3C0",
+    borderRadius: 24,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    alignItems: "center",
+    width: 150,
+    marginTop: 20,
   },
 });
 
