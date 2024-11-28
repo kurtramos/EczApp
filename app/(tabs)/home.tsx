@@ -117,7 +117,7 @@ export default function HomeScreen() {
             now.getDate() - now.getDay()
           );
 
-          // Check if there's a "POEM Survey" notification from this week
+          // Check if there's a "POEM Survey" and notification from this week
           const hasThisWeekPOEMNotif = fetchedNotifications.some(
             (notif) =>
               notif.title === "POEM Survey" && notif.timestamp >= startOfWeek
@@ -128,19 +128,42 @@ export default function HomeScreen() {
             const latestId = fetchedNotifications.length
               ? Math.max(...fetchedNotifications.map((notif) => notif.id))
               : 0;
-            const newDocId = latestId + 1;
 
-            const newDocRef = doc(
+            // Add new POEM Survey Notification
+            const newPoemNotifId = latestId + 1;
+
+            const newPoemNotifRef = doc(
               firestore,
               "users",
               userEmail,
               "notifications",
-              newDocId.toString()
+              newPoemNotifId.toString()
             );
-            await setDoc(newDocRef, {
-              id: newDocId,
+
+            await setDoc(newPoemNotifRef, {
+              id: newPoemNotifId,
               title: "POEM Survey",
               details: "POEM Survey has been reset. Please answer it now.",
+              timestamp: Timestamp.fromDate(new Date()),
+              opened: false,
+            });
+
+            // Add new "Take a Picture" notification
+            const newPicNotifId = latestId + 2;
+
+            const newPicRef = doc(
+              firestore,
+              "users",
+              userEmail,
+              "notifications",
+              newPicNotifId.toString()
+            );
+
+            await setDoc(newPicRef, {
+              id: newPicNotifId,
+              title: "Skin Analysis",
+              details:
+                "Please take a picture of your skin for analysis after completing the POEM Survey.",
               timestamp: Timestamp.fromDate(new Date()),
               opened: false,
             });
@@ -238,7 +261,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
     // alignItems: 'center',
-
   },
   scrollViewContent: {
     paddingBottom: 100, // Adjust this value to fit the height of your BottomNav
