@@ -15,9 +15,19 @@ import { useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import { getAuth } from "firebase/auth";
 import { firestore, storage } from "../firebaseConfig";
-import { collection, addDoc, setDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  setDoc,
+  doc,
+  query,
+  getDocs,
+  limit,
+  orderBy,
+} from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useTranslation } from "react-i18next";
+import { useFocusEffect } from "expo-router";
 
 const getAccessToken = async () => {
   const user = getAuth().currentUser;
@@ -37,10 +47,116 @@ const CameraScreen = () => {
   const router = useRouter();
   const [imageUri, setImageUri] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState(null);
   const [modalTitle, setModalTitle] = useState<any | string>("Processing");
   const [modalMessage, setModalMessage] = useState<any | string>(null);
   const [closeButtonVisible, setCloseButtonVisible] = useState(false);
+  const [saveImageAvailable, setSaveImageAvailable] = useState(true);
+  const [surveyDone, setSurveyDone] = useState(false);
+
+  // Check latest image
+  useFocusEffect(
+    React.useCallback(() => {
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      // Get start of week week
+      const now = new Date();
+      const startOfWeek = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate() - now.getDay()
+      );
+
+      const checkSurveyDone = async () => {
+        if (user) {
+          try {
+            // Get latest survey
+            const poemScoresRef = collection(
+              firestore,
+              "users",
+              user.email,
+              "POEMScores"
+            );
+
+            const latestSurveyQuery = query(
+              poemScoresRef,
+              orderBy("timestamp", "desc"),
+              limit(1)
+            );
+            const querySnapshot = await getDocs(latestSurveyQuery);
+
+            // Get latest survey timestamp
+            if (!querySnapshot.empty) {
+              const latestDoc = querySnapshot.docs[0].data();
+              const latestTimestamp = latestDoc.timestamp.toDate();
+
+              // Check if the timestamp is within the current week
+              if (latestTimestamp >= startOfWeek) {
+                setSurveyDone(true);
+              } else {
+                setSurveyDone(false);
+              }
+            } else {
+              // No surveys found
+              setSurveyDone(false);
+            }
+          } catch (error) {
+            console.error("Error fetching user data:", error);
+            Alert.alert(
+              "Error",
+              "Failed to retrieve user data from Firestore."
+            );
+          }
+        }
+      };
+
+      const checkLastImage = async () => {
+        if (user) {
+          try {
+            // Get latest image
+            const poemScoresRef = collection(
+              firestore,
+              "users",
+              user.email,
+              "images"
+            );
+
+            const latestImageQuery = query(
+              poemScoresRef,
+              orderBy("timestamp", "desc"),
+              limit(1)
+            );
+            const querySnapshot = await getDocs(latestImageQuery);
+
+            // Get latest image timestamp
+            if (!querySnapshot.empty) {
+              const latestDoc = querySnapshot.docs[0].data();
+              const latestTimestamp = latestDoc.timestamp.toDate();
+
+              // Check if the timestamp is within the current week
+              if (latestTimestamp >= startOfWeek) {
+                setSaveImageAvailable(false);
+              } else {
+                setSaveImageAvailable(true);
+              }
+            } else {
+              // No image found
+              setSaveImageAvailable(true);
+            }
+          } catch (error) {
+            console.error("Error fetching user data:", error);
+            Alert.alert(
+              "Error",
+              "Failed to retrieve user data from Firestore."
+            );
+          }
+        }
+      };
+
+      checkLastImage();
+      checkSurveyDone();
+    }, [])
+  );
 
   // Function to open the camera
   const openCamera = async () => {
@@ -77,6 +193,18 @@ const CameraScreen = () => {
 
   // Function to save image to Firebase Storage and Firestore
   const saveImage = async () => {
+    if (!surveyDone) {
+      Alert.alert(
+        t("Please answer the POEM survey first before taking a picture.")
+      );
+      return;
+    }
+
+    if (!saveImageAvailable) {
+      Alert.alert(t("You have already submitted a picture for this week."));
+      return;
+    }
+
     if (!imageUri) {
       Alert.alert(t("camera.alerts.no_image_selected"));
       return;
@@ -95,7 +223,6 @@ const CameraScreen = () => {
       setModalTitle("Processing...");
       setCloseButtonVisible(false);
       setModalMessage("Saving image...");
-      setAnalysisResult(null);
 
       // Create a unique path for each image
       const imageName = `images/${userEmail}/${Date.now()}_image.jpg`;
@@ -120,7 +247,7 @@ const CameraScreen = () => {
       );
       await addDoc(imagesCollectionRef, {
         imageUrl: downloadURL,
-        timestamp: new Date().toISOString(),
+        timestamp: new Date(),
       });
 
       Alert.alert(t("camera.alerts.image_saved"));
