@@ -110,7 +110,26 @@
       }
     }
   },
+  
+  
+    "modal": {
+      "submit_title": "Submit?",
+      "submit_message": "Are you sure you want to submit your answers?",
+      "saving_title": "Saving",
+      "saving_message": "Please wait...",
+      "success_title": "Success",
+      "success_message": "Your answers have been submitted. Please proceed to camera and take a picture of your skin.",
+      "submit": "Submit",
+      "cancel": "Cancel",
+      "close": "Close",
+      "next": "Next"
 
+    },
+    "errors": {
+      "no_user_logged_in": "No user is currently logged in.",
+      "save_failed": "Error saving responses"
+    },
+  
   "poem_result": {
     "poem_result": "RESULTS",
     "score": "Your POEM score is",
@@ -148,6 +167,7 @@
     "image_upload_button": "Image Upload",
     "save_button": "Save",
     "gallery_button": "Gallery",
+    "placeholder_text": "Tap to take a picture.",
     "alerts": {
       "camera_permission_not_granted": "Camera permission not granted",
       "camera_cancelled": "Camera capture was cancelled or failed.",
@@ -157,7 +177,24 @@
       "user_not_logged_in": "No user is currently logged in.",
       "image_saved": "Image saved successfully!",
       "image_save_failed": "Failed to save image"
-    }
+    },
+
+
+    
+    "survey": {
+    "not_completed": "Please answer the POEM survey first before taking a picture.",
+    "already_submitted": "You have already submitted a picture for this week."
+  },
+  "processing": {
+    "title": "Processing...",
+    "message": "Please wait while the image is being processed."
+  },
+  "success": {
+    "message": "Saved and analyzed image."
+  },
+  "error": {
+    "message": "An error occurred while processing the image."
+  }
   },
 
   "settings": {

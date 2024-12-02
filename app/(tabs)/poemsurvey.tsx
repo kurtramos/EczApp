@@ -122,8 +122,8 @@ const POEMScreen = () => {
       return;
     }
 
-    setModalTitle("Submit?");
-    setModalMessage("Are you sure you want to submit your answers?");
+    setModalTitle(t("modal.submit_title"));
+    setModalMessage(t("modal.submit_message"));
     setresponseButtonVisible(true);
     setCloseButtonVisible(false);
     setNextButtonVisible(false);
@@ -131,16 +131,16 @@ const POEMScreen = () => {
   };
 
   const handleSave = async () => {
-    setModalTitle("Saving");
-    setModalMessage("Please wait...");
+    setModalTitle(t("modal.saving_title"));
+    setModalMessage(t("modal.saving_message"));
     setresponseButtonVisible(false);
 
     const user = getAuth().currentUser;
     const userEmail = user?.email;
 
     if (!userEmail) {
-      console.error("No user is currently logged in.");
-      Alert.alert("Error", "No user is currently logged in.");
+      console.error(t("errors.no_user_logged_in"));
+      Alert.alert(t("errors.error_title"), t("errors.no_user_logged_in"));
       return;
     }
 
@@ -163,10 +163,8 @@ const POEMScreen = () => {
         timestamp: timestamp,
       });
 
-      setModalTitle("Success");
-      setModalMessage(
-        "Your answers have been submitted. Please proceed to camera and take a picture of your skin."
-      );
+      setModalTitle(t("modal.success_title"));
+      setModalMessage(t("modal.success_message"));
       setCloseButtonVisible(false);
       setNextButtonVisible(true);
       resetSurvey();
@@ -279,7 +277,7 @@ const POEMScreen = () => {
                   handleSave();
                 }}
               >
-                <Text style={styles.submitButtonText}>Submit</Text>
+                <Text style={styles.submitButtonText}>{t("modal.submit")}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.cancelButton}
@@ -287,7 +285,7 @@ const POEMScreen = () => {
                   setModalVisible(false);
                 }}
               >
-                <Text style={styles.submitButtonText}>Cancel</Text>
+                <Text style={styles.submitButtonText}>{t("modal.cancel")}</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -298,7 +296,7 @@ const POEMScreen = () => {
                 setModalVisible(false);
               }}
             >
-              <Text style={styles.submitButtonText}>Close</Text>
+              <Text style={styles.submitButtonText}>{t("modal.close")}</Text>
             </TouchableOpacity>
           )}
           {nextButtonVisible && (
@@ -308,7 +306,7 @@ const POEMScreen = () => {
                 router.push("/camera");
               }}
             >
-              <Text style={styles.submitButtonText}>Next</Text>
+              <Text style={styles.submitButtonText}>{t("modal.next")}</Text>
             </TouchableOpacity>
           )}
         </View>

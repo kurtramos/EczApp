@@ -109,6 +109,24 @@
     }
   },
 
+  "modal": {
+  "submit_title": "I-submit?",
+  "submit_message": "Sigurado ka bang nais mong i-submit ang iyong mga sagot?",
+  "saving_title": "Nagsi-save",
+  "saving_message": "Pakiusap maghintay...",
+  "success_title": "Tagumpay",
+  "success_message": "Na-submit na ang iyong mga sagot. Mangyaring magpatuloy sa camera at kumuha ng larawan ng iyong balat.",
+  "submit": "I-submit",
+  "cancel": "Kanselahin",
+  "close": "Isara",
+  "next": "Susunod"
+},
+"errors": {
+  "no_user_logged_in": "Walang user na naka-log in.",
+  "save_failed": "May error sa pag-save ng mga sagot"
+},
+
+
   "poem_result": {
     "poem_result": "MGA RESULTA",
     "score": "Ang iyong POEM score ay",
@@ -146,7 +164,7 @@
     "image_upload_button": "Mag-upload ng Larawan",
     "save_button": "I-save",
     "gallery_button": "Gallery",
-    "alerts": {
+       "alerts": {
       "camera_permission_not_granted": "Hindi nabigyan ng pahintulot ang camera",
       "camera_cancelled": "Kinansela o nabigo ang pagkuha ng larawan.",
       "gallery_permission_not_granted": "Hindi nabigyan ng pahintulot ang media library",
@@ -154,10 +172,29 @@
       "no_image_selected": "Walang napiling larawan",
       "user_not_logged_in": "Walang kasalukuyang naka-log in na user.",
       "image_saved": "Matagumpay na na-save ang larawan!",
-      "image_save_failed": "Nabigo ang pag-save ng larawan"
-    }
-  },
+      "image_save_failed": "Nabigo ang pag-save ng larawan",
 
+      
+      "image_analysis_failed": "Nabigong suriin ang larawan",
+      "image_upload_failed": "Nabigong i-upload ang larawan",
+      "retake_button": "Kuhanin ulit ang larawan",
+      "image_upload_button": "I-upload ang larawan",
+      "save_button": "I-save ang larawan",
+      "gallery_button": "Pumunta sa Gallery",
+      "placeholder_text": "Pindutin upang kumuha ng larawan",
+      "Processing...": "Pinoproseso...",
+      "Saving image...": "Sine-save ang larawan...",
+      "Analyzing image...": "Sinusuri ang larawan...",
+      "Success": "Tagumpay",
+      "Saved and analyzed image.": "Na-save at nasuri ang larawan.",
+      "Error": "Error",
+      "Something went wrong in connecting to Cloud Run: {error}": "May nangyaring problema sa pagkonekta sa Cloud Run: {error}",
+      "Prediction Error": "Error sa Pagtataya",
+      "Failed to analyze image.": "Nabigong suriin ang larawan.",
+      "Please answer the POEM survey first before taking a picture.": "Mangyaring sagutin muna ang POEM survey bago kumuha ng larawan.",
+      "You have already submitted a picture for this week.": "Nag-submit ka na ng larawan para sa linggong ito."
+    }
+}
   "settings": {
     "settings": "Mga Setting",
     "language_setting": "Setting ng Wika",
