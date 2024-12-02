@@ -1,13 +1,5 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-  Modal,
-} from "react-native";
+import React, { useState, useRef } from "react";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Modal } from "react-native";
 import { Ionicons, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { signInWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, getAuth } from "firebase/auth";
@@ -22,20 +14,77 @@ export default function App() {
   const [password, setPassword] = useState("");
   const [isForgotPasswordVisible, setForgotPasswordVisible] = useState(false);
   const [emailForReset, setEmailForReset] = useState("");
+  const [failedAttempts, setFailedAttempts] = useState(0); // Track failed attempts
+  const [cooldown, setCooldown] = useState(false); // Track cooldown state
+  const [cooldownTime, setCooldownTime] = useState(15); // Cooldown duration in seconds
   const router = useRouter();
+  const cooldownTimer = useRef(null); // To hold the cooldown timer
 
   // Handle login with Firebase
   const handleLogin = async () => {
+    // Step 1: Check if cooldown is active
+    if (cooldown) {
+      Alert.alert(
+        "Cooldown Active",
+        `You have reached the maximum number of attempts. Please try again in ${cooldownTime} seconds.`
+      );
+      return;
+    }
+
+    // Step 2: Validate Email Format
     if (!email || !password) {
       Alert.alert("Error", "Please enter both email and password.");
       return;
     }
-  
+
+    // Step 3: Convert email to lowercase
+    const emailLowerCase = email.toLowerCase();
+
+    // Validate the email format
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(emailLowerCase)) {
+      Alert.alert("Invalid Email", "Please enter a valid email address.");
+      return;
+    }
+
+    // Step 4: Check if the email ends with '@gmail.com' or other valid domains
+    const validDomains = ['@gmail.com']; // You can add more domains here
+    const emailDomain = emailLowerCase.split('@')[1];
+
+    if (!validDomains.includes(`@${emailDomain}`)) {
+      Alert.alert("Invalid Email", "Please use a valid email domain (@gmail.com).");
+      return;
+    }
+
+    // Step 5: Check if the email exists in Firestore
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userDocRef = doc(firestore, "users", emailLowerCase); // Use lowercase email here
+      const userDocSnap = await getDoc(userDocRef);
+
+      if (!userDocSnap.exists()) {
+        // If email is not found in Firestore, prompt user to register
+        Alert.alert(
+          "Email Not Registered",
+          "It seems you don't have an account. Would you like to register?",
+          [
+            {
+              text: "Register",
+              onPress: () => router.push("/signup"), // Navigate to sign-up page
+            },
+            {
+              text: "Cancel",
+              onPress: () => console.log("User chose not to register"),
+            },
+          ]
+        );
+        return; // Exit the function as email isn't registered
+      }
+
+      // Step 6: Proceed to Firebase Authentication (sign in)
+      const userCredential = await signInWithEmailAndPassword(auth, emailLowerCase, password); // Use lowercase email here
       const user = userCredential.user;
-  
-      // Check if email is verified
+
+      // Step 7: Check if email is verified
       if (!user.emailVerified) {
         Alert.alert(
           "Email Not Verified",
@@ -57,25 +106,70 @@ export default function App() {
         );
         return;
       }
-  
-      // Update Firestore to mark user as verified if necessary
-      const userDocRef = doc(firestore, "users", user.email);
-      const userDocSnap = await getDoc(userDocRef);
-  
-      if (userDocSnap.exists()) {
-        const userData = userDocSnap.data();
+
+      // Step 8: Update Firestore to mark the user as verified if necessary
+      const userDocRefForUpdate = doc(firestore, "users", user.email);
+      const userDocSnapForUpdate = await getDoc(userDocRefForUpdate);
+
+      if (userDocSnapForUpdate.exists()) {
+        const userData = userDocSnapForUpdate.data();
         if (!userData.isVerified) {
-          await updateDoc(userDocRef, { isVerified: true });
+          await updateDoc(userDocRefForUpdate, { isVerified: true });
           console.log("Updated isVerified to true in Firestore");
         }
       }
-  
+
+      // Step 9: Proceed to the home screen after successful login
       Alert.alert("Success", "Logged in successfully!");
-      router.push("/home");
+      router.push("/home"); // Navigate to the home page
+
+      // Reset failed attempts on successful login
+      setFailedAttempts(0);
+
     } catch (error) {
-      Alert.alert("Login Error", "Please enter valid credentials.");
+      // Handle failed login attempts
+      const updatedFailedAttempts = failedAttempts + 1;
+      setFailedAttempts(updatedFailedAttempts);
+
+      if (updatedFailedAttempts >= 5) {
+        // Start cooldown if failed attempts exceed 5
+        setCooldown(true);
+        Alert.alert(
+          "Too Many Attempts",
+          "You have exceeded the maximum number of attempts. Please try again in 15 seconds."
+        );
+
+        // Start cooldown timer
+        if (cooldownTimer.current) clearInterval(cooldownTimer.current);
+        
+        cooldownTimer.current = setInterval(() => {
+          setCooldownTime((prevTime) => {
+            if (prevTime === 1) {
+              clearInterval(cooldownTimer.current);
+              setCooldown(false);
+              setCooldownTime(15); // Reset cooldown time
+            }
+            return prevTime - 1;
+          });
+        }, 1000);
+      } else {
+        if (error.code === "auth/invalid-email") {
+          Alert.alert("Invalid Email", "Please enter a valid email address.");
+        } else if (error.code === "auth/user-not-found") {
+          Alert.alert("Login Error", "This email is not registered. Please sign up.");
+        } else if (error.code === "auth/wrong-password") {
+          Alert.alert("Login Error", "Incorrect password. Please try again.");
+        }
+
+        Alert.alert(
+          "Login Error",
+          `Incorrect credentials. You have ${5 - updatedFailedAttempts} attempts remaining before the cooldown starts.`
+        );
+      }
     }
   };
+  
+  
   
 
   // Handle Password Reset
