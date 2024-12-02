@@ -207,6 +207,20 @@ const Treatment = () => {
             </Text>
           </View>
         </View>
+
+        {/* Disclaimer Section */}
+          <View style={styles.disclaimerContainer}>
+            <Text style={styles.sectionHeading}>
+              {t("imagerecogdisclaimer.heading")}
+            </Text>
+            <Text style={styles.disclaimerText}>
+              {t("imagerecogdisclaimer.text2")}
+            </Text>
+            <Text style={styles.disclaimerText}>
+              {t("imagerecogdisclaimer.text3")}
+            </Text>
+          </View>
+
       </ScrollView>
 
       <BottomNav />
@@ -308,6 +322,24 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "600",
+  },
+
+  disclaimerContainer: {
+    marginTop: 0,
+    padding: 15,
+    marginBottom: 40,
+    backgroundColor: '#f8f8f8',
+    borderRadius: 8,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    paddingBottom: 5,
+  },
+  disclaimerText: {
+    fontSize: 14,
+    color: '#333',
+    fontStyle: 'italic',
+    marginBottom: 10,
+    textAlign: 'center',  // Center-align the disclaimer text
   },
 });
 

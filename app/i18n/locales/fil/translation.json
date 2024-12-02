@@ -40,6 +40,12 @@
     "disclaimer_description": "Ang application na ito ay nilayon upang makatulong sa pagsubaybay at pagmamasid sa kalubhaan ng eczema ng isang pasyente. Hindi ito maaaring pumalit sa propesyonal na medikal na payo o paggamot. Kung magpatuloy o lumala ang mga sintomas, mangyaring kumonsulta sa iyong doktor para sa karagdagang pagsusuri at pangangalaga."
   },
 
+   "imagerecogdisclaimer": {
+    "heading": "DISCLAIMER:",
+    "text2": "Ang tool para sa pagkilala ng imahe ay hindi pamalit sa propesyonal na medikal na payo. Mangyaring kumonsulta sa iyong allergist bago magamit ang anumang paggamot.",
+    "text3": "Ang mga resulta na ibinigay ng tool ay para lamang sa layuning pang-impormasyon."
+  },
+
   "how_to_use": {
     "how_to_use": "Paano Gamitin",
     "how_to_use_the_camera": "Paano Gamitin ang Kamera",

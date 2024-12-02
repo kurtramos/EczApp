@@ -48,7 +48,7 @@ export default function App() {
     }
 
     // Step 4: Check if the email ends with '@gmail.com' or other valid domains
-    const validDomains = ['@gmail.com']; // You can add more domains here
+    const validDomains = ['@gmail.com', '@ust.edu.ph']; // You can add more domains here
     const emailDomain = emailLowerCase.split('@')[1];
 
     if (!validDomains.includes(`@${emailDomain}`)) {

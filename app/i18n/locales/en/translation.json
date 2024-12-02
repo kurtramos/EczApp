@@ -40,6 +40,12 @@
     "disclaimer_description": "This application is designed to help track and monitor the severity of a patient’s eczema. It is not intended to replace professional medical advice or treatment. If symptoms persist or worsen, please consult your doctor for further evaluation and care."
   },
 
+  "imagerecogdisclaimer": {
+    "heading": "DISCLAIMER:",
+    "text2": "The image recognition tool is not a substitute for professional medical advice. Please consult with your allergist before using any treatment.",
+    "text3": "The results provided by the tool should be used for informational purposes only."
+  },
+
   "how_to_use": {
     "how_to_use": "How to Use",
     "how_to_use_the_camera": "How to Use the Camera",
