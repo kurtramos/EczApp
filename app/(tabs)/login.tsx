@@ -203,7 +203,7 @@ export default function App() {
       <Text style={styles.labelText}>Email</Text>
       <TextInput
         style={styles.inputBox}
-        placeholder="example@example.com"
+        placeholder="example@gmail.com"
         placeholderTextColor="#bcbcbc"
         value={email}
         onChangeText={(value) => {

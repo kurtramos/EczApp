@@ -155,7 +155,7 @@ const SignUpScreen = () => {
       });
 
       Alert.alert("Success", "Account created successfully!");
-      router.push("/login");
+      router.push("/firstlanguage");
     } catch (error) {
       console.error("Sign-Up Error:", error);
       const errorMessage = error.message || "An unknown error occurred";
@@ -191,7 +191,7 @@ const SignUpScreen = () => {
         <Text style={styles.label}>Email</Text>
         <TextInput
           style={styles.inputField}
-          placeholder="example@example.com"
+          placeholder="example@gmail.com"
           placeholderTextColor="#bcbcbc"
           value={email}
           onChangeText={setEmail}
