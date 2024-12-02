@@ -73,7 +73,7 @@ export default function App() {
       Alert.alert("Success", "Logged in successfully!");
       router.push("/home");
     } catch (error) {
-      Alert.alert("Login Error", error.message);
+      Alert.alert("Login Error", "Please enter valid credentials.");
     }
   };
   
