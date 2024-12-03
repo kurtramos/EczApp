@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Dimensions,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import BackArrow from "../components/BackArrow";
@@ -301,7 +302,20 @@ const MyRecordScreen = () => {
               {t("poem_result.imagemessage")}
             </Text>
           </View>
+
+        <Text style={styles.sectionTitle}>
+          {t("account.treatment")}
+        </Text>
+        <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          router.push("/medicationhistory");
+        }}
+      >
+         <Text style={styles.buttonText}>{t('account.medication')}</Text> 
+      </TouchableOpacity>
         </View>
+        
       </ScrollView>
     </View>
   );
@@ -310,7 +324,10 @@ const MyRecordScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 30,
+    paddingLeft: 30,  // Left padding
+    paddingRight: 30, // Right padding
+    paddingBottom: 30, // Bottom padding
+    paddingTop: 0, // No top padding
     backgroundColor: "white",
   },
   header: {
@@ -319,6 +336,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     textAlign: "center",
     marginVertical: 20,
+    marginTop: 50,
   },
   badgeContainer: {
     flexDirection: "row",
@@ -326,6 +344,24 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: -5,
   },
+  button: {
+    backgroundColor: "#74BDB3",
+    borderRadius: 20,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    width: "70%", // Keeps the button size consistent
+    alignItems: "center", // Centers the text inside the button
+    justifyContent: "center", // Ensures the button text is vertically centered
+    marginTop: 20, // Space above the button
+    alignSelf: "center", // Centers the button horizontally
+  },
+  
+  buttonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "600",
+  },
+  
   verifiedBadge: {
     flexDirection: "row",
     alignItems: "center",
