@@ -8,6 +8,8 @@ import { useRouter } from "expo-router";
 import { firestore } from "../firebaseConfig";
 import { getAuth } from "firebase/auth";
 import { doc, setDoc, collection } from "firebase/firestore";
+import { useTranslation } from "react-i18next";
+
 
 const MedicationScreen = () => {
   const router = useRouter();
@@ -17,6 +19,7 @@ const MedicationScreen = () => {
   const [quantity, setQuantity] = useState(1);
   const [timesPerDay, setTimesPerDay] = useState(1);
   const [addedMeds, setAddedMeds] = useState([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -33,7 +36,7 @@ const MedicationScreen = () => {
 
   const handleSave = async () => {
     if (addedMeds.length === 0) {
-      Alert.alert("No Added Medication", "Please add at least one medication before saving.");
+      Alert.alert(t("medication.alerts.no_added_medication"), t("medication.alerts.add_medication_prompt"));
       return;
     }
   
@@ -43,7 +46,7 @@ const MedicationScreen = () => {
   
     if (!userEmail) {
       console.error("No user logged in");
-      Alert.alert("Error", "You must be logged in to save medication.");
+      Alert.alert(t("medication.alerts.error"), t("medication.alerts.login_required"))
       return;
     }
   
@@ -61,15 +64,16 @@ const MedicationScreen = () => {
         timestamp: timestamp,
       });
   
-      Alert.alert("Success", "Your medications have been saved.");
+      Alert.alert(t("medication.alerts.success"), t("medication.alerts.medications_saved"))
       console.log("Medications saved:", addedMeds);
   
       // Reset the addedMeds list after saving
       setAddedMeds([]);
   
     } catch (error) {
+
+      Alert.alert(t("medication.alerts.success"), t("medication.alerts.error_saving_medications"))
       console.error("Error saving medications:", error);
-      Alert.alert("Error", "There was an issue saving your medications. Please try again.");
     }
   };
   
@@ -82,7 +86,7 @@ const MedicationScreen = () => {
 
   const handleAddMedication = () => {
     if (!medName || !quantity || !timesPerDay) {
-      Alert.alert("Add some meds", "Please fill in all fields before adding a medication.");
+      Alert.alert(t("medication.alerts.add_meds"), t("medication.alerts.add_meds_prompt"))
       return;
     }
 
@@ -108,11 +112,11 @@ const MedicationScreen = () => {
     <View style={styles.container}>
       {/* Back Arrow */}
       <BackArrow onPress={() => router.back()} />
-      <Text style={styles.header}>MEDICATION</Text>
+      <Text style={styles.header}>{t("medication.header")}</Text>
 
       {/* Description Text */}
       <Text style={styles.description}>
-        This page is dedicated for listing your treatments, medications, and skincare products prescribed by your doctor for managing Atopic Dermatitis.
+      {t("medication.description.medication_description")}
       </Text>
 
       {/* Date and Time */}
@@ -124,9 +128,9 @@ const MedicationScreen = () => {
       <View style={styles.formContainer}>
         {/* Labels */}
         <View style={styles.inputFieldContainer}>
-          <Text style={styles.inputLabel}>Quantity</Text>
-          <Text style={styles.inputLabel2}>Prescribed Meds/Skincare</Text>
-          <Text style={styles.inputLabel3}>Times per Day</Text>
+          <Text style={styles.inputLabel}>{t("medication.form.quantity")}</Text>
+          <Text style={styles.inputLabel2}>{t("medication.form.prescribed_meds")}</Text>
+          <Text style={styles.inputLabel3}>{t("medication.form.times_per_day")}</Text>
         </View>
 
         {/* Input Row with Inputs and Trash Icon */}
@@ -149,7 +153,7 @@ const MedicationScreen = () => {
           <View style={styles.medicationInputContainer}>
             <TextInput
               style={styles.input}
-              placeholder="Enter meds/skincare"
+              placeholder={t("medication.form.medication_placeholder")}
               value={medName}
               onChangeText={setMedName}
             />
@@ -182,28 +186,28 @@ const MedicationScreen = () => {
       {/* Buttons: Add, Save, History */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.addButton} onPress={handleAddMedication}>
-          <Text style={styles.buttonText}>Add</Text>
+          <Text style={styles.buttonText}>{t("medication.buttons.add")}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-          <Text style={styles.buttonText}>Save</Text>
+          <Text style={styles.buttonText}>{t("medication.buttons.save")}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.historyButton} onPress={handleHistoryRedirect}>
-          <Text style={styles.buttonText}>History</Text>
+          <Text style={styles.buttonText}>{t("medication.buttons.history")}</Text>
         </TouchableOpacity>
       </View>
 
       {/* Added Medications List */}
       <View style={styles.medicationsListContainer}>
         <Text style={styles.reviewText}>
-          This is where you can see your currently added meds. Check it before saving.
+        {t("medication.alerts.added_meds_check")}
         </Text>
         {addedMeds.length === 0 ? (
-          <Text style={styles.noMedsText}>No medications added yet.</Text>
+          <Text style={styles.noMedsText}>{t("medication.alerts.no_meds_added")}</Text>
         ) : (
           addedMeds.map((med, index) => (
             <View key={index} style={styles.medicationItem}>
               <Text style={styles.medicationText}>
-              {med.quantity} {med.medName} - {med.timesPerDay} times per day
+              {med.quantity} {med.medName} - {med.timesPerDay} {t("medication.alerts.times_per_day")}
               </Text>
               <TouchableOpacity
                 onPress={() => handleRemoveMedication(index)}

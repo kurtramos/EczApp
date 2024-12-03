@@ -238,6 +238,38 @@
 
 },
 
+"medication": {
+  "header": "Medication",
+  "alerts": {
+    "no_added_medication": "No Added Medication",
+    "add_medication_prompt": "Please add at least one medication before saving.",
+    "login_required": "You must be logged in to save medication.",
+    "error": "Error",
+    "success": "Success",
+    "medications_saved": "Your medications have been saved.",
+    "error_saving_medications": "There was an issue saving your medications. Please try again.",
+    "add_meds": "Add some meds",
+    "add_meds_prompt": "Please fill in all fields before adding a medication.",
+    "added_meds_check": "This is where you can see your currently added meds. Check it before saving.",
+    "no_meds_added": "No medications added yet."
+  },
+  "form": {
+    "quantity": "Quantity",
+    "prescribed_meds": "Prescribed Meds/Skincare",
+    "times_per_day": "Times per Day",
+    "medication_placeholder": "Enter meds/skincare"
+  },
+  "buttons": {
+    "add": "Add",
+    "save": "Save",
+    "history": "History"
+  },
+  "description": {
+    "medication_description": "This page is dedicated for listing your treatments, medications, and skincare products prescribed by your doctor for managing Atopic Dermatitis."
+  }
+},
+  
+
 
   "settings": {
     "settings": "Settings",

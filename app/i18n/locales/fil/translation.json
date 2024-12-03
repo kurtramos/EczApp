@@ -231,6 +231,40 @@
     "email": "Email: ",
     "created": "Created: "
 },
+
+
+"medication": {
+  "header": "Medikasyon",
+  "alerts": {
+    "no_added_medication": "Walang Idinagdag na Gamot",
+    "add_medication_prompt": "Mangyaring magdagdag ng kahit isang gamot bago mag-save.",
+    "login_required": "Kailangan kang mag-login para mag-save ng gamot.",
+    "error": "Error",
+    "success": "Tagumpay",
+    "medications_saved": "Ang iyong mga gamot ay na-save na.",
+    "error_saving_medications": "Nagkaroon ng problema sa pag-save ng iyong mga gamot. Pakisubukang muli.",
+    "add_meds": "Maglagay ng meds",
+    "add_meds_prompt": "Mangyaring punan ang lahat ng mga field bago magdagdag ng gamot.",
+    "added_meds_check": "Dito mo makikita ang mga kasalukuyang gamot na idinagdag. Suriin ito bago mag-save.",
+    "no_meds_added": "Walang gamot na idinagdag pa."
+  },
+  "form": {
+    "quantity": "Dami",
+    "prescribed_meds": "Iniresetang Gamot/Skincare",
+    "times_per_day": "Bilang ng Pag-inom",
+    "medication_placeholder": "Ilagay ang gamot/skincare"
+  },
+  "buttons": {
+    "add": "Idagdag",
+    "save": "I-save",
+    "history": "History"
+  },
+  "description": {
+    "medication_description": "Ang pahinang ito ay inilalaan para sa pag-lista ng iyong mga paggamot, gamot, at skincare na inireseta ng iyong doktor para sa pamamahala ng Atopic Dermatitis."
+  }
+},
+
+    
   "settings": {
     "settings": "Mga Setting",
     "language_setting": "Setting ng Wika",
