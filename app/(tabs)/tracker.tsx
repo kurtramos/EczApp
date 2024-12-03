@@ -16,6 +16,7 @@ import BottomNav from "../components/BottomNav";
 import { firestore } from "../firebaseConfig";
 import { getAuth } from "firebase/auth";
 import { collection, query, orderBy, getDocs } from "firebase/firestore";
+import { useTranslation } from "react-i18next";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -57,6 +58,7 @@ const TrackerScreen = () => {
   const [monthModalVisible, setMonthModalVisible] = useState(false);
   const [yearModalVisible, setYearModalVisible] = useState(false);
   const router = useRouter();
+  const { t } = useTranslation();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -184,7 +186,7 @@ const TrackerScreen = () => {
   return (
     <View style={styles.container}>
       <BackArrow onPress={() => router.push("/home")} />
-      <Text style={styles.header}>TRACKER</Text>
+      <Text style={styles.header}>{t('tracker.header')}</Text> 
       <View style={styles.dateContainer}>
         <TouchableOpacity style={styles.buttonMonth} onPress={openMonthModal}>
           <Text style={styles.buttonText}>{month}</Text>
@@ -208,8 +210,18 @@ const TrackerScreen = () => {
           router.push("/treatment");
         }}
       >
-        <Text style={styles.buttonText}>POEM SURVEY RESULT</Text>
+        <Text style={styles.buttonText}>{t('tracker.poemSurveyResult')}</Text>
+        </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          router.push("/medication");
+        }}
+      >
+         <Text style={styles.buttonText}>{t('tracker.medication')}</Text> 
       </TouchableOpacity>
+
       <BottomNav />
 
       {/* Month Modal */}

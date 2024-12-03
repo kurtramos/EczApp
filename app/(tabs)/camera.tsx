@@ -22,7 +22,7 @@ const CameraScreen = () => {
 
   return (
     <View style={styles.container}>
-      <BackArrow onPress={() => router.push("/home")} />
+      <BackArrow onPress={() => router.back()} />
       <Text style={styles.header}>{t("camera.title")}</Text>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.description}>{t("camera.description")}</Text>
@@ -91,7 +91,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "black",
     textAlign: "center",
-    marginBottom: 30, // Increased margin for more spacing
+    marginBottom: 5, // Increased margin for more spacing
+    padding: 20,
   },
   infoContainer: {
     width: screenWidth - 40,

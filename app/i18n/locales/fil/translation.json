@@ -193,8 +193,15 @@
       "Failed to analyze image.": "Nabigong suriin ang larawan.",
       "Please answer the POEM survey first before taking a picture.": "Mangyaring sagutin muna ang POEM survey bago kumuha ng larawan.",
       "You have already submitted a picture for this week.": "Nag-submit ka na ng larawan para sa linggong ito."
-    }
-}
+    },
+
+"tracker": {
+    "header": "Tracker",
+    "poemSurveyResult": "RESULTA NG POEM SURVEY",
+    "medication":  "Medikasyon"
+  }
+
+},
   "settings": {
     "settings": "Mga Setting",
     "language_setting": "Setting ng Wika",

@@ -367,10 +367,10 @@ const CameraScreen = () => {
 
   return (
     <View style={styles.container}>
-      <BackArrow onPress={() => router.push("/home")} />
-      <View style={styles.header}>
-        <Text style={styles.headerText}>CAMERA</Text>
-      </View>
+      <BackArrow onPress={() => router.back()} />
+
+        <Text style={styles.header}>CAMERA</Text>
+
 
       {/* Display the selected image in the placeholder area if it exists */}
       <TouchableOpacity
@@ -444,11 +444,12 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   header: {
-    fontSize: 32,
-    color: "#85D3C0",
-    fontWeight: "600",
+    fontSize: 35,
+    color: "#74BDB3",
+    fontWeight: "bold",
     textAlign: "center",
-    marginVertical: 20,
+    marginTop: 20,
+    marginBottom: 10,
   },
   headerText: {
     fontSize: 32,

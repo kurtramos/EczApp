@@ -197,6 +197,13 @@
   }
   },
 
+"tracker": {
+    "header": "Tracker",
+    "poemSurveyResult": "POEM SURVEY RESULT",
+    "medication":  "Medication"
+  },
+
+
   "settings": {
     "settings": "Settings",
     "language_setting": "Language Setting",
