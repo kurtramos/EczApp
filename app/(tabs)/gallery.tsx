@@ -18,11 +18,14 @@ import { getAuth } from 'firebase/auth';
 import { firestore } from '../firebaseConfig';
 import { collection, query, getDocs, doc, getDoc } from 'firebase/firestore';
 import { Timestamp } from 'firebase/firestore';
+import { useTranslation } from "react-i18next";
+
 
 const { width } = Dimensions.get('window');
 const imageSize = width / 3 - 10;
 
 const GalleryScreen = () => {
+    const { t } = useTranslation();
     const router = useRouter();
     const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -120,7 +123,7 @@ const GalleryScreen = () => {
     return (
         <View style={styles.container}>
             <BackArrow onPress={() => router.push('/camerascreen')} />
-            <Text style={styles.header}>Your Captured Images</Text>
+            <Text style={styles.header}>{t("gallery.captures")}</Text>
 
             {loading ? (
                 <ActivityIndicator size="large" color="#85D3C0" style={styles.loadingIndicator} />
@@ -140,7 +143,7 @@ const GalleryScreen = () => {
                     ))}
                 </ScrollView>
             ) : (
-                <Text style={styles.noImagesText}>No images to display.</Text>
+                <Text style={styles.noImagesText}>{t("gallery.noimages")}</Text>
             )}
 
             {/* Modal for zoomed image view with details */}
@@ -153,10 +156,10 @@ const GalleryScreen = () => {
                         <View style={styles.detailsContainer}>
                             <Image source={{ uri: selectedImage.uri }} style={styles.fullImage} resizeMode="contain" />
                             <Text style={styles.detailsText}>
-                                Captured by: {profileInfo.firstName} {profileInfo.lastName}
+                            {t("gallery.capturedby")}{profileInfo.firstName} {profileInfo.lastName}
                             </Text>
-                            <Text style={styles.detailsText}>Email: {profileInfo.email}</Text>
-                            <Text style={styles.detailsText}>Created: {new Date(selectedImage.timestamp).toLocaleString()}</Text>
+                            <Text style={styles.detailsText}>{t("gallery.email")}{profileInfo.email}</Text>
+                            <Text style={styles.detailsText}>{t("gallery.created")}{new Date(selectedImage.timestamp).toLocaleString()}</Text>
                         </View>
                     )}
                 </View>

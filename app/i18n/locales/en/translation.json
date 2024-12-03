@@ -229,6 +229,15 @@
     "medication":  "Medication"
   },
 
+  "gallery": {
+    "captures": "Your Captured Images",
+    "noimages": "No images to display.",
+    "capturedby": "Captured by: ",
+    "email": "Email: ",
+    "created": "Created: "
+
+},
+
 
   "settings": {
     "settings": "Settings",

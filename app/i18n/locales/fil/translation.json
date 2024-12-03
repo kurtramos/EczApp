@@ -224,6 +224,13 @@
     "poemSurveyResult": "RESULTA NG POEM SURVEY",
     "medication":  "Medikasyon"
 },
+"gallery": {
+    "captures": "Mga Nakuhang Imahe",
+    "noimages": "Walang Imaheng Ipapakita",
+    "capturedby": "Kuha Ni: ",
+    "email": "Email: ",
+    "created": "Created: "
+},
   "settings": {
     "settings": "Mga Setting",
     "language_setting": "Setting ng Wika",
