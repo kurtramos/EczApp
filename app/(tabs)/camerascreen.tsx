@@ -195,13 +195,13 @@ const CameraScreen = () => {
   const saveImage = async () => {
     if (!surveyDone) {
       Alert.alert(
-        t("Please answer the POEM survey first before taking a picture.")
+        t("camera.alerts.survey_required")
       );
       return;
     }
 
     if (!saveImageAvailable) {
-      Alert.alert(t("You have already submitted a picture for this week."));
+      Alert.alert(t("camera.alerts.picture_submitted"));
       return;
     }
 
@@ -220,9 +220,9 @@ const CameraScreen = () => {
       }
 
       setModalVisible(true);
-      setModalTitle("Processing...");
+      setModalTitle(t("camera.modal.processing"));
       setCloseButtonVisible(false);
-      setModalMessage("Saving image...");
+      setModalMessage(t("camera.modal.saving_image"));
 
       // Create a unique path for each image
       const imageName = `images/${userEmail}/${Date.now()}_image.jpg`;
@@ -262,7 +262,7 @@ const CameraScreen = () => {
   };
 
   const analyzeSeverity = async (base64Image) => {
-    setModalMessage("Analyzing image...");
+    setModalMessage(t("camera.modal.analyzing_image"));
     const BACKEND_URL =
       "https://us-central1-eczemacare-1195e.cloudfunctions.net/predictImage";
 
@@ -284,25 +284,23 @@ const CameraScreen = () => {
 
       if (!response.ok) {
         setModalTitle("Error");
-        setModalMessage(`Cloud Run response error: ${response.statusText}`);
+        setModalMessage(t("camera.modal.cloud_run_error"));
         setCloseButtonVisible(true);
-        throw new Error(`Cloud Run response error: ${response.statusText}`);
+        throw new Error(t("camera.modal.cloud_run_error"))
       }
 
       const result = await response.json();
 
-      setModalTitle("Success");
-      setModalMessage(`Saved and analyzed image.`);
+      setModalTitle(t("success"));
+      setModalMessage(t("camera.modal.saved_and_analyzed"));
       saveAnalysis(result);
       console.log("Cloud Run results:", result);
     } catch (error) {
       setModalTitle("Error");
-      setModalMessage(
-        `Something went wrong in connecting to Cloud Run: ${error}`
-      );
+      setModalMessage(t("camera.modal.cloud_run_connect_error"))
       setCloseButtonVisible(true);
       console.error("Something went wrong in connecting to Cloud Run:", error);
-      Alert.alert("Prediction Error", "Failed to analyze image.");
+      Alert.alert(t("camera.alerts.prediction_error", "camera.alerts.analyze_failed"))
     }
   };
 
@@ -313,7 +311,7 @@ const CameraScreen = () => {
 
       if (!userEmail) {
         console.error("No user is logged in.");
-        Alert.alert("Error", "No user is currently logged in.");
+        Alert.alert(t("camera.alerts.error", "camera.alerts.user_not_logged_in"))
         return;
       }
 
@@ -337,16 +335,16 @@ const CameraScreen = () => {
       console.log("Analysis saved successfully:", analysisResult);
 
       // Update modal and navigate
-      setModalTitle("Success");
-      setModalMessage("Analysis saved successfully.");
+      setModalTitle(t("camera.modal.success"));
+      setModalMessage(t("camera.modal.analysis_saved"))
       setModalVisible(false);
       router.push("/treatment");
     } catch (error) {
       console.error("Error saving analysis to Firestore:", error);
-      setModalTitle("Error");
-      setModalMessage("Failed to save analysis. Please try again.");
+      setModalTitle(t("camera.modal.error"));
+      setModalMessage(t("camera.modal.analysis_save_failed"))
       setCloseButtonVisible(true);
-      Alert.alert("Error", "Failed to save analysis to Firestore.");
+      Alert.alert(t("camera.alerts.error", "camera.alerts.analysis_save_failed"))
     }
   };
 
@@ -369,7 +367,7 @@ const CameraScreen = () => {
     <View style={styles.container}>
       <BackArrow onPress={() => router.back()} />
 
-        <Text style={styles.header}>CAMERA</Text>
+        <Text style={styles.header}> {t("camera.header")}</Text>
 
 
       {/* Display the selected image in the placeholder area if it exists */}
@@ -427,7 +425,7 @@ const CameraScreen = () => {
                 setModalVisible(false);
               }}
             >
-              <Text style={styles.buttonText}>Close</Text>
+              <Text style={styles.buttonText}>{t("camera.button.close")}</Text>
             </TouchableOpacity>
           )}
         </View>

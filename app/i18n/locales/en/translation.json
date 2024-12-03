@@ -145,6 +145,7 @@
   },
 
   "camera": {
+    "header": "CAMERA",
     "title": "CAMERA",
     "description": "Use the camera to capture images for skin condition recognition. Follow the instructions below for better accuracy.",
     "steps": {
@@ -167,18 +168,42 @@
     "image_upload_button": "Image Upload",
     "save_button": "Save",
     "gallery_button": "Gallery",
-    "placeholder_text": "Tap to take a picture.",
     "alerts": {
       "camera_permission_not_granted": "Camera permission not granted",
       "camera_cancelled": "Camera capture was cancelled or failed.",
       "gallery_permission_not_granted": "Media library permission not granted",
       "image_selection_cancelled": "Image selection was cancelled or failed.",
       "no_image_selected": "No image selected",
+      "error": "Error",
       "user_not_logged_in": "No user is currently logged in.",
       "image_saved": "Image saved successfully!",
-      "image_save_failed": "Failed to save image"
+      "image_save_failed": "Failed to save image",
+      "survey_required": "Please answer the POEM survey first before taking a picture.",
+      "picture_submitted": "You have already submitted a picture for this week.",
+      "prediction_error": "Prediction Error",
+      "analyze_failed": "Failed to analyze image.",
+      "no_user_logged_in": "No user is currently logged in.",
+      "analysis_save_failed": "Failed to save analysis to Firestore."
     },
-
+    "modal": {
+      "success": "Success",
+      "processing": "Processing...",
+      "saving_image": "Saving image...",
+      "analyzing_image": "Analyzing image...",
+      "cloud_run_error": "Cloud Run response error: ${response.statusText}",
+      "saved_and_analyzed": "Saved and analyzed image.",
+      "cloud_run_connect_error": "Something went wrong in connecting to Cloud Run: ${error}",
+      "analysis_saved": "Analysis saved successfully.",
+      "analysis_save_failed": "Failed to save analysis. Please try again.",
+      "error": "Error"
+    },
+    "button": {
+      "retake": "Retake",
+      "upload_image": "Upload Image",
+      "save": "Save",
+      "gallery": "Gallery",
+      "close": "Close"
+    },
 
     
     "survey": {

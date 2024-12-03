@@ -142,6 +142,7 @@
   },
 
   "camera": {
+    "header": "KAMERA",
     "title": "CAMERA",
     "description": "Gamitin ang camera upang kumuha ng mga larawan para sa pagkilala ng kondisyon ng balat. Sundin ang mga tagubilin sa ibaba para sa mas mahusay na katumpakan.",
     "steps": {
@@ -164,24 +165,46 @@
     "image_upload_button": "Mag-upload ng Larawan",
     "save_button": "I-save",
     "gallery_button": "Gallery",
-       "alerts": {
+    "alerts": {
       "camera_permission_not_granted": "Hindi nabigyan ng pahintulot ang camera",
       "camera_cancelled": "Kinansela o nabigo ang pagkuha ng larawan.",
       "gallery_permission_not_granted": "Hindi nabigyan ng pahintulot ang media library",
       "image_selection_cancelled": "Kinansela o nabigo ang pagpili ng larawan.",
       "no_image_selected": "Walang napiling larawan",
+      "error": "Error",
       "user_not_logged_in": "Walang kasalukuyang naka-log in na user.",
       "image_saved": "Matagumpay na na-save ang larawan!",
       "image_save_failed": "Nabigo ang pag-save ng larawan",
+      "survey_required": "Paki sagutan muna ang POEM survey bago kumuha ng larawan.",
+      "picture_submitted": "Nakapagsumite ka na ng larawan para sa linggong ito.",
+      "prediction_error": "Error sa Pagtataya",
+      "analyze_failed": "Nabigong i-analyze ang larawan.",
+      "no_user_logged_in": "Walang gumagamit na naka-log in.",
+      "analysis_save_failed": "Nabigo ang pag-save ng pagsusuri sa Firestore."
+    },
+    "modal": {
+      "success": "Tagumpay",
+      "processing": "Pinoproseso...",
+      "saving_image": "Nagse-save ng larawan...",
+      "analyzing_image": "Inaanalyze ang larawan...",
+      "cloud_run_error": "Error sa Cloud Run na tugon: ${response.statusText}",
+      "saved_and_analyzed": "Na-save at na-analyze ang larawan.",
+      "cloud_run_connect_error": "May nangyaring problema sa pagkonekta sa Cloud Run: ${error}",
+      "analysis_saved": "Matagumpay na na-save ang pagsusuri.",
+      "analysis_save_failed": "Nabigo ang pag-save ng pagsusuri. Pakisubok muli.",
+      "error": "Error"
+    },
+    "button": {
+      "retake": "Kunin muli",
+      "upload_image": "Mag-upload ng Larawan",
+      "save": "I-save",
+      "gallery": "Gallery",
+      "close": "Isara"
+    },
 
       
       "image_analysis_failed": "Nabigong suriin ang larawan",
       "image_upload_failed": "Nabigong i-upload ang larawan",
-      "retake_button": "Kuhanin ulit ang larawan",
-      "image_upload_button": "I-upload ang larawan",
-      "save_button": "I-save ang larawan",
-      "gallery_button": "Pumunta sa Gallery",
-      "placeholder_text": "Pindutin upang kumuha ng larawan",
       "Processing...": "Pinoproseso...",
       "Saving image...": "Sine-save ang larawan...",
       "Analyzing image...": "Sinusuri ang larawan...",
@@ -199,8 +222,6 @@
     "header": "Tracker",
     "poemSurveyResult": "RESULTA NG POEM SURVEY",
     "medication":  "Medikasyon"
-  }
-
 },
   "settings": {
     "settings": "Mga Setting",
