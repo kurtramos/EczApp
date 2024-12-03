@@ -25,14 +25,20 @@ import {
 import BackArrow from "../components/BackArrow";
 import BottomNav from "../components/BottomNav";
 import RNPickerSelect from "react-native-picker-select";
+import { deleteDoc } from "firebase/firestore"; // Make sure this is imported
+
+import { useTranslation } from "react-i18next";
+
 
 const MedicationHistoryScreen = () => {
+  const { t } = useTranslation();
   const router = useRouter();
   const [medicationHistory, setMedicationHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState(null);
   const [editedMedications, setEditedMedications] = useState({});
   const [modifiedTimestamps, setModifiedTimestamps] = useState({});
+
 
   // Function to fetch medication history
   const fetchMedicationHistory = async () => {
@@ -120,7 +126,7 @@ const MedicationHistoryScreen = () => {
       const userEmail = user?.email;
 
       if (!userEmail) {
-        Alert.alert("Error", "You must be logged in to save changes.");
+        Alert.alert(t("medicationhistory.alerts.error"), t("medicationhistory.alerts.login_required"))
         return;
       }
 
@@ -139,7 +145,7 @@ const MedicationHistoryScreen = () => {
          modifiedTimestamp: newModifiedTimestamp, // Add modified timestamp
        });
  
-       Alert.alert("Success", "Medications updated successfully.");
+       Alert.alert(t("medicationhistory.alerts.success"), t("medicationhistory.alerts.medications_updated"))
        fetchMedicationHistory();
        setEditingId(null);
        setModifiedTimestamps((prev) => ({
@@ -148,9 +154,40 @@ const MedicationHistoryScreen = () => {
        }));
      } catch (error) {
        console.error("Error updating medications:", error);
-       Alert.alert("Error", "Failed to update medications.");
+       Alert.alert(t("medicationhistory.alerts.error"), t("medicationhistory.alerts.update_failed"))
      }
    };
+
+    // Handle deleting an entry
+const handleDelete = async (id) => {
+  try {
+    const user = getAuth().currentUser;
+    const userEmail = user?.email;
+
+    if (!userEmail) {
+      Alert.alert(
+        t("medicationhistory.alerts.error"), // Error title
+        t("medicationhistory.alerts.login_required") // Error message when not logged in
+      );
+      return;
+    }
+
+    const docRef = doc(firestore, "users", userEmail, "medications", id);
+    await deleteDoc(docRef);
+
+    Alert.alert(
+      t("medicationhistory.alerts.success"), // Success title
+      t("medicationhistory.alerts.medication_deleted") // Success message after deletion
+    );
+    fetchMedicationHistory(); // Refresh the data
+  } catch (error) {
+    console.error("Error deleting medication:", error);
+    Alert.alert(
+      t("medicationhistory.alerts.error"), // Error title
+      t("medicationhistory.alerts.delete_failed") // Error message if deletion fails
+    );
+  }
+};
 
 
   // Format timestamp
@@ -174,15 +211,15 @@ const MedicationHistoryScreen = () => {
   return (
     <View style={styles.container}>
               <BackArrow onPress={() => router.back()} />
-      <Text style={styles.header}>Medication History</Text>
+      <Text style={styles.header}>{t("medicationhistory.history.title")}</Text>
       {/* <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Text style={styles.buttonText}>Back</Text>
       </TouchableOpacity> */}
 
       {loading ? (
-        <Text style={styles.loadingText}>Loading...</Text>
+        <Text style={styles.loadingText}>{t("medicationhistory.history.loading")}</Text>
       ) : medicationHistory.length === 0 ? (
-        <Text style={styles.noHistoryText}>No medication history available.</Text>
+        <Text style={styles.noHistoryText}>{t("medicationhistory.history.no_history")}</Text>
       ) : (
         <ScrollView style={styles.medicationList}>
           {medicationHistory.map((entry, index) => (
@@ -242,13 +279,13 @@ const MedicationHistoryScreen = () => {
                   ) : (
                     // Show medication details
                  <Text style={styles.medicationText}>
-                      {med.quantity} {med.medName} - {med.timesPerDay} times per day
+                      {med.quantity} {med.medName} - {med.timesPerDay} {t("medicationhistory.labels.times_per_day")}
                     </Text>
                   )}
                   {/* Display Modified Timestamp */}
                   {modifiedTimestamps[entry.id] && (
                     <Text style={styles.modifiedTimestampText}>
-                      Modified: {formatTimestamp(modifiedTimestamps[entry.id])}
+                      {t("medicationhistory.modified.label")} {formatTimestamp(modifiedTimestamps[entry.id])}
                     </Text>
                   )}
                   {i < entry.medications.length - 1 && (
@@ -261,22 +298,22 @@ const MedicationHistoryScreen = () => {
                   style={styles.editButton}
                   onPress={() => handleEdit(entry.id)}
                 >
-                  <Text style={styles.actionText}>Edit</Text>
+                  <Text style={styles.actionText}>{t("medicationhistory.buttons.edit")}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.deleteButton}
                   onPress={() =>
                     Alert.alert(
-                      "Delete Entry",
-                      "Are you sure you want to delete this entry?",
+                      t("medicationhistory.alerts.delete_entry"),  // Translated Title
+                      t("medicationhistory.alerts.delete_prompt"), // Translated Message
                       [
-                        { text: "Cancel", style: "cancel" },
-                        { text: "Delete", onPress: () => handleDelete(entry.id) },
+                        { text:  t("medicationhistory.alerts.cancel"), style: "cancel" },
+                        { text:  t("medicationhistory.alerts.delete"), onPress: () => handleDelete(entry.id) },
                       ]
                     )
                   }
                 >
-                  <Text style={styles.actionText}>Delete</Text>
+                  <Text style={styles.actionText}>{t("medicationhistory.buttons.delete")}</Text>
                 </TouchableOpacity>
               </View>
               {/* Show Save button when editing */}
@@ -286,7 +323,7 @@ const MedicationHistoryScreen = () => {
                     style={styles.saveButton}
                     onPress={() => handleSave(entry.id)}
                   >
-                    <Text style={styles.buttonText}>Save</Text>
+                    <Text style={styles.buttonText}>{t("medicationhistory.buttons.save")}</Text>
                   </TouchableOpacity>
                 </View>
               )}

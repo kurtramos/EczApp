@@ -11,6 +11,7 @@ import { doc, setDoc, collection } from "firebase/firestore";
 import { useTranslation } from "react-i18next";
 
 
+
 const MedicationScreen = () => {
   const router = useRouter();
 
@@ -69,6 +70,10 @@ const MedicationScreen = () => {
   
       // Reset the addedMeds list after saving
       setAddedMeds([]);
+
+      // Redirect to medication history page
+      router.push("/medicationhistory"); 
+
   
     } catch (error) {
 

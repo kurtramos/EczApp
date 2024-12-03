@@ -251,7 +251,7 @@
   "form": {
     "quantity": "Dami",
     "prescribed_meds": "Iniresetang Gamot/Skincare",
-    "times_per_day": "Bilang ng Pag-inom",
+    "times_per_day": "Beses kada araw",
     "medication_placeholder": "Ilagay ang gamot/skincare"
   },
   "buttons": {
@@ -263,6 +263,50 @@
     "medication_description": "Ang pahinang ito ay inilalaan para sa pag-lista ng iyong mga paggamot, gamot, at skincare na inireseta ng iyong doktor para sa pamamahala ng Atopic Dermatitis."
   }
 },
+
+  "medicationhistory": {
+    "history": {
+      "title": "Kasaysayan ng Gamot",
+      "loading": "Naglo-load...",
+      "no_history": "Walang kasaysayan ng gamot."
+    },
+    "alerts": {
+      "no_added_medication": "Walang Idinagdag na Gamot",
+      "add_medication_prompt": "Mangyaring magdagdag ng kahit isang gamot bago mag-save.",
+      "success": "Matagumpay",
+      "medications_updated": "Na-update ang mga gamot nang matagumpay.",
+      "error": "Error",
+      "update_failed": "Nabigong i-update ang mga gamot.",
+      "delete_entry": "Tanggalin ang Entry",
+      "delete_prompt": "Sigurado ka bang nais mong tanggalin ang entry na ito?",
+      "cancel": "Kanselahin",
+      "delete": "Tanggalin",
+      "login_required": "Kailangan mong mag-login upang mag-save ng mga pagbabago.",
+
+      
+      "medication_deleted": "Ang entry ng gamot ay matagumpay na natanggal.",
+      "delete_failed": "Hindi natanggal ang entry ng gamot.",
+
+    },
+    "buttons": {
+      "edit": "I-edit",
+      "delete": "Tanggalin",
+      "save": "I-save"
+    },
+    "labels": {
+      "times_per_day": "beses sa isang araw"
+    },
+    "medication_quantities": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5"
+    },
+    "modified": {
+      "label": "Binago:"
+    }
+  },
 
     
   "settings": {
