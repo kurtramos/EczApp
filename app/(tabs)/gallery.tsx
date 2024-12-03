@@ -17,6 +17,7 @@ import BackArrow from '../components/BackArrow';
 import { getAuth } from 'firebase/auth';
 import { firestore } from '../firebaseConfig';
 import { collection, query, getDocs, doc, getDoc } from 'firebase/firestore';
+import { Timestamp } from 'firebase/firestore';
 
 const { width } = Dimensions.get('window');
 const imageSize = width / 3 - 10;
@@ -78,7 +79,7 @@ const GalleryScreen = () => {
             const userImages = querySnapshot.docs.map((doc) => ({
                 id: doc.id,
                 uri: doc.data().imageUrl,
-                timestamp: doc.data().timestamp || 'Unknown',
+                timestamp: doc.data().timestamp instanceof Timestamp ? doc.data().timestamp.toDate() : 'Unknown',
             }));
 
             const groupedImages = groupImagesByDate(userImages);
