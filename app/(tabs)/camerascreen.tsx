@@ -102,10 +102,8 @@ const CameraScreen = () => {
             }
           } catch (error) {
             console.error("Error fetching user data:", error);
-            Alert.alert(
-              "Error",
-              "Failed to retrieve user data from Firestore."
-            );
+            Alert.alert
+            (t("camera.alerts.error", "camera.alerts.firestore_retrieve_failed"))
           }
         }
       };
@@ -145,10 +143,8 @@ const CameraScreen = () => {
             }
           } catch (error) {
             console.error("Error fetching user data:", error);
-            Alert.alert(
-              "Error",
-              "Failed to retrieve user data from Firestore."
-            );
+            Alert.alert
+            (t("camera.alerts.error", "camera.alerts.firestore_retrieve_failed"))
           }
         }
       };
@@ -168,7 +164,7 @@ const CameraScreen = () => {
         console.log("Camera image URI:", result.assets[0].uri);
       } else {
         console.log("Camera capture was cancelled or URI is undefined");
-        Alert.alert("camera.alerts.camera_cancelled");
+        Alert.alert(t("camera.alerts.camera_cancelled"));
       }
     } else {
       Alert.alert(t("camera.alerts.camera_permission_not_granted"));
@@ -283,7 +279,7 @@ const CameraScreen = () => {
       });
 
       if (!response.ok) {
-        setModalTitle("Error");
+        setModalTitle(t("camera.modal.error"));
         setModalMessage(t("camera.modal.cloud_run_error"));
         setCloseButtonVisible(true);
         throw new Error(t("camera.modal.cloud_run_error"))
@@ -291,12 +287,12 @@ const CameraScreen = () => {
 
       const result = await response.json();
 
-      setModalTitle(t("success"));
+      setModalTitle(t("camera.modal.success"));
       setModalMessage(t("camera.modal.saved_and_analyzed"));
       saveAnalysis(result);
       console.log("Cloud Run results:", result);
     } catch (error) {
-      setModalTitle("Error");
+      setModalTitle(t("camera.modal.error"));
       setModalMessage(t("camera.modal.cloud_run_connect_error"))
       setCloseButtonVisible(true);
       console.error("Something went wrong in connecting to Cloud Run:", error);

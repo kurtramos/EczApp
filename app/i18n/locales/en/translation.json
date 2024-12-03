@@ -175,6 +175,7 @@
       "image_selection_cancelled": "Image selection was cancelled or failed.",
       "no_image_selected": "No image selected",
       "error": "Error",
+      "firestore_retrieve_failed": "Failed to retrieve user data from Firestore.",
       "user_not_logged_in": "No user is currently logged in.",
       "image_saved": "Image saved successfully!",
       "image_save_failed": "Failed to save image",

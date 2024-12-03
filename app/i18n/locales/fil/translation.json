@@ -172,6 +172,7 @@
       "image_selection_cancelled": "Kinansela o nabigo ang pagpili ng larawan.",
       "no_image_selected": "Walang napiling larawan",
       "error": "Error",
+      "firestore_retrieve_failed": "Nabigo ang pagkuha ng data ng gumagamit mula sa Firestore.",
       "user_not_logged_in": "Walang kasalukuyang naka-log in na user.",
       "image_saved": "Matagumpay na na-save ang larawan!",
       "image_save_failed": "Nabigo ang pag-save ng larawan",
