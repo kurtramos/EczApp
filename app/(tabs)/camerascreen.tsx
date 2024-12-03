@@ -103,7 +103,7 @@ const CameraScreen = () => {
           } catch (error) {
             console.error("Error fetching user data:", error);
             Alert.alert
-            (t("camera.alerts.error", "camera.alerts.firestore_retrieve_failed"))
+            (t("camera.alerts.error"), t("camera.alerts.firestore_retrieve_failed"))
           }
         }
       };
@@ -144,7 +144,7 @@ const CameraScreen = () => {
           } catch (error) {
             console.error("Error fetching user data:", error);
             Alert.alert
-            (t("camera.alerts.error", "camera.alerts.firestore_retrieve_failed"))
+            (t("camera.alerts.error"), t("camera.alerts.firestore_retrieve_failed"))
           }
         }
       };
@@ -296,7 +296,7 @@ const CameraScreen = () => {
       setModalMessage(t("camera.modal.cloud_run_connect_error"))
       setCloseButtonVisible(true);
       console.error("Something went wrong in connecting to Cloud Run:", error);
-      Alert.alert(t("camera.alerts.prediction_error", "camera.alerts.analyze_failed"))
+      Alert.alert(t("camera.alerts.prediction_error"), t("camera.alerts.analyze_failed"))
     }
   };
 
@@ -307,7 +307,7 @@ const CameraScreen = () => {
 
       if (!userEmail) {
         console.error("No user is logged in.");
-        Alert.alert(t("camera.alerts.error", "camera.alerts.user_not_logged_in"))
+        Alert.alert(t("camera.alerts.error"), t("camera.alerts.user_not_logged_in"))
         return;
       }
 
@@ -340,7 +340,7 @@ const CameraScreen = () => {
       setModalTitle(t("camera.modal.error"));
       setModalMessage(t("camera.modal.analysis_save_failed"))
       setCloseButtonVisible(true);
-      Alert.alert(t("camera.alerts.error", "camera.alerts.analysis_save_failed"))
+      Alert.alert(t("camera.alerts.error"), t("camera.alerts.analysis_save_failed"))
     }
   };
 

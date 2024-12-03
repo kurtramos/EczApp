@@ -207,7 +207,7 @@ const MedicationScreen = () => {
           addedMeds.map((med, index) => (
             <View key={index} style={styles.medicationItem}>
               <Text style={styles.medicationText}>
-              {med.quantity} {med.medName} - {med.timesPerDay} {t("medication.alerts.times_per_day")}
+              {med.quantity} {med.medName} - {med.timesPerDay} {t("medication.form.times_per_day")}
               </Text>
               <TouchableOpacity
                 onPress={() => handleRemoveMedication(index)}
