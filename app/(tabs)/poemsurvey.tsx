@@ -28,6 +28,7 @@ import { useTranslation } from "react-i18next";
 const POEMScreen = () => {
   const { t } = useTranslation();
   const [surveyAvailable, setSurveyAvailable] = useState(false);
+  const [loading, setLoading] = useState(true); // Loading state
   const [modalTitle, setModalTitle] = useState<any | string>("Processing");
   const [modalMessage, setModalMessage] = useState<any | string>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -98,6 +99,7 @@ const POEMScreen = () => {
             );
           }
         }
+        setLoading(false); // Set loading to false once the data is fetched
       };
 
       checkLastSurvey();
@@ -109,7 +111,6 @@ const POEMScreen = () => {
   };
 
   const handleSubmit = async () => {
-    // Validate that all questions are answered
     const allQuestionsAnswered = Object.values(response).every(
       (answer) => answer !== null
     );
@@ -208,7 +209,13 @@ const POEMScreen = () => {
     <View style={styles.container}>
       <BackArrow onPress={() => router.push("/home")} />
 
-      {!surveyAvailable ? (
+      {/* Loading State */}
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <Text style={styles.titleloading}>{t("poem_survey.titleloading")}</Text>
+          <Text style={styles.loadingText}>{t("poem_survey.loading")}</Text>
+        </View>
+      ) : !surveyAvailable ? (
         <View style={styles.header}>
           <Text style={styles.title}>{t("poem_survey.title")}</Text>
           <Text style={styles.description}>{t("poem_survey.unavailable")}</Text>
@@ -231,14 +238,8 @@ const POEMScreen = () => {
                   {["0", "1-2", "3-4", "5-6", "7"].map((option, idx) => (
                     <TouchableOpacity
                       key={idx}
-                      style={[
-                        styles.option,
-                        response[`question${index + 1}`] === option &&
-                          styles.selectedOption,
-                      ]}
-                      onPress={() =>
-                        selectOption(`question${index + 1}`, option)
-                      }
+                      style={[styles.option, response[`question${index + 1}`] === option && styles.selectedOption]}
+                      onPress={() => selectOption(`question${index + 1}`, option)}
                     >
                       <Text style={styles.optionText}>{option}</Text>
                     </TouchableOpacity>
@@ -254,9 +255,7 @@ const POEMScreen = () => {
               style={styles.submitButton}
               onPress={handleSubmit}
             >
-              <Text style={styles.submitButtonText}>
-                {t("poem_survey.submit_button")}
-              </Text>
+              <Text style={styles.submitButtonText}>{t("poem_survey.submit_button")}</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -264,7 +263,7 @@ const POEMScreen = () => {
 
       <BottomNav />
 
-      {/* modal */}
+      {/* Modal */}
       <Modal visible={modalVisible} transparent={true} animationType="slide">
         <View style={styles.modalContainer}>
           <Text style={styles.title}>{modalTitle}</Text>
@@ -273,17 +272,13 @@ const POEMScreen = () => {
             <View>
               <TouchableOpacity
                 style={styles.closeModalButton}
-                onPress={() => {
-                  handleSave();
-                }}
+                onPress={handleSave}
               >
                 <Text style={styles.submitButtonText}>{t("modal.submit")}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.cancelButton}
-                onPress={() => {
-                  setModalVisible(false);
-                }}
+                onPress={() => setModalVisible(false)}
               >
                 <Text style={styles.submitButtonText}>{t("modal.cancel")}</Text>
               </TouchableOpacity>
@@ -292,9 +287,7 @@ const POEMScreen = () => {
           {closeButtonVisible && (
             <TouchableOpacity
               style={styles.closeModalButton}
-              onPress={() => {
-                setModalVisible(false);
-              }}
+              onPress={() => setModalVisible(false)}
             >
               <Text style={styles.submitButtonText}>{t("modal.close")}</Text>
             </TouchableOpacity>
@@ -302,9 +295,7 @@ const POEMScreen = () => {
           {nextButtonVisible && (
             <TouchableOpacity
               style={styles.closeModalButton}
-              onPress={() => {
-                router.push("/camera");
-              }}
+              onPress={() => router.push("/camera")}
             >
               <Text style={styles.submitButtonText}>{t("modal.next")}</Text>
             </TouchableOpacity>
@@ -320,6 +311,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingText: {
+    fontSize: 16,
+    color: "#888",
+    textAlign: "center",
+  },
+
   scrollViewContent: {
     paddingBottom: 100,
   },
@@ -335,6 +337,14 @@ const styles = StyleSheet.create({
     fontSize: 36,
     color: "#74BDB3",
     fontWeight: "700",
+  },
+  titleloading: {
+    fontSize: 36,
+    color: "#74BDB3",
+    fontWeight: "700",
+    padding: 5,
+    textAlign: "center",
+    
   },
   description: {
     fontSize: 13,

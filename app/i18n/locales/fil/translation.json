@@ -20,6 +20,14 @@
     }
   },
 
+    "welcome": {
+      "select_language": "Pumili ng Wika"
+    },
+    "common": {
+      "next": "Susunod"
+    },
+  
+
   "learn": {
     "learn": "Alamin",
     "what_is_eczema": "Ano ang Eczema?",
@@ -83,6 +91,9 @@
     "title": "POEM",
     "description": "Kumpletuhin ang POEM questionnaire isang beses sa isang linggo upang masubaybayan ang pagbabago sa kondisyon ng iyong balat. Pakisagot nang maingat ang mga sumusunod na tanong, at bigyan ng marka mula 0 (pinakamababa) hanggang 7 (pinakamataas). Ang kabuuang puntos ay magpapakita ng kalubhaan ng iyong eczema.",
     "unavailable": "Nasagutan mo na ang POEM questionnaire ngayong linggo. Bumalik sa susunod na linggo upang magsagot muli.",
+    "titleloading": "Ang Kasalukuyang Poem Survey",
+    "loading": "Naglo-load...",
+   
     "questions": [
       "Sa nakaraang linggo, ilang araw ang naging makati ang iyong/iyong anak na balat dahil sa eczema?",
       "Sa nakaraang linggo, ilang gabi ang naging sagabal sa iyong/iyong anak na pagtulog dahil sa eczema?",

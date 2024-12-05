@@ -159,7 +159,7 @@ const SignUpScreen = () => {
     } catch (error) {
       console.error("Sign-Up Error:", error);
       const errorMessage = error.message || "An unknown error occurred";
-      Alert.alert("Sign-Up Error", errorMessage);
+      Alert.alert("Sign-Up Error", "Please use another email.");
     }
   };
 

@@ -3,56 +3,91 @@ import {
   View,
   Text,
   StyleSheet,
+  Dimensions,
   TouchableOpacity,
   Modal,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import { useRouter } from "expo-router";
+import { useRouter } from "expo-router"; // useRouter from expo-router
+import { useFocusEffect } from "expo-router";
+import { useFonts } from "expo-font";
+import BackArrow from "../components/BackArrow";
 import { getAuth } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { firestore } from "../firebaseConfig";
 import { useTranslation } from "react-i18next";
+
+const { width, height } = Dimensions.get("window");
 
 const firstlanguage = () => {
   const { t, i18n } = useTranslation();
   const [selectedLanguage, setSelectedLanguage] = useState("English");
   const [modalVisible, setModalVisible] = useState(false);
-  const router = useRouter();
 
   const languages = ["English", "Filipino"];
+  const router = useRouter(); // use useRouter for navigation
 
-  // Save selected language in Firestore and navigate to sign up page
-  const saveLanguage = async () => {
-    const auth = getAuth();
-    const user = auth.currentUser;
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchUserData = async () => {
+        const auth = getAuth();
+        const user = auth.currentUser;
 
-    if (user) {
-      // Save language to Firestore
-      const userDocRef = doc(firestore, "users", user.email ?? "");
-      await setDoc(userDocRef, { language: selectedLanguage }, { merge: true });
+        if (user) {
+          const userDocRef = doc(firestore, "users", user.email ?? "");
+          const userDocSnap = await getDoc(userDocRef);
 
-      // Change language in i18n
-      i18n.changeLanguage(selectedLanguage);
+          if (userDocSnap.exists()) {
+            const userData = userDocSnap.data();
+            setSelectedLanguage(userData.language);
+          } else {
+            console.log("No user data found in Firestore.");
+          }
+        }
+      };
 
-      // Navigate to the sign-up screen
-      router.push("/signup");
-    }
-  };
+      fetchUserData();
+    }, [])
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const updateLanguage = async () => {
+        const auth = getAuth();
+        const user = auth.currentUser;
+
+        if (user) {
+          const userDocRef = doc(firestore, "users", user.email ?? "");
+          await updateDoc(userDocRef, { language: selectedLanguage });
+          i18n.changeLanguage(selectedLanguage);
+        }
+      };
+
+      updateLanguage();
+    }, [selectedLanguage, i18n])
+  );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{t("welcome.select_language")}</Text>
+      {/* <BackArrow onPress={() => router.push("/settings")} /> */}
+      <View style={styles.selectorContainer}>
+        <Text style={styles.welcomeText}>{t("welcome.select_language")}</Text>
 
-      <TouchableOpacity
-        style={styles.languageBox}
-        onPress={() => setModalVisible(true)}
-      >
-        <Text style={styles.languageText}>{selectedLanguage}</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.languageBox}
+          onPress={() => setModalVisible(true)}
+        >
+          <Text style={styles.languageText}>{selectedLanguage}</Text>
+          <View style={styles.dropdownIcon} />
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.nextButton} onPress={saveLanguage}>
-        <Text style={styles.nextButtonText}>{t("common.next")}</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.nextButton}
+          onPress={() => router.push("/login")}
+        >
+          <Text style={styles.nextButtonText}>{t("common.next")}</Text>
+        </TouchableOpacity>
+      </View>
 
       {/* Language Picker Modal */}
       <Modal
@@ -90,13 +125,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
   },
-  title: {
+  selectorContainer: {
+    width: "100%",
+    maxWidth: 400, // Max width for larger screens
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  welcomeText: {
     fontSize: 24,
     color: "#85D3C0",
     fontFamily: "League Spartan",
     fontWeight: "600",
     textTransform: "capitalize",
-    marginBottom: 50,
+    marginBottom: 50, // Reduced margin for better fit on smaller screens
   },
   languageBox: {
     width: "100%",
@@ -105,7 +146,7 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     justifyContent: "center",
     paddingHorizontal: 15,
-    marginBottom: 30,
+    marginBottom: 100, // Ensure there is space between elements
   },
   languageText: {
     fontSize: 20,
@@ -113,9 +154,23 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     color: "black",
   },
+  dropdownIcon: {
+    width: 12,
+    height: 12,
+    borderWidth: 2,
+    borderColor: "#85D3C0",
+    borderTopWidth: 0,
+    borderLeftWidth: 0,
+    borderRadius: 2,
+    transform: [{ rotate: "40deg" }],
+    top: 14,
+    position: "absolute",
+    right: 15,
+  },
   nextButton: {
     width: "50%",
     height: 45,
+    top: 100,
     backgroundColor: "#85D3C0",
     borderRadius: 30,
     justifyContent: "center",
@@ -126,16 +181,17 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: "League Spartan",
     fontWeight: "500",
+    textTransform: "capitalize",
   },
   modalContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: "rgba(0,0,0,0.5)", // Semi-transparent background
   },
   modalContent: {
     width: "80%",
-    maxWidth: 400,
+    maxWidth: 400, // Max width for the modal content
     backgroundColor: "white",
     borderRadius: 20,
     padding: 20,

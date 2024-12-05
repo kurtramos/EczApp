@@ -101,21 +101,21 @@ const SettingsScreen = () => {
           title={t("settings.language_setting")}
           onPress={() => router.push("/languagesettings")}
         />
-        <SettingOption
+        {/* <SettingOption
           icon="notifications"
           title={t("settings.notification_setting")}
           onPress={() => router.push("/notificationsettings")}
-        />
+        /> */}
         <SettingOption
           icon="lock"
           title={t("settings.change_password")}
           onPress={() => router.push("/changepassword")}
         />
-        <SettingOption
+        {/* <SettingOption
           icon="delete"
           title={t("settings.delete_account")}
           onPress={handleDeleteAccount}
-        />
+        /> */}
       </ScrollView>
     </View>
   );
