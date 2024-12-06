@@ -233,7 +233,9 @@
 "tracker": {
     "header": "Tracker",
     "poemSurveyResult": "RESULTA NG POEM SURVEY",
-    "medication":  "Medikasyon"
+    "medication":  "Medikasyon",
+    "titleloading": "Poem Survey",
+    "loading": "Naglo-load..."
 },
 "gallery": {
     "captures": "Mga Nakuhang Imahe",

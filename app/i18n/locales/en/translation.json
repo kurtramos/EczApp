@@ -237,7 +237,9 @@
 "tracker": {
     "header": "Tracker",
     "poemSurveyResult": "POEM SURVEY RESULT",
-    "medication":  "Medication"
+    "medication":  "Medication",
+    "titleloading": "Tracker",
+    "loading": "Loading..."
   },
 
   "gallery": {

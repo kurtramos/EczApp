@@ -59,6 +59,7 @@ const TrackerScreen = () => {
   const [yearModalVisible, setYearModalVisible] = useState(false);
   const router = useRouter();
   const { t } = useTranslation();
+  const [loading, setLoading] = useState(true); // Loading state
 
   useFocusEffect(
     React.useCallback(() => {
@@ -92,6 +93,8 @@ const TrackerScreen = () => {
           setScores(fetchedScores.reverse());
         } catch (error) {
           console.error("Error fetching scores: ", error);
+        } finally {
+          setLoading(false); // Set loading to false after fetching data
         }
       };
 
@@ -145,6 +148,8 @@ const TrackerScreen = () => {
           setScores(filteredScores.reverse()); // Update state with filtered scores
         } catch (error) {
           console.error("Error filtering scores: ", error);
+        } finally {
+          setLoading(false); // Set loading to false after filtering data
         }
       };
 
@@ -186,41 +191,53 @@ const TrackerScreen = () => {
   return (
     <View style={styles.container}>
       <BackArrow onPress={() => router.push("/home")} />
-      <Text style={styles.header}>{t('tracker.header')}</Text> 
-      <View style={styles.dateContainer}>
-        <TouchableOpacity style={styles.buttonMonth} onPress={openMonthModal}>
-          <Text style={styles.buttonText}>{month}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonYear} onPress={openYearModal}>
-          <Text style={styles.buttonText}>{year}</Text>
-        </TouchableOpacity>
-      </View>
-      <LineChart
-        data={chartData}
-        width={screenWidth - 30}
-        height={220}
-        chartConfig={chartConfig}
-        style={styles.chart}
-        fromZero={true}
-      />
+     
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          router.push("/treatment");
-        }}
-      >
-        <Text style={styles.buttonText}>{t('tracker.poemSurveyResult')}</Text>
-        </TouchableOpacity>
+      {/* Loading State */}
+      {loading ? (
+         <View style={styles.loadingContainer}>
+         <Text style={styles.titleloading}>{t("tracker.titleloading")}</Text>
+         <Text style={styles.loadingText}>{t("tracker.loading")}</Text>
+       </View>
+      ) : (
+        <>
+         <Text style={styles.header}>{t('tracker.header')}</Text> 
+          <View style={styles.dateContainer}>
+            <TouchableOpacity style={styles.buttonMonth} onPress={openMonthModal}>
+              <Text style={styles.buttonText}>{month}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.buttonYear} onPress={openYearModal}>
+              <Text style={styles.buttonText}>{year}</Text>
+            </TouchableOpacity>
+          </View>
+          <LineChart
+            data={chartData}
+            width={screenWidth - 30}
+            height={220}
+            chartConfig={chartConfig}
+            style={styles.chart}
+            fromZero={true}
+          />
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          router.push("/medication");
-        }}
-      >
-         <Text style={styles.buttonText}>{t('tracker.medication')}</Text> 
-      </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              router.push("/treatment");
+            }}
+          >
+            <Text style={styles.buttonText}>{t('tracker.poemSurveyResult')}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              router.push("/medication");
+            }}
+          >
+            <Text style={styles.buttonText}>{t('tracker.medication')}</Text> 
+          </TouchableOpacity>
+        </>
+      )}
 
       <BottomNav />
 
@@ -348,6 +365,25 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#fff",
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingText: {
+    fontSize: 16,
+    color: "#888",
+    textAlign: "center",
+  },
+  titleloading: {
+    fontSize: 36,
+    color: "#74BDB3",
+    fontWeight: "700",
+    padding: 5,
+    textAlign: "center",
+    
+  },
+  
 });
 
 export default TrackerScreen;
