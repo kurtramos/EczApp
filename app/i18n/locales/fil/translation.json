@@ -345,7 +345,7 @@
 
   "account": {
     "age": "Edad",
-    "my_account": "Aking account",
+    "my_account": "Aking Account",
     "personal_information": "Personal na Impormasyon",
     "profile": "Profile",
     "my_record": "Aking Record",
@@ -387,7 +387,10 @@
     "no_data": "Walang Data",
     "taon": "taon",
     "date_of_birth": "Taon ng Kapanganakan",
-    "select_data_point": "Pumili ng survey na gusto tignan"
+    "select_data_point": "Pumili ng survey na gusto tignan",
+
+    "gallery": "Mga Larawan ng Iyong Atopic Dermatitis" ,
+    "gallerybtn": "Tignan and Mga Larawan" 
   },
 
   "privacy_policy": {

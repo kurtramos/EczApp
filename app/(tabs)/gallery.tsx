@@ -97,6 +97,9 @@ const GalleryScreen = () => {
 
     // Group images by date
     const groupImagesByDate = (images) => {
+            // Sort images by timestamp in descending order (latest to oldest)
+    images.sort((a, b) => b.timestamp - a.timestamp);
+    
         const grouped = images.reduce((acc, image) => {
             const date = new Date(image.timestamp).toLocaleDateString(); // Format to a readable date
             if (!acc[date]) acc[date] = [];

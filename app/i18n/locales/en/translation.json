@@ -350,7 +350,7 @@
 
   "account": {
     "age": "Age",
-    "my_account": "My account",
+    "my_account": "My Account",
     "personal_information": "Personal Information",
     "profile": "Profile",
     "my_record": "My Record",
@@ -392,7 +392,10 @@
     "no_data": "No Data",
     "taon": "years old",
     "date_of_birth": "Date Of Birth",
-    "select_data_point": "Point what survey you like to view"
+    "select_data_point": "Point what survey you like to view",
+
+    "gallery": "Images of Your Atopic Dermatits" ,
+    "gallerybtn": "View Your Gallery" 
   },
 
   "privacy_policy": {

@@ -47,14 +47,14 @@ export default function App() {
       return;
     }
 
-    // Step 4: Check if the email ends with '@gmail.com' or other valid domains
-    const validDomains = ['@gmail.com', '@ust.edu.ph']; // You can add more domains here
-    const emailDomain = emailLowerCase.split('@')[1];
+    // // Step 4: Check if the email ends with '@gmail.com' or other valid domains
+    // const validDomains = ['@gmail.com', '@ust.edu.ph']; // You can add more domains here
+    // const emailDomain = emailLowerCase.split('@')[1];
 
-    if (!validDomains.includes(`@${emailDomain}`)) {
-      Alert.alert("Invalid Email", "Please use a valid email domain (@gmail.com).");
-      return;
-    }
+    // if (!validDomains.includes(`@${emailDomain}`)) {
+    //   Alert.alert("Invalid Email", "Please use a valid email domain (@gmail.com).");
+    //   return;
+    // }
 
     // Step 5: Check if the email exists in Firestore
     try {
@@ -184,7 +184,7 @@ export default function App() {
       Alert.alert("Password Reset Email Sent", "Please check your email to reset your password.");
       setForgotPasswordVisible(false);
     } catch (error) {
-      Alert.alert("Error", error.message);
+      Alert.alert("Error", "Please input a valid email address.");
     }
   };
 

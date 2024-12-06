@@ -314,6 +314,18 @@ const MyRecordScreen = () => {
       >
          <Text style={styles.buttonText}>{t('account.medication')}</Text> 
       </TouchableOpacity>
+
+      <Text style={styles.sectionTitle}>
+          {t("account.gallery")}
+        </Text>
+        <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          router.push("/gallery");
+        }}
+      >
+         <Text style={styles.buttonText}>{t('account.gallerybtn')}</Text> 
+      </TouchableOpacity>
         </View>
         
       </ScrollView>
