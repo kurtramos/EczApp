@@ -34,6 +34,10 @@
       "permissions": [
         "RECEIVE_BOOT_COMPLETED"
       ],
+      "defaultConfig": {
+        "missingDimensionStrategy": "react-native-camera",
+        "general": ""
+      },
       "package": "com.eczemacare.bundle"
     },
     "web": {
@@ -54,7 +58,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "9e4b912a-dae9-4f0d-9c31-d0b66a970380"
+        "projectId": "59612240-72af-4088-92c7-d9c87f8808ab"
       }
     }
   }
