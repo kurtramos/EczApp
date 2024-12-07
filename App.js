@@ -8,12 +8,14 @@ import { initializeApp } from 'firebase/app';
 
 // Firebase config
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyCdZ5rS-RaAHsPNXZEhR1Wf6jICthRZWyY",
+  authDomain: "eczemacare-1195e.firebaseapp.com",
+  databaseURL: "https://eczemacare-1195e-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "eczemacare-1195e",
+  storageBucket: "eczemacare-1195e.appspot.com",
+  messagingSenderId: "53407213745",
+  appId: "1:53407213745:web:c88d68c00c19bc7b20da90",
+  measurementId: "G-SB0RWKBL0Y",
 };
 
 // Initialize Firebase
