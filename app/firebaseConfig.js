@@ -1,9 +1,9 @@
-// firebaseConfig.js
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage"; // Import getStorage
+import { getStorage } from "firebase/storage";
+import { getDatabase } from "firebase/database"; // Add this for Realtime Database
 
 const firebaseConfig = {
   apiKey: "AIzaSyCdZ5rS-RaAHsPNXZEhR1Wf6jICthRZWyY",
@@ -20,6 +20,7 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const firestore = getFirestore(app);
-const storage = getStorage(app); // Initialize storage
+const storage = getStorage(app);
+const database = getDatabase(app); // Initialize Realtime Database
 
-export { auth, firestore, storage }; // Export storage
+export { auth, firestore, storage, database }; 
