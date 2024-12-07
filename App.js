@@ -4,7 +4,9 @@ import * as Notifications from 'expo-notifications';
 import firebase from 'firebase/app';
 import 'firebase/auth'; // for authentication
 import 'firebase/storage'; // for image storage
+import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from 'firebase/app';
+
 
 // Firebase config
 const firebaseConfig = {
@@ -15,6 +17,9 @@ const firebaseConfig = {
   messagingSenderId: "53407213745",
   appId: "1:53407213745:web:c88d68c00c19bc7b20da90"
 };
+
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
 // Initialize Firebase
 if (!firebase.apps.length) {
