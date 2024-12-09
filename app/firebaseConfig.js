@@ -1,6 +1,12 @@
 // firebaseConfig.js
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import {
+  getAuth,
+  initializeAuth,
+  getReactNativePersistence,
+} from "firebase/auth";
+import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
+
 // import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage"; // Import getStorage
@@ -10,7 +16,8 @@ import { getFunctions } from "firebase/functions"; // Import Cloud Functions
 const firebaseConfig = {
   apiKey: "AIzaSyCdZ5rS-RaAHsPNXZEhR1Wf6jICthRZWyY",
   authDomain: "eczemacare-1195e.firebaseapp.com",
-  databaseURL: "https://eczemacare-1195e-default-rtdb.asia-southeast1.firebasedatabase.app",
+  databaseURL:
+    "https://eczemacare-1195e-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "eczemacare-1195e",
   storageBucket: "eczemacare-1195e.appspot.com",
   messagingSenderId: "53407213745",
@@ -20,7 +27,10 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
-const auth = getAuth(app);
+const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(ReactNativeAsyncStorage),
+});
+
 const firestore = getFirestore(app);
 const storage = getStorage(app); // Initialize storage
 const database = getDatabase(app); // Initialize the Realtime Database

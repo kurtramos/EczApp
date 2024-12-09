@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "EczApp",
-    "slug": "EczApp",
+    "slug": "ecz-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -58,8 +58,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "c8ae5e8c-235a-4fd1-82d6-bbf021da5355"
+        "projectId": "3eaa8cc0-0f50-4192-bd85-7da9e66ac5cd"
       }
-    }
+    },
+    "owner": "realitaless1996"
   }
 }
