@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   welcomeText: {
     fontSize: 24,
     color: "#85D3C0",
-    fontFamily: "League Spartan",
+    fontFamily: "Spartan_600SemiBold",
     fontWeight: "600",
     textTransform: "capitalize",
     marginBottom: 50, // Reduced margin for better fit on smaller screens
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
   },
   languageText: {
     fontSize: 20,
-    fontFamily: "League Spartan",
+    fontFamily: "Spartan_400Regular",
     fontWeight: "400",
     color: "black",
   },
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
   nextButtonText: {
     color: "white",
     fontSize: 24,
-    fontFamily: "League Spartan",
+    fontFamily: "Spartan_500Medium",
     fontWeight: "500",
     textTransform: "capitalize",
   },

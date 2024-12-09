@@ -15,7 +15,7 @@ import { Ionicons, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useRouter } from "expo-router";
 import BackArrow from "../components/BackArrow";
-import termsAndConditions from '../components/TermsAndConditions';
+import termsAndConditions from "../components/TermsAndConditions";
 
 // Firebase imports
 import {
@@ -334,62 +334,71 @@ const SignUpScreen = () => {
           </Text>
         </View>
 
- {/* Terms of Use Modal */}
-<Modal visible={showTermsModal} transparent={true} animationType="slide">
-  <View style={styles.fullScreenModalContainer}>
-    <ScrollView
-      contentContainerStyle={styles.modalContentContainer}
-      onScroll={handleScroll}
-      scrollEventThrottle={16}
-    >
-      <View style={styles.modalContent}>
-        <Text style={styles.modalTitle}>EczemaCare</Text>
-        <Text style={styles.modalSubtitle}>Terms and Conditions Update</Text>
-
-        {/* Illustration (replace source with actual image) */}
-        <Image
-          source={require("../../assets/logos/EczemaCareLogoG.png")} // Ensure this path is correct
-          style={styles.illustration}
-        />
-
-        {/* Insert Terms and Conditions Below */}
-        {termsAndConditions.map((section, index) => (
-          <View key={index}>
-            <Text style={styles.termsTitle}>{section.title}</Text>
-            <Text style={styles.termsText}>{section.content}</Text>
-          </View>
-        ))}
-
-        {/* Checkbox with Terms Agreement */}
-        <View style={styles.checkboxContainer}>
-          <Switch
-            value={termsAccepted}
-            onValueChange={(value) => setTermsAccepted(value)}
-            trackColor={{ false: "#D3D3D3", true: "#85D3C0" }}
-            thumbColor={termsAccepted ? "#FFFFFF" : "#f4f3f4"}
-          />
-          <Text style={styles.checkboxLabel}>
-            I have read and agree to the Terms
-          </Text>
-        </View>
-
-        {/* Continue Button */}
-        <TouchableOpacity
-          style={[
-            styles.continueButton,
-            { opacity: termsAccepted ? 1 : 0.6 },
-          ]}
-          onPress={closeTermsModal}
-          disabled={!termsAccepted}
+        {/* Terms of Use Modal */}
+        <Modal
+          visible={showTermsModal}
+          transparent={true}
+          animationType="slide"
         >
-          <Text style={styles.continueButtonText}>I Accept</Text>
-          <Ionicons name="arrow-forward-outline" size={20} color="white" />
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
-  </View>
-</Modal>
+          <View style={styles.fullScreenModalContainer}>
+            <ScrollView
+              contentContainerStyle={styles.modalContentContainer}
+              onScroll={handleScroll}
+              scrollEventThrottle={16}
+            >
+              <View style={styles.modalContent}>
+                <Text style={styles.modalTitle}>EczemaCare</Text>
+                <Text style={styles.modalSubtitle}>
+                  Terms and Conditions Update
+                </Text>
 
+                {/* Illustration (replace source with actual image) */}
+                <Image
+                  source={require("../../assets/logos/EczemaCareLogoG.png")} // Ensure this path is correct
+                  style={styles.illustration}
+                />
+
+                {/* Insert Terms and Conditions Below */}
+                {termsAndConditions.map((section, index) => (
+                  <View key={index}>
+                    <Text style={styles.termsTitle}>{section.title}</Text>
+                    <Text style={styles.termsText}>{section.content}</Text>
+                  </View>
+                ))}
+
+                {/* Checkbox with Terms Agreement */}
+                <View style={styles.checkboxContainer}>
+                  <Switch
+                    value={termsAccepted}
+                    onValueChange={(value) => setTermsAccepted(value)}
+                    trackColor={{ false: "#D3D3D3", true: "#85D3C0" }}
+                    thumbColor={termsAccepted ? "#FFFFFF" : "#f4f3f4"}
+                  />
+                  <Text style={styles.checkboxLabel}>
+                    I have read and agree to the Terms
+                  </Text>
+                </View>
+
+                {/* Continue Button */}
+                <TouchableOpacity
+                  style={[
+                    styles.continueButton,
+                    { opacity: termsAccepted ? 1 : 0.6 },
+                  ]}
+                  onPress={closeTermsModal}
+                  disabled={!termsAccepted}
+                >
+                  <Text style={styles.continueButtonText}>I Accept</Text>
+                  <Ionicons
+                    name="arrow-forward-outline"
+                    size={20}
+                    color="white"
+                  />
+                </TouchableOpacity>
+              </View>
+            </ScrollView>
+          </View>
+        </Modal>
       </View>
     </ScrollView>
   );
@@ -550,7 +559,7 @@ const styles = StyleSheet.create({
   termsText: {
     fontSize: 12,
     color: "#070707",
-    fontFamily: "League Spartan",
+    fontFamily: "Spartan_300Light",
     fontWeight: "300",
     textAlign: "justify",
     lineHeight: 14,
@@ -558,7 +567,7 @@ const styles = StyleSheet.create({
   linkText: {
     color: "#85D3C0",
     fontWeight: "500",
-    fontFamily: "League Spartan",
+    fontFamily: "Spartan_500Medium",
   },
   updateText: {
     fontSize: 14,

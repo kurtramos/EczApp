@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   sectionContent: {
     fontSize: 14,
     fontWeight: "300",
-    fontFamily: "League Spartan",
+    fontFamily: "Spartan_300Light",
     lineHeight: 20,
     color: "black",
     textAlign: "justify",
