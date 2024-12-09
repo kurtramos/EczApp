@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "EczApp",
-    "slug": "EczApp",
+    "name": "EczemaCare",
+    "slug": "eczemacare",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -58,8 +58,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "c8ae5e8c-235a-4fd1-82d6-bbf021da5355"
+        "projectId": "e0a04fc6-132c-41d6-ab11-f308828a8bde"
       }
-    }
+    },
+    "owner": "popie"
   }
 }
