@@ -338,7 +338,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 30,  // Left padding
     paddingRight: 30, // Right padding
-    paddingBottom: 30, // Bottom padding
+    // paddingBottom: 30, // Bottom padding
     paddingTop: 0, // No top padding
     backgroundColor: "white",
   },
@@ -365,6 +365,7 @@ const styles = StyleSheet.create({
     alignItems: "center", // Centers the text inside the button
     justifyContent: "center", // Ensures the button text is vertically centered
     marginTop: 20, // Space above the button
+    marginBottom: 20,
     alignSelf: "center", // Centers the button horizontally
   },
   

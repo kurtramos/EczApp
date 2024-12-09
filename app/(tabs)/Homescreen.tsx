@@ -23,7 +23,7 @@ export default function HomeScreen() {
 
       {/* Description Text */}
       <Text style={styles.subtitle}>
-        A Symptoms Tracker And Recognition System For Atopic Dermatitis
+      A Mobile Application for Monitoring and Severity Tracking of Atopic Dermatitis
       </Text>
 
       {/* Sign Up Button */}
