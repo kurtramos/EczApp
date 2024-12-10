@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "53407213745",
+    "firebase_url": "https://eczemacare-1195e-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "eczemacare-1195e",
+    "storage_bucket": "eczemacare-1195e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53407213745:android:95bb13471c632c2520da90",
+        "android_client_info": {
+          "package_name": "com.eczemacare.bundle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53407213745-imhm40io7284jck0bh3iu9asmfh8vmpm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbXzsvMKMjWTIt0d2gHlRIjk3MpvaXRTI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53407213745-imhm40io7284jck0bh3iu9asmfh8vmpm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
