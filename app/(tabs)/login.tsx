@@ -1,12 +1,25 @@
 import React, { useState, useRef } from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Modal } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  Modal,
+} from "react-native";
 import { Ionicons, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { signInWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, getAuth } from "firebase/auth";
-import { auth } from "../firebaseConfig"; 
+import {
+  signInWithEmailAndPassword,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  getAuth,
+} from "firebase/auth";
+import { auth } from "../firebaseConfig";
 import BackArrow from "../components/BackArrow";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { firestore } from "../firebaseConfig"; 
+import { firestore } from "../firebaseConfig";
 
 export default function App() {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -81,7 +94,11 @@ export default function App() {
       }
 
       // Step 6: Proceed to Firebase Authentication (sign in)
-      const userCredential = await signInWithEmailAndPassword(auth, emailLowerCase, password); // Use lowercase email here
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        emailLowerCase,
+        password
+      ); // Use lowercase email here
       const user = userCredential.user;
 
       // Step 7: Check if email is verified
@@ -95,7 +112,10 @@ export default function App() {
               onPress: async () => {
                 try {
                   await sendEmailVerification(user);
-                  Alert.alert("Verification Email Sent", "Please check your email.");
+                  Alert.alert(
+                    "Verification Email Sent",
+                    "Please check your email."
+                  );
                 } catch (error) {
                   Alert.alert("Error", error.message);
                 }
@@ -125,7 +145,6 @@ export default function App() {
 
       // Reset failed attempts on successful login
       setFailedAttempts(0);
-
     } catch (error) {
       // Handle failed login attempts
       const updatedFailedAttempts = failedAttempts + 1;
@@ -141,7 +160,7 @@ export default function App() {
 
         // Start cooldown timer
         if (cooldownTimer.current) clearInterval(cooldownTimer.current);
-        
+
         cooldownTimer.current = setInterval(() => {
           setCooldownTime((prevTime) => {
             if (prevTime === 1) {
@@ -156,32 +175,40 @@ export default function App() {
         if (error.code === "auth/invalid-email") {
           Alert.alert("Invalid Email", "Please enter a valid email address.");
         } else if (error.code === "auth/user-not-found") {
-          Alert.alert("Login Error", "This email is not registered. Please sign up.");
+          Alert.alert(
+            "Login Error",
+            "This email is not registered. Please sign up."
+          );
         } else if (error.code === "auth/wrong-password") {
           Alert.alert("Login Error", "Incorrect password. Please try again.");
         }
 
         Alert.alert(
           "Login Error",
-          `Incorrect credentials. You have ${5 - updatedFailedAttempts} attempts remaining before the cooldown starts.`
+          `Incorrect credentials. You have ${
+            5 - updatedFailedAttempts
+          } attempts remaining before the cooldown starts.`
         );
       }
     }
   };
-  
-  
-  
 
   // Handle Password Reset
   const handleForgotPassword = async () => {
     if (!emailForReset) {
-      Alert.alert("Enter Email", "Please enter your email address to reset your password.");
+      Alert.alert(
+        "Enter Email",
+        "Please enter your email address to reset your password."
+      );
       return;
     }
 
     try {
       await sendPasswordResetEmail(getAuth(), emailForReset);
-      Alert.alert("Password Reset Email Sent", "Please check your email to reset your password.");
+      Alert.alert(
+        "Password Reset Email Sent",
+        "Please check your email to reset your password."
+      );
       setForgotPasswordVisible(false);
     } catch (error) {
       Alert.alert("Error", "Please input a valid email address.");
@@ -227,7 +254,11 @@ export default function App() {
             onPress={() => setPasswordVisible(!passwordVisible)}
             style={styles.eyeIcon}
           >
-            <Ionicons name={passwordVisible ? "eye" : "eye-off"} size={24} color="black" />
+            <Ionicons
+              name={passwordVisible ? "eye" : "eye-off"}
+              size={24}
+              color="black"
+            />
           </TouchableOpacity>
         </View>
         <TouchableOpacity
@@ -241,19 +272,6 @@ export default function App() {
       <TouchableOpacity style={styles.logInButton} onPress={handleLogin}>
         <Text style={styles.logInButtonText}>Log In</Text>
       </TouchableOpacity>
-
-      {/* <Text style={styles.orSignUpText}>or log in with</Text>
-      <View style={styles.socialIconsContainer}>
-        <View style={styles.circle}>
-          <FontAwesome name="google" size={24} color="#85D3C0" />
-        </View>
-        <View style={styles.circle}>
-          <FontAwesome name="facebook" size={24} color="#85D3C0" />
-        </View>
-        <View style={styles.circle}>
-          <MaterialIcons name="fingerprint" size={24} color="#85D3C0" />
-        </View>
-      </View> */}
 
       <View style={styles.signUpTextContainer}>
         <Text style={styles.noAccountText}>Don’t have an account? </Text>
@@ -279,7 +297,10 @@ export default function App() {
               value={emailForReset}
               onChangeText={setEmailForReset}
             />
-            <TouchableOpacity style={styles.resetButton} onPress={handleForgotPassword}>
+            <TouchableOpacity
+              style={styles.resetButton}
+              onPress={handleForgotPassword}
+            >
               <Text style={styles.resetButtonText}>Reset Password</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setForgotPasswordVisible(false)}>
