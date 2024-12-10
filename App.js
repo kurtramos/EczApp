@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import SplashScreen from "./components/SplashScreen"; // Adjust the path according to your project structure
+// import SplashScreen from "./components/SplashScreen"; // Adjust the path according to your project structure
 import * as Notifications from "expo-notifications";
 import firebase from "firebase/app";
-import { initializeAuth, getReactNativePersistence } from "firebase/auth"; // for authentication
-import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
+// import { initializeAuth, getReactNativePersistence } from "firebase/auth"; // for authentication
+// import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import "firebase/storage"; // for image storage
-import { initializeApp } from "firebase/app";
+// import { initializeApp } from "firebase/app";
 
 // Firebase config
 const firebaseConfig = {
@@ -91,5 +91,5 @@ export default function App() {
     };
   }, []);
 
-  return <SplashScreen />;
+  return null;
 }
