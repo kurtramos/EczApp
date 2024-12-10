@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "EczApp",
+    "name": "Eczema Care",
     "slug": "ecz-app",
     "version": "1.0.2",
     "orientation": "portrait",
@@ -45,7 +45,8 @@
       "expo-font",
       "@react-native-firebase/app",
       "@react-native-firebase/auth",
-      "@react-native-firebase/crashlytics"
+      "@react-native-firebase/crashlytics",
+      "@react-native-firebase/perf"
     ],
     "experiments": {
       "typedRoutes": true

@@ -51,7 +51,6 @@ export default function SplashScreen() {
   }, [fontsLoaded]);
 
   if (!fontsLoaded) {
-    // Show a loading indicator or default text until fonts are loaded
     return (
       <View style={styles.container}>
         <ActivityIndicator size="large" color="white" />
