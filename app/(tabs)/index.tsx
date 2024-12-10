@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, Dimensions, Image } from "react-native";
 import { useFonts } from "expo-font";
 import { useRouter } from "expo-router"; // useRouter from expo-router
 import "../i18n";
-
 const { width, height } = Dimensions.get("window");
 
 export default function SplashScreen() {

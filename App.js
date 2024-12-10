@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
 import SplashScreen from "./components/SplashScreen"; // Adjust the path according to your project structure
 import * as Notifications from 'expo-notifications';
-import firebase from 'firebase/app';
-import 'firebase/auth'; // for authentication
-import 'firebase/storage'; // for image storage
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { initializeApp } from 'firebase/app';
+import { getAuth, initializeAuth, browserLocalPersistence } from 'firebase/auth'; // Import for Firebase Auth and persistence
 
 // Firebase config
 const firebaseConfig = {
@@ -18,10 +17,15 @@ const firebaseConfig = {
   measurementId: "G-SB0RWKBL0Y",
 };
 
-// Initialize Firebase
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
+// Initialize Firebase app
+const app = initializeApp(firebaseConfig);
+
+// Initialize Firebase Auth with persistence using AsyncStorage
+const auth = initializeAuth(app, {
+  persistence: browserLocalPersistence, // Ensures auth state is persisted
+  storage: AsyncStorage, // Using AsyncStorage for persisting auth state
+});
+
 const scheduleSurveyReminder = async () => {
   await Notifications.scheduleNotificationAsync({
     content: {
@@ -30,10 +34,11 @@ const scheduleSurveyReminder = async () => {
       sound: true,
     },
     trigger: {
-      seconds: 5 // 7 days in seconds
+      seconds: 5, // 7 days in seconds
     },
   });
-}
+};
+
 // Function to request notification permissions and retrieve token
 const requestNotificationPermissions = async () => {
   const { status: existingStatus } = await Notifications.getPermissionsAsync();

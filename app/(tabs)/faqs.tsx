@@ -11,7 +11,7 @@ import BottomNav from "../components/BottomNav";
 import BackArrow from "../components/BackArrow";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
-
+import { useFonts } from "expo-font";
 const HowToUse = () => {
   const { t } = useTranslation();
   const router = useRouter();
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   sectionContent: {
     fontSize: 14,
     fontWeight: "300",
-    fontFamily: "League Spartan",
+    fontFamily: "Arial",
     lineHeight: 20,
     color: "black",
     textAlign: "justify",

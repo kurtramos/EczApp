@@ -16,6 +16,7 @@ import { getAuth } from "firebase/auth";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { firestore } from "../firebaseConfig";
 import { useTranslation } from "react-i18next";
+// Adjust path as needed
 
 const { width, height } = Dimensions.get("window");
 

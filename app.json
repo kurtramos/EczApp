@@ -32,12 +32,20 @@
       },
       "useNextNotificationsApi": true,
       "permissions": [
-        "RECEIVE_BOOT_COMPLETED"
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "INTERNET",
+        "VIBRATE",
+        "ACCESS_WIFI_STATE",
+        "CHANGE_WIFI_STATE",
+        "RECEIVE_BOOT_COMPLETED",
+        "WAKE_LOCK",
+        "FOREGROUND_SERVICE",
+        "ACCESS_NETWORK_STATE"
       ],
-      "defaultConfig": {
-        "missingDimensionStrategy": "react-native-camera",
-        "general": ""
-      },
       "package": "com.eczemacare.bundle"
     },
     "web": {

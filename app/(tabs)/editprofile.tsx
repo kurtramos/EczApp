@@ -1,20 +1,15 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Alert,
-} from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker"; // Importing date picker
-import { useRouter } from "expo-router";
-import { useFocusEffect } from "expo-router";
-import BackArrow from "../components/BackArrow";
-import { getAuth } from "firebase/auth";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { firestore } from "../firebaseConfig";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useFocusEffect } from "expo-router";
+import { useRouter } from "expo-router";
+import { getAuth } from "firebase/auth";
+
+import BackArrow from "../components/BackArrow";
+import { firestore } from "../firebaseConfig";
+
 
 const EditProfile = () => {
   const { t } = useTranslation();

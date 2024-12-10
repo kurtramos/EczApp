@@ -16,7 +16,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useRouter } from "expo-router";
 import BackArrow from "../components/BackArrow";
 import termsAndConditions from '../components/TermsAndConditions';
-
+import { useFonts } from "expo-font"; 
 // Firebase imports
 import {
   getAuth,
