@@ -41,7 +41,7 @@ export default function SplashScreen() {
 
   useEffect(() => {
     if (fontsLoaded) {
-      onLayoutRootView(); // Hide splash screen after fonts are loaded
+      onLayoutRootView();
       const timer = setTimeout(() => {
         router.push("/Homescreen");
       }, 1200);
