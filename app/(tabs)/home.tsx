@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
     width: 65,
     height: 65,
     borderRadius: 36,
-    // marginTop: 22,
+    marginTop: 15,
   },
   greeting: {
     marginLeft: 20,
