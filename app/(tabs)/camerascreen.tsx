@@ -361,7 +361,7 @@ const CameraScreen = () => {
 
   return (
     <View style={styles.container}>
-      <BackArrow onPress={() => router.back()} />
+    <BackArrow onPress={() => router.push("/camera")} />
 
         <Text style={styles.header}> {t("camera.header")}</Text>
 

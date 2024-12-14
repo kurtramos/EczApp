@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Eczema Care",
-    "slug": "ecz-app",
+    "slug": "EczApp",
     "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/logos/EczemaCareLogoG.png",
@@ -61,6 +61,6 @@
         "projectId": "c8ae5e8c-235a-4fd1-82d6-bbf021da5355"
       }
     },
-    "owner": "realitaless1996"
+    "owner": "ustkurtramos"
   }
 }

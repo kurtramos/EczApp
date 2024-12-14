@@ -22,7 +22,7 @@ const CameraScreen = () => {
 
   return (
     <View style={styles.container}>
-      <BackArrow onPress={() => router.back()} />
+    <BackArrow onPress={() => router.push("/home")} />
       <Text style={styles.header}>{t("camera.title")}</Text>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.description}>{t("camera.description")}</Text>

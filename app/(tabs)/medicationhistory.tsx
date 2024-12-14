@@ -210,7 +210,7 @@ const handleDelete = async (id) => {
 
   return (
     <View style={styles.container}>
-              <BackArrow onPress={() => router.back()} />
+<BackArrow onPress={() => router.push("/medication")} />
       <Text style={styles.header}>{t("medicationhistory.history.title")}</Text>
       {/* <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Text style={styles.buttonText}>Back</Text>

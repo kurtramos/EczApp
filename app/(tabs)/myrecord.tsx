@@ -89,22 +89,24 @@ const MyRecordScreen = () => {
     return Math.abs(ageDate.getUTCFullYear() - 1970);
   };
 
-  const fetchPoemScores = async () => {
-    const scoresRef = collection(firestore, "users", user.email, "POEMScores");
-    const scoresQuery = query(scoresRef, orderBy("timestamp", "desc"));
-    const querySnapshot = await getDocs(scoresQuery);
+const fetchPoemScores = async () => {
+  const scoresRef = collection(firestore, "users", user.email, "POEMScores");
+  const scoresQuery = query(scoresRef, orderBy("timestamp", "desc"));
+  const querySnapshot = await getDocs(scoresQuery);
 
-    const scoresData = querySnapshot.docs.map((doc) => {
-      const data = doc.data();
-      return {
-        date: data.timestamp?.toDate()?.toLocaleDateString() || "N/A",
-        score: data.totalScore,
-        severity: getSeverityLevel(data.totalScore),
-      };
-    });
+  const scoresData = querySnapshot.docs.map((doc) => {
+    const data = doc.data();
+    return {
+      date: data.timestamp?.toDate()?.toLocaleDateString() || "N/A",
+      score: data.totalScore,
+      severity: getSeverityLevel(data.totalScore),
+    };
+  });
 
-    setPoemScores(scoresData.reverse());
-  };
+  setPoemScores(scoresData.reverse());
+  console.log("Fetched POEM Scores:", scoresData); // Debugging step
+};
+
 
   const getSeverityLevel = (score) => {
     switch (true) {

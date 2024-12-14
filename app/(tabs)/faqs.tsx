@@ -6,6 +6,7 @@ import {
   View,
   Image,
   TouchableOpacity,
+  
 } from "react-native";
 import BottomNav from "../components/BottomNav";
 import BackArrow from "../components/BackArrow";
@@ -121,6 +122,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // backgroundColor: "#f4f4f4",
+    backgroundColor: "white",
   },
   heading: {
     fontSize: 35,

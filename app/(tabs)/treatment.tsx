@@ -157,7 +157,7 @@ const Treatment = () => {
 
   return (
     <View style={styles.container}>
-      <BackArrow onPress={() => router.back()} />
+    <BackArrow onPress={() => router.push("/tracker")} />
       <Text style={styles.heading}>{t("poem_result.poem_result")}</Text>
       <ScrollView style={styles.scrollView}>
         {/* Block for POEM Score */}
@@ -231,6 +231,7 @@ const Treatment = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "white",
   },
   scrollView: {
     flex: 1,

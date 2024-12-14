@@ -179,6 +179,13 @@ const POEMScreen = () => {
     }
   };
 
+  // Reset modal state when navigating to another screen
+const navigateToNext = () => {
+  setModalVisible(false); // Close the modal
+  setNextButtonVisible(false); // Reset the state for next action
+  router.push("/camera"); // Navigate to the camera app
+};
+
   const resetSurvey = () => {
     setResponse({
       question1: null,
@@ -284,22 +291,27 @@ const POEMScreen = () => {
               </TouchableOpacity>
             </View>
           )}
-          {closeButtonVisible && (
-            <TouchableOpacity
-              style={styles.closeModalButton}
-              onPress={() => setModalVisible(false)}
-            >
-              <Text style={styles.submitButtonText}>{t("modal.close")}</Text>
-            </TouchableOpacity>
-          )}
-          {nextButtonVisible && (
-            <TouchableOpacity
-              style={styles.closeModalButton}
-              onPress={() => router.push("/camera")}
-            >
-              <Text style={styles.submitButtonText}>{t("modal.next")}</Text>
-            </TouchableOpacity>
-          )}
+       {closeButtonVisible && (
+  <TouchableOpacity
+    style={styles.closeModalButton}
+    onPress={() => {
+      setModalVisible(false); // Close the modal
+      setresponseButtonVisible(false); // Reset response button visibility
+    }}
+  >
+    <Text style={styles.submitButtonText}>{t("modal.close")}</Text>
+  </TouchableOpacity>
+)}
+
+         {nextButtonVisible && (
+  <TouchableOpacity
+    style={styles.closeModalButton}
+    onPress={navigateToNext} // Use the updated navigation function
+  >
+    <Text style={styles.submitButtonText}>{t("modal.next")}</Text>
+  </TouchableOpacity>
+)}
+
         </View>
       </Modal>
     </View>

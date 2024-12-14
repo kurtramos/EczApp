@@ -73,7 +73,7 @@ const Doctors = () => {
 
   return (
     <View style={styles.container}>
-      <BackArrow onPress={() => router.back()} />
+    <BackArrow onPress={() => router.push("/home")} />
 
       <Text style={styles.heading}>{t("doctors.heading")}</Text>
       <Text style={styles.subheading}>{t("doctors.subheading")}</Text>
@@ -178,6 +178,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // backgroundColor: "#f4f4f4",
+    backgroundColor: "white",
   },
   scrollView: {
     flex: 1,

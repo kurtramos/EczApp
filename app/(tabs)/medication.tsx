@@ -116,7 +116,7 @@ const MedicationScreen = () => {
   return (
     <View style={styles.container}>
       {/* Back Arrow */}
-      <BackArrow onPress={() => router.back()} />
+      <BackArrow onPress={() => router.push("/tracker")} />
       <Text style={styles.header}>{t("medication.header")}</Text>
 
       {/* Description Text */}

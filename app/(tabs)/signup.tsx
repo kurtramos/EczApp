@@ -16,6 +16,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useRouter } from "expo-router";
 import BackArrow from "../components/BackArrow";
 import termsAndConditions from "../components/TermsAndConditions";
+import RNPickerSelect from "react-native-picker-select";
 
 // Firebase imports
 import {
@@ -26,6 +27,21 @@ import {
 import { firestore } from "../firebaseConfig";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 
+const months = Array.from({ length: 12 }, (_, i) => ({
+  label: new Date(0, i).toLocaleString("default", { month: "long" }),
+  value: i + 1,
+}));
+
+const days = Array.from({ length: 31 }, (_, i) => ({
+  label: `${i + 1}`,
+  value: i + 1,
+}));
+
+const years = Array.from({ length: 100 }, (_, i) => ({
+  label: `${new Date().getFullYear() - i}`,
+  value: new Date().getFullYear() - i,
+}));
+
 const SignUpScreen = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
@@ -35,15 +51,32 @@ const SignUpScreen = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
-  const [dateOfBirth, setDateOfBirth] = useState(new Date());
-  const [tempDate, setTempDate] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
+
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false);
   const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
+  const currentDate = new Date();
+  const [dateOfBirth, setDateOfBirth] = useState({
+    month: currentDate.getMonth() + 1,
+    day: currentDate.getDate(),
+    year: currentDate.getFullYear(),
+  });
+  
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const scrollViewRef = useRef(null);
   const router = useRouter();
+  
 
+  const confirmDateOfBirth = () => {
+    if (dateOfBirth instanceof Date && !isNaN(dateOfBirth.getTime())) {
+      setShowDatePicker(false);
+      Alert.alert("Date Selected", dateOfBirth.toLocaleDateString());
+    } else {
+      Alert.alert("Incomplete Date", "Please select a valid date.");
+    }
+  };
+  
+  
   const handleNameChange = (
     value: string,
     setName: {
@@ -62,6 +95,7 @@ const SignUpScreen = () => {
       );
     }
   };
+
 
   const handleMobileNumberChange = (
     value: any[] | React.SetStateAction<string>
@@ -83,10 +117,6 @@ const SignUpScreen = () => {
     }
   };
 
-  const confirmDateOfBirth = () => {
-    setDateOfBirth(tempDate); // Set the confirmed date as date of birth
-    setShowDatePicker(false); // Close the date picker modal
-  };
 
   const handleScroll = (event) => {
     const { contentOffset, layoutMeasurement, contentSize } = event.nativeEvent;
@@ -125,6 +155,18 @@ const SignUpScreen = () => {
       return;
     }
 
+    // Create a JavaScript Date object from dateOfBirth
+  const selectedDate = new Date(
+    dateOfBirth.year,
+    dateOfBirth.month - 1, // Month is 0-indexed in JS Date
+    dateOfBirth.day
+  );
+
+  if (selectedDate > currentDate) {
+    Alert.alert("Invalid Date", "The selected date cannot be in the future.");
+    return;
+  }
+
     try {
       const auth = getAuth();
       const userCredential = await createUserWithEmailAndPassword(
@@ -146,13 +188,13 @@ const SignUpScreen = () => {
       const docRef = doc(firestore, "users", email);
       await setDoc(docRef, {
         firstName: firstName,
-        lastName: lastName,
-        email: email,
-        mobileNumber: mobileNumber,
-        dateOfBirth: dateOfBirth,
-        isVerified: false, // New field to track email verification status
-        language: "English",
-      });
+      lastName: lastName,
+      email: email,
+      mobileNumber: mobileNumber,
+      dateOfBirth: selectedDate, // Convert selected date to Firestore Timestamp
+      isVerified: false, // New field to track email verification status
+      language: "English",
+    });
 
       Alert.alert("Success", "Account created successfully!");
       router.push("/firstlanguage");
@@ -256,40 +298,135 @@ const SignUpScreen = () => {
           />
         </View>
 
-        <Text style={styles.label}>Date Of Birth</Text>
-        <TouchableOpacity
-          style={styles.inputField}
-          onPress={() => setShowDatePicker(true)}
-        >
-          <Text style={styles.dateOfBirthText}>
-            {dateOfBirth.toLocaleDateString()}
-          </Text>
-        </TouchableOpacity>
+    <View style={styles.label}>
+      <Text style={styles.label}>Date Of Birth</Text>
+      <TouchableOpacity
+  style={styles.inputField}
+  onPress={() => setShowDatePicker(true)}
+>
+  <Text style={styles.dateOfBirthText}>
+    {dateOfBirth?.month && dateOfBirth?.day && dateOfBirth?.year
+      ? `${dateOfBirth.month}/${dateOfBirth.day}/${dateOfBirth.year}`
+      : "Select Date"}
+  </Text>
+</TouchableOpacity>
 
-        <Modal
-          visible={showDatePicker}
-          transparent={true}
-          animationType="slide"
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.datePickerContainer}>
-              <DateTimePicker
-                value={tempDate}
-                mode="date"
-                display="default"
-                onChange={onDateChange}
-                maximumDate={new Date()}
-              />
-              {/* Confirm Button */}
-              <TouchableOpacity
-                style={styles.confirmButton}
-                onPress={confirmDateOfBirth}
-              >
-                <Text style={styles.confirmButtonText}>Confirm</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
+
+
+         {/* Date Picker Modal */}
+         <Modal visible={showDatePicker} transparent={true} animationType="slide">
+  <View style={styles.modalContainer}>
+    <View style={styles.datePickerContainer}>
+      <Text style={styles.modalTitle}>Select Date of Birth</Text>
+
+      
+    {/* Display Current Selected Date */}
+    <Text style={styles.selectedDateText}>
+      Selected Date:{" "}
+      {dateOfBirth && dateOfBirth.month && dateOfBirth.day && dateOfBirth.year
+        ? `${dateOfBirth.month}/${dateOfBirth.day}/${dateOfBirth.year}`
+        : "Not Selected"}
+    </Text>
+
+
+ {/* Month Picker */}
+<RNPickerSelect
+  onValueChange={(value) =>
+    setDateOfBirth((prev) => ({
+      ...prev,
+      month: value,
+    }))
+  }
+  value={dateOfBirth?.month || currentDate.getMonth() + 1}
+  items={months.filter(
+    (month) =>
+      dateOfBirth.year < currentDate.getFullYear() ||
+      (dateOfBirth.year === currentDate.getFullYear() &&
+        month.value <= currentDate.getMonth() + 1)
+  )}
+  style={pickerStyles}
+  placeholder={{ label: "Month", value: null }}
+/>
+
+{/* Day Picker */}
+<RNPickerSelect
+  onValueChange={(value) =>
+    setDateOfBirth((prev) => ({
+      ...prev,
+      day: value,
+    }))
+  }
+  value={dateOfBirth?.day || currentDate.getDate()}
+  items={days.filter(
+    (day) =>
+      dateOfBirth.year < currentDate.getFullYear() ||
+      (dateOfBirth.year === currentDate.getFullYear() &&
+        dateOfBirth.month < currentDate.getMonth() + 1) ||
+      (dateOfBirth.year === currentDate.getFullYear() &&
+        dateOfBirth.month === currentDate.getMonth() + 1 &&
+        day.value <= currentDate.getDate())
+  )}
+  style={pickerStyles}
+  placeholder={{ label: "Day", value: null }}
+/>
+
+{/* Year Picker */}
+<RNPickerSelect
+  onValueChange={(value) =>
+    setDateOfBirth((prev) => ({
+      ...prev,
+      year: value,
+    }))
+  }
+  value={dateOfBirth?.year || currentDate.getFullYear()}
+  items={years.filter((year) => year.value <= currentDate.getFullYear())}
+  style={pickerStyles}
+  placeholder={{ label: "Year", value: null }}
+/>
+
+    {/* Confirm and Cancel Buttons */}
+    <View style={styles.modalButtonsContainer}>
+    <TouchableOpacity
+  style={styles.confirmButton}
+  onPress={() => {
+    const selectedDate = new Date(
+      dateOfBirth.year,
+      dateOfBirth.month - 1,
+      dateOfBirth.day
+    );
+    if (selectedDate > currentDate) {
+      Alert.alert(
+        "Invalid Date",
+        "The selected date cannot be in the future. Please select a valid date."
+      );
+    } else if (!dateOfBirth?.month || !dateOfBirth?.day || !dateOfBirth?.year) {
+      Alert.alert("Incomplete Date", "Please select a valid date.");
+    } else {
+      setShowDatePicker(false);
+      Alert.alert(
+        "Date Selected",
+        `${dateOfBirth.month}/${dateOfBirth.day}/${dateOfBirth.year}`
+      );
+    }
+  }}
+>
+  <Text style={styles.confirmButtonText}>Confirm</Text>
+</TouchableOpacity>
+
+
+      <TouchableOpacity
+        style={styles.cancelButton}
+        onPress={() => setShowDatePicker(false)}
+      >
+        <Text style={styles.cancelButtonText}>Cancel</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+</View>
+</Modal>
+
+    </View>
+  
 
         {/* Terms of Use with Checkbox */}
         <View style={styles.checkboxContainer}>
@@ -463,6 +600,34 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
   },
+  selectedDateText: {
+    fontSize: 16,
+    color: "#000",
+    marginBottom: 20,
+    textAlign: "center",
+    fontWeight: "500",
+  },
+  modalButtonsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between", // Space between the buttons
+    marginTop: 20,
+    width: "80%", // Ensure buttons align within the modal width
+    paddingHorizontal: 10, // Add padding around the buttons
+  },
+  
+cancelButton: {
+  backgroundColor: "#f44336", // Red background
+  borderRadius: 20,
+  paddingVertical: 10,
+  paddingHorizontal: 30,
+  marginTop: 20,
+},
+
+  cancelButtonText: {
+    color: "white",
+    fontSize: 16,
+  },
+  
   confirmButton: {
     backgroundColor: "#85D3C0",
     borderRadius: 20,
@@ -579,6 +744,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginVertical: 10,
+    padding: 20
   },
   checkbox: {
     width: 24,
@@ -669,5 +835,30 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
 });
+// Picker styles
+const pickerStyles = {
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    color: "black",
+    paddingRight: 30, // to ensure the text is not truncated
+    marginBottom: 10,
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    color: "black",
+    paddingRight: 30, // to ensure the text is not truncated
+    marginBottom: 10,
+  },
+};
 
 export default SignUpScreen;
