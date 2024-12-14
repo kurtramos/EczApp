@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: -5,
+    marginTop: 0,
     marginBottom: 25,
     alignSelf: "stretch",
     padding: 20,

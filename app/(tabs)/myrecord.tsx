@@ -43,6 +43,7 @@ const MyRecordScreen = () => {
   const [loading, setLoading] = useState(true);
   const [analysisLabel, setAnalysisLabel] = useState(null);
   const [analysisDate, setAnalysisDate] = useState(""); // State to hold Skin Analysis date
+  const [refresh, setRefresh] = useState(false);
 
   const user = getAuth().currentUser;
 
@@ -64,7 +65,7 @@ const MyRecordScreen = () => {
       }
     };
     fetchData();
-  }, [user]);
+  }, [user, refresh]); // Add `refresh` as a dependency
 
   const fetchUserProfile = async () => {
     const userDocRef = doc(firestore, "users", user.email);
@@ -204,6 +205,11 @@ const fetchPoemScores = async () => {
     }
   };
 
+  const handleRefresh = () => {
+    setRefresh((prev) => !prev);
+  };
+  
+
   return (
     <View style={styles.container}>
       <BackArrow onPress={() => router.push("/myaccount")} />
@@ -218,6 +224,7 @@ const fetchPoemScores = async () => {
         <Text style={styles.age}>
           {t("account.age")}: {profile.age} {t("account.taon")}
         </Text>
+
 
         
         {/* Verified Badge */}
@@ -261,6 +268,10 @@ const fetchPoemScores = async () => {
           style={styles.chart}
           onDataPointClick={handleDataPointClick}
         />
+
+<TouchableOpacity style={styles.button2} onPress={handleRefresh}>
+  <Text style={styles.buttonText}>{t("account.poem_score_refresh")}</Text>
+</TouchableOpacity>
 
         {/* Treatment and Medication Section */}
         <Text style={styles.sectionTitle}>
@@ -367,6 +378,18 @@ const styles = StyleSheet.create({
     alignItems: "center", // Centers the text inside the button
     justifyContent: "center", // Ensures the button text is vertically centered
     marginTop: 20, // Space above the button
+    marginBottom: 20,
+    alignSelf: "center", // Centers the button horizontally
+  },
+  button2: {
+    backgroundColor: "#74BDB3",
+    borderRadius: 20,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    width: "70%", // Keeps the button size consistent
+    alignItems: "center", // Centers the text inside the button
+    justifyContent: "center", // Ensures the button text is vertically centered
+    marginTop: 5, // Space above the button
     marginBottom: 20,
     alignSelf: "center", // Centers the button horizontally
   },
