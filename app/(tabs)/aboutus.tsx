@@ -1,22 +1,15 @@
-import React, { useState } from "react";
-import {
-  ScrollView,
-  Text,
-  StyleSheet,
-  View,
-  Image,
-  TextInput,
-  TouchableOpacity,
-  Dimensions,
-  Linking,
-} from "react-native";
+import { ScrollView, Text, StyleSheet, View, Image, TextInput, TouchableOpacity, Dimensions, Linking, } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
 import ImageView from "react-native-image-viewing";
+import { useTranslation } from "react-i18next";
+import React, { useState } from "react";
+import { useRouter } from "expo-router";
+import { FlatList } from "react-native";
+
+import allergists from "../components/allergistspt1";
 import BottomNav from "../components/BottomNav";
 import BackArrow from "../components/BackArrow";
-import allergists from "../components/allergistspt1";
-import { useRouter } from "expo-router";
-import { useTranslation } from "react-i18next";
+
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -116,34 +109,37 @@ const Doctors = () => {
           onChangeText={(text) => setSearchQuery(text)}
         />
 
-        {/* Doctor Details */}
-        <View style={styles.squareBackground}>
-          <ScrollView>
-            {filteredDoctors.length > 0 ? (
-              filteredDoctors.map((doctor, index) => (
-                <View key={index} style={styles.doctorCard}>
-                  <Text style={styles.city}>{doctor.city.toUpperCase()}</Text>
-                  <Text style={styles.doctorName}>{doctor.name}</Text>
-                  <Text style={styles.doctorDetails}>{doctor.hospital}</Text>
-                  {doctor.unit && (
-                    <Text style={styles.doctorDetails}>{doctor.unit}</Text>
-                  )}
-                  <Text style={styles.doctorDetails}>{doctor.schedule}</Text>
-                  <Text style={styles.doctorDetails}>
-                    Contact: {doctor.contact}
-                  </Text>
-                  {doctor.platforms && doctor.platforms.length > 0 && (
-                    <Text style={styles.doctorDetails}>
-                      Platforms: {doctor.platforms.join(", ")}
-                    </Text>
-                  )}
-                </View>
-              ))
-            ) : (
-              <Text style={styles.noResults}>{t("doctors.no_results")}</Text>
-            )}
-          </ScrollView>
+       {/* Doctor Details */}
+<View style={styles.squareBackground}>
+  {filteredDoctors.length > 0 ? (
+    <FlatList
+      data={filteredDoctors}
+      keyExtractor={(item, index) => index.toString()}
+      renderItem={({ item }) => (
+        <View style={styles.doctorCard}>
+          <Text style={styles.city}>{item.city.toUpperCase()}</Text>
+          <Text style={styles.doctorName}>{item.name}</Text>
+          <Text style={styles.doctorDetails}>{item.hospital}</Text>
+          {item.unit && (
+            <Text style={styles.doctorDetails}>{item.unit}</Text>
+          )}
+          <Text style={styles.doctorDetails}>{item.schedule}</Text>
+          <Text style={styles.doctorDetails}>
+            Contact: {item.contact}
+          </Text>
+          {item.platforms && item.platforms.length > 0 && (
+            <Text style={styles.doctorDetails}>
+              Platforms: {item.platforms.join(", ")}
+            </Text>
+          )}
         </View>
+      )}
+      style={{ flexGrow: 0 }}
+    />
+  ) : (
+    <Text style={styles.noResults}>{t("doctors.no_results")}</Text>
+  )}
+</View>
 
         {/* Doctor List Source */}
         <Text style={styles.doctorSource}>

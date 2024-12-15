@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Eczema Care",
-    "slug": "EczApp",
+    "slug": "eczemacare",
     "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/logos/EczemaCareLogoG.png",
@@ -19,7 +19,10 @@
         "NSUserTrackingUsageDescription": "This identifier will be used to personalize your experience.",
         "NSCameraUsageDescription": "This app requires camera access",
         "NSLocationWhenInUseUsageDescription": "This app requires location access",
-        "UIBackgroundModes": ["fetch", "remote-notification"]
+        "UIBackgroundModes": [
+          "fetch",
+          "remote-notification"
+        ]
       }
     },
     "android": {
@@ -27,12 +30,9 @@
         "foregroundImage": "./assets/images/adaptive-icon_eczW.png",
         "backgroundColor": "#85D3C0"
       },
-      // "useNextNotificationsApi": true,
-      "permissions": ["RECEIVE_BOOT_COMPLETED"],
-      // "defaultConfig": {
-      //   "missingDimensionStrategy": "react-native-camera",
-      //   "general": ""
-      // },
+      "permissions": [
+        "RECEIVE_BOOT_COMPLETED"
+      ],
       "googleServicesFile": "./google-services.json",
       "package": "com.eczemacare.bundle"
     },
@@ -58,9 +58,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "c8ae5e8c-235a-4fd1-82d6-bbf021da5355"
+        "projectId": "e0a04fc6-132c-41d6-ab11-f308828a8bde"
       }
     },
-    "owner": "ustkurtramos"
+    "owner": "popie"
   }
 }
