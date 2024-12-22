@@ -18,7 +18,8 @@ import {
   orderBy,
   updateDoc,
   doc,
-  serverTimestamp, // Import for setting server-side timestamp
+  serverTimestamp,
+  onSnapshot, // Import for setting server-side timestamp
 } from "firebase/firestore";
 
 // Importing Picker for selecting values
@@ -40,41 +41,37 @@ const MedicationHistoryScreen = () => {
   const [modifiedTimestamps, setModifiedTimestamps] = useState({});
 
 
-  // Function to fetch medication history
-  const fetchMedicationHistory = async () => {
-    try {
-      const user = getAuth().currentUser;
-      const userEmail = user?.email;
-  
-      if (!userEmail) {
-        console.error("No user logged in");
-        return;
-      }
-  
-      const medicationsRef = collection(
-        firestore,
-        "users",
-        userEmail,
-        "medications"
-      );
-      const q = query(medicationsRef, orderBy("timestamp", "desc"));
-      const querySnapshot = await getDocs(q);
-  
+  // Function to listen for real-time medication history changes
+const fetchMedicationHistory = () => {
+  try {
+    const user = getAuth().currentUser;
+    const userEmail = user?.email;
+
+    if (!userEmail) {
+      console.error("No user logged in");
+      return;
+    }
+
+    const medicationsRef = collection(firestore, "users", userEmail, "medications");
+    const q = query(medicationsRef, orderBy("timestamp", "desc"));
+
+    // Use onSnapshot to listen for changes
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const groupedMeds = {};
-  
+
       querySnapshot.forEach((doc) => {
         const data = doc.data();
         const timestamp = data.timestamp.toDate().toISOString();
         const modifiedTimestamp = data.modifiedTimestamp
           ? data.modifiedTimestamp.toDate().toISOString()
           : null;
-  
+
         // Group meds by timestamp
         if (!groupedMeds[timestamp]) {
           groupedMeds[timestamp] = { id: doc.id, medications: [] };
         }
         groupedMeds[timestamp].medications.push(...data.medications);
-  
+
         // Store modified timestamp in state for each entry
         if (modifiedTimestamp) {
           setModifiedTimestamps((prevState) => ({
@@ -83,22 +80,23 @@ const MedicationHistoryScreen = () => {
           }));
         }
       });
-  
-      const groupedArray = Object.entries(groupedMeds).map(
-        ([timestamp, entry]) => ({
-          timestamp,
-          id: entry.id,
-          medications: entry.medications,
-        })
-      );
-  
-      setMedicationHistory(groupedArray);
+
+      const groupedArray = Object.entries(groupedMeds).map(([timestamp, entry]) => ({
+        timestamp,
+        id: entry.id,
+        medications: entry.medications,
+      }));
+
+      setMedicationHistory(groupedArray); // Update the state with the grouped data
       setLoading(false);
-    } catch (error) {
-      console.error("Error fetching medication history:", error);
-      setLoading(false);
-    }
-  };
+    });
+
+    return unsubscribe; // Return unsubscribe for cleanup
+  } catch (error) {
+    console.error("Error fetching medication history:", error);
+    setLoading(false);
+  }
+};
   
 
   // Handle editing an entry
