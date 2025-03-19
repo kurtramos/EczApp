@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Modal,
   FlatList,
+  ScrollView,
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
@@ -189,6 +190,7 @@ const TrackerScreen = () => {
   };
 
   return (
+ 
     <View style={styles.container}>
       <BackArrow onPress={() => router.push("/home")} />
      
@@ -210,6 +212,18 @@ const TrackerScreen = () => {
               <Text style={styles.buttonText}>{year}</Text>
             </TouchableOpacity>
           </View>
+
+          <Text style={styles.chartTitle}>Graph for Poem Survey</Text>
+          <LineChart
+            data={chartData}
+            width={screenWidth - 30}
+            height={220}
+            chartConfig={chartConfig}
+            style={styles.chart}
+            fromZero={true}
+          />
+
+          <Text style={styles.chartTitle}>Graph for Image Recognition</Text>
           <LineChart
             data={chartData}
             width={screenWidth - 30}
@@ -301,6 +315,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 50,
   },
+  chartTitle: {
+    fontSize: 20,
+    color: "#74BDB3",
+    fontWeight: "600",
+    marginTop: 50,
+    marginBottom: 10,
+  },
   chart: {
     marginVertical: 8,
   },
@@ -320,6 +341,7 @@ const styles = StyleSheet.create({
   },
   dateContainer: {
     display: "flex",
+    marginVertical: -40,
     flexDirection: "row",
     justifyContent: "flex-end",
     width: "80%",

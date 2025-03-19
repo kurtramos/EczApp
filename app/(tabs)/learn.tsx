@@ -93,17 +93,17 @@ const Learn = () => {
             )}
 
             {/* Section 6: What to Do */}
-            <TouchableOpacity onPress={() => toggleSection("whatToDo")}>
+            {/* <TouchableOpacity onPress={() => toggleSection("whatToDo")}>
               <Text style={styles.sectionTitle}>{t("learn.what_to_do")}</Text>
             </TouchableOpacity>
             {activeSection === "whatToDo" && (
               <Text style={styles.sectionContent}>
                 {t("learn.what_to_do_description")}
               </Text>
-            )}
+            )} */}
 
             {/* Section 7: What to Avoid */}
-            <TouchableOpacity onPress={() => toggleSection("whatToAvoid")}>
+            {/* <TouchableOpacity onPress={() => toggleSection("whatToAvoid")}>
               <Text style={styles.sectionTitle}>
                 {t("learn.what_to_avoid")}
               </Text>
@@ -112,7 +112,7 @@ const Learn = () => {
               <Text style={styles.sectionContent}>
                 {t("learn.what_to_avoid_description")}
               </Text>
-            )}
+            )} */}
 
             {/* Section 8: Disclaimer */}
             <TouchableOpacity onPress={() => toggleSection("disclaimer")}>
