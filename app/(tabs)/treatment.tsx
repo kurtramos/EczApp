@@ -56,7 +56,9 @@ const Treatment = () => {
 
             setPoemScore(totalScore ?? "No score available");
             setPoemDate(
-              timestamp ? new Date(timestamp.seconds * 1000).toLocaleDateString() : "Unknown"
+              timestamp
+                ? new Date(timestamp.seconds * 1000).toLocaleDateString()
+                : "Unknown"
             ); // Format the date
           } else {
             console.log("No scores found.");
@@ -103,7 +105,9 @@ const Treatment = () => {
 
             setAnalysisLabel(label);
             setAnalysisDate(
-              timestamp ? new Date(timestamp.seconds * 1000).toLocaleDateString() : "Unknown"
+              timestamp
+                ? new Date(timestamp.seconds * 1000).toLocaleDateString()
+                : "Unknown"
             ); // Format the date
           } else {
             console.log("No result found.");
@@ -157,13 +161,15 @@ const Treatment = () => {
 
   return (
     <View style={styles.container}>
-    <BackArrow onPress={() => router.push("/tracker")} />
+      <BackArrow onPress={() => router.push("/tracker")} />
       <Text style={styles.heading}>{t("poem_result.poem_result")}</Text>
       <ScrollView style={styles.scrollView}>
         {/* Block for POEM Score */}
         <View style={styles.sectionContainer}>
           <View style={styles.squareBackground}>
-            <Text style={styles.sectionHeading}>{t("poem_result.heading")}</Text>
+            <Text style={styles.sectionHeading}>
+              {t("poem_result.heading")}
+            </Text>
             <Text style={styles.dateText}>
               {t("poem_result.date_taken")}: {poemDate}
             </Text>
@@ -196,6 +202,25 @@ const Treatment = () => {
               {t("poem_result.heading2")}
             </Text>
             <Text style={styles.dateText}>
+              {t("poem_result.date_taken")}: {poemDate}
+            </Text>
+            <Text style={styles.severityLabel}>
+              {t("poem_result.severity_level")}
+            </Text>
+            <Text style={styles.severityValue}>{level}</Text>
+            <Text style={styles.message}>
+              {t("poem_result.severity_level")}
+            </Text>
+          </View>
+        </View>
+
+        {/* Block for Skin Analysis
+        <View style={styles.sectionContainer}>
+          <View style={styles.squareBackground}>
+            <Text style={styles.sectionHeading}>
+              {t("poem_result.heading2")}
+            </Text>
+            <Text style={styles.dateText}>
               {t("poem_result.date_taken")}: {analysisDate}
             </Text>
             <Text style={styles.severityLabel}>
@@ -206,21 +231,20 @@ const Treatment = () => {
               {t("poem_result.imagemessage")}
             </Text>
           </View>
-        </View>
+        </View> */}
 
         {/* Disclaimer Section */}
-          <View style={styles.disclaimerContainer}>
-            <Text style={styles.sectionHeading}>
-              {t("imagerecogdisclaimer.heading")}
-            </Text>
-            <Text style={styles.disclaimerText}>
-              {t("imagerecogdisclaimer.text2")}
-            </Text>
-            <Text style={styles.disclaimerText}>
-              {t("imagerecogdisclaimer.text3")}
-            </Text>
-          </View>
-
+        <View style={styles.disclaimerContainer}>
+          <Text style={styles.sectionHeading}>
+            {t("imagerecogdisclaimer.heading")}
+          </Text>
+          <Text style={styles.disclaimerText}>
+            {t("imagerecogdisclaimer.text2")}
+          </Text>
+          <Text style={styles.disclaimerText}>
+            {t("imagerecogdisclaimer.text3")}
+          </Text>
+        </View>
       </ScrollView>
 
       <BottomNav />
@@ -273,7 +297,7 @@ const styles = StyleSheet.create({
     color: "#74BDB3",
     fontWeight: "bold",
     textAlign: "left",
-    marginTop: 5
+    marginTop: 5,
   },
   poemScore: {
     fontSize: 28,
@@ -329,18 +353,18 @@ const styles = StyleSheet.create({
     marginTop: 0,
     padding: 15,
     marginBottom: 40,
-    backgroundColor: '#f8f8f8',
+    backgroundColor: "#f8f8f8",
     borderRadius: 8,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderWidth: 1,
     paddingBottom: 5,
   },
   disclaimerText: {
     fontSize: 14,
-    color: '#333',
-    fontStyle: 'italic',
+    color: "#333",
+    fontStyle: "italic",
     marginBottom: 10,
-    textAlign: 'center',  // Center-align the disclaimer text
+    textAlign: "center", // Center-align the disclaimer text
   },
 });
 

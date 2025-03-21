@@ -90,24 +90,23 @@ const MyRecordScreen = () => {
     return Math.abs(ageDate.getUTCFullYear() - 1970);
   };
 
-const fetchPoemScores = async () => {
-  const scoresRef = collection(firestore, "users", user.email, "POEMScores");
-  const scoresQuery = query(scoresRef, orderBy("timestamp", "desc"));
-  const querySnapshot = await getDocs(scoresQuery);
+  const fetchPoemScores = async () => {
+    const scoresRef = collection(firestore, "users", user.email, "POEMScores");
+    const scoresQuery = query(scoresRef, orderBy("timestamp", "desc"));
+    const querySnapshot = await getDocs(scoresQuery);
 
-  const scoresData = querySnapshot.docs.map((doc) => {
-    const data = doc.data();
-    return {
-      date: data.timestamp?.toDate()?.toLocaleDateString() || "N/A",
-      score: data.totalScore,
-      severity: getSeverityLevel(data.totalScore),
-    };
-  });
+    const scoresData = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        date: data.timestamp?.toDate()?.toLocaleDateString() || "N/A",
+        score: data.totalScore,
+        severity: getSeverityLevel(data.totalScore),
+      };
+    });
 
-  setPoemScores(scoresData.reverse());
-  console.log("Fetched POEM Scores:", scoresData); // Debugging step
-};
-
+    setPoemScores(scoresData.reverse());
+    console.log("Fetched POEM Scores:", scoresData); // Debugging step
+  };
 
   const getSeverityLevel = (score) => {
     switch (true) {
@@ -145,9 +144,18 @@ const fetchPoemScores = async () => {
   };
 
   const fetchAnalysis = async () => {
-    const analysisRef = collection(firestore, "users", user.email, "skinAnalysis");
+    const analysisRef = collection(
+      firestore,
+      "users",
+      user.email,
+      "skinAnalysis"
+    );
     try {
-      const analysisQuery = query(analysisRef, orderBy("timestamp", "desc"), limit(1));
+      const analysisQuery = query(
+        analysisRef,
+        orderBy("timestamp", "desc"),
+        limit(1)
+      );
       const querySnapshot = await getDocs(analysisQuery);
 
       if (!querySnapshot.empty) {
@@ -165,7 +173,9 @@ const fetchPoemScores = async () => {
 
         // Format the date of analysis
         setAnalysisDate(
-          timestamp ? new Date(timestamp.seconds * 1000).toLocaleDateString() : "Unknown"
+          timestamp
+            ? new Date(timestamp.seconds * 1000).toLocaleDateString()
+            : "Unknown"
         );
       } else {
         console.log("No analysis result found.");
@@ -208,14 +218,12 @@ const fetchPoemScores = async () => {
   const handleRefresh = () => {
     setRefresh((prev) => !prev);
   };
-  
 
   return (
     <View style={styles.container}>
       <BackArrow onPress={() => router.push("/myaccount")} />
       <ScrollView>
         <Text style={styles.header}>{t("account.my_record")}</Text>
-
 
         {/* Personal Information */}
         <Text style={styles.name}>
@@ -225,8 +233,6 @@ const fetchPoemScores = async () => {
           {t("account.age")}: {profile.age} {t("account.taon")}
         </Text>
 
-
-        
         {/* Verified Badge */}
         <View style={styles.badgeContainer}>
           {profile.isVerified ? (
@@ -241,7 +247,6 @@ const fetchPoemScores = async () => {
             </View>
           )}
         </View>
-
 
         <Text style={styles.sectionTitle}>
           {t("account.personal_information")}
@@ -269,9 +274,25 @@ const fetchPoemScores = async () => {
           onDataPointClick={handleDataPointClick}
         />
 
-<TouchableOpacity style={styles.button2} onPress={handleRefresh}>
-  <Text style={styles.buttonText}>{t("account.poem_score_refresh")}</Text>
-</TouchableOpacity>
+        {/* Line Chart with Clickable Dots */}
+        <Text style={styles.sectionTitle}>
+          {t("account.image_score_trend")}
+        </Text>
+        <LineChart
+          data={data}
+          width={screenWidth - 32}
+          height={220}
+          chartConfig={chartConfig}
+          bezier
+          style={styles.chart}
+          onDataPointClick={handleDataPointClick}
+        />
+
+        <TouchableOpacity style={styles.button2} onPress={handleRefresh}>
+          <Text style={styles.buttonText}>
+            {t("account.poem_score_refresh")}
+          </Text>
+        </TouchableOpacity>
 
         {/* Treatment and Medication Section */}
         <Text style={styles.sectionTitle}>
@@ -280,7 +301,10 @@ const fetchPoemScores = async () => {
         {selectedSurvey ? (
           <View style={styles.treatmentContainer}>
             <Text style={styles.treatmentHeader}>
-              {t("account.previous_survey_info")} - {selectedSurvey.date}
+              {t("account.previous_survey_info")}
+            </Text>
+            <Text style={styles.treatmentText}>
+              {t("poem_result.date_taken")}: {selectedSurvey.date}
             </Text>
             <Text style={styles.treatmentText}>
               {t("account.score")}: {selectedSurvey.score}
@@ -298,49 +322,52 @@ const fetchPoemScores = async () => {
           </Text>
         )}
 
-         {/* Block for Skin Analysis */}
-         <View style={styles.sectionTitle}>
-          <View style={styles.treatmentContainer}>
-            <Text style={styles.treatmentHeader}>
-              {t("poem_result.heading3")}
-            </Text>
-            <Text style={styles.treatmentText}>
-              {t("poem_result.date_taken")}: {analysisDate}
-            </Text>
-            <Text style={styles.treatmentText}>
-              {t("poem_result.severity_level")}: {analysisLabel}
-            </Text>
-            {/* <Text style={styles.treatmentText}></Text> */}
-            <Text style={styles.treatmentMessage}>
-              {t("poem_result.imagemessage")}
-            </Text>
+        {/* Block for Skin Analysis */}
+        {selectedSurvey ? (
+          <View style={styles.sectionTitle}>
+            <View style={styles.treatmentContainer}>
+              <Text style={styles.treatmentHeader}>
+                {t("poem_result.heading3")}
+              </Text>
+              <Text style={styles.treatmentText}>
+                {t("poem_result.date_taken")}: {selectedSurvey.date}
+              </Text>
+              <Text style={styles.treatmentText}>
+                {t("account.score")}: {selectedSurvey.score}
+              </Text>
+              <Text style={styles.treatmentText}>
+                {t("account.severity_level")}: {selectedSurvey.severity.level}
+              </Text>
+              <Text style={styles.treatmentMessage}>
+                {t("poem_result.imagemessage")}
+              </Text>
+            </View>
           </View>
+        ) : (
+          <Text style={styles.noSurveyText}>
+            {t("account.select_data_point")}
+          </Text>
+        )}
 
-        <Text style={styles.sectionTitle}>
-          {t("account.treatment")}
-        </Text>
+        <Text style={styles.sectionTitle}>{t("account.treatment")}</Text>
         <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          router.push("/medicationhistory");
-        }}
-      >
-         <Text style={styles.buttonText}>{t('account.medication')}</Text> 
-      </TouchableOpacity>
+          style={styles.button}
+          onPress={() => {
+            router.push("/medicationhistory");
+          }}
+        >
+          <Text style={styles.buttonText}>{t("account.medication")}</Text>
+        </TouchableOpacity>
 
-      <Text style={styles.sectionTitle}>
-          {t("account.gallery")}
-        </Text>
+        <Text style={styles.sectionTitle}>{t("account.gallery")}</Text>
         <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          router.push("/gallery");
-        }}
-      >
-         <Text style={styles.buttonText}>{t('account.gallerybtn')}</Text> 
-      </TouchableOpacity>
-        </View>
-        
+          style={styles.button}
+          onPress={() => {
+            router.push("/gallery");
+          }}
+        >
+          <Text style={styles.buttonText}>{t("account.gallerybtn")}</Text>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );
@@ -349,7 +376,7 @@ const fetchPoemScores = async () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingLeft: 30,  // Left padding
+    paddingLeft: 30, // Left padding
     paddingRight: 30, // Right padding
     // paddingBottom: 30, // Bottom padding
     paddingTop: 0, // No top padding
@@ -393,13 +420,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     alignSelf: "center", // Centers the button horizontally
   },
-  
+
   buttonText: {
     color: "#fff",
     fontSize: 18,
     fontWeight: "600",
   },
-  
+
   verifiedBadge: {
     flexDirection: "row",
     alignItems: "center",
@@ -476,7 +503,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     marginVertical: 5,
-    marginBottom: -10
+    marginBottom: -10,
   },
   treatmentHeader: {
     fontSize: 18,

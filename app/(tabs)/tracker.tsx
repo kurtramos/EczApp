@@ -190,22 +190,23 @@ const TrackerScreen = () => {
   };
 
   return (
- 
     <View style={styles.container}>
       <BackArrow onPress={() => router.push("/home")} />
-     
 
       {/* Loading State */}
       {loading ? (
-         <View style={styles.loadingContainer}>
-         <Text style={styles.titleloading}>{t("tracker.titleloading")}</Text>
-         <Text style={styles.loadingText}>{t("tracker.loading")}</Text>
-       </View>
+        <View style={styles.loadingContainer}>
+          <Text style={styles.titleloading}>{t("tracker.titleloading")}</Text>
+          <Text style={styles.loadingText}>{t("tracker.loading")}</Text>
+        </View>
       ) : (
         <>
-         <Text style={styles.header}>{t('tracker.header')}</Text> 
+          <Text style={styles.header}>{t("tracker.header")}</Text>
           <View style={styles.dateContainer}>
-            <TouchableOpacity style={styles.buttonMonth} onPress={openMonthModal}>
+            <TouchableOpacity
+              style={styles.buttonMonth}
+              onPress={openMonthModal}
+            >
               <Text style={styles.buttonText}>{month}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.buttonYear} onPress={openYearModal}>
@@ -213,7 +214,7 @@ const TrackerScreen = () => {
             </TouchableOpacity>
           </View>
 
-          <Text style={styles.chartTitle}>Graph for Poem Survey</Text>
+          <Text style={styles.chartTitle}>{t("tracker.poemgraphtitle")}</Text>
           <LineChart
             data={chartData}
             width={screenWidth - 30}
@@ -223,7 +224,7 @@ const TrackerScreen = () => {
             fromZero={true}
           />
 
-          <Text style={styles.chartTitle}>Graph for Image Recognition</Text>
+          <Text style={styles.chartTitle}>{t("tracker.imagegraphtitle")}</Text>
           <LineChart
             data={chartData}
             width={screenWidth - 30}
@@ -239,7 +240,9 @@ const TrackerScreen = () => {
               router.push("/treatment");
             }}
           >
-            <Text style={styles.buttonText}>{t('tracker.poemSurveyResult')}</Text>
+            <Text style={styles.buttonText}>
+              {t("tracker.poemSurveyResult")}
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -248,7 +251,7 @@ const TrackerScreen = () => {
               router.push("/medication");
             }}
           >
-            <Text style={styles.buttonText}>{t('tracker.medication')}</Text> 
+            <Text style={styles.buttonText}>{t("tracker.medication")}</Text>
           </TouchableOpacity>
         </>
       )}
@@ -403,9 +406,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     padding: 5,
     textAlign: "center",
-    
   },
-  
 });
 
 export default TrackerScreen;

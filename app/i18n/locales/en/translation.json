@@ -235,6 +235,8 @@
 
 "tracker": {
     "header": "Tracker",
+    "poemgraphtitle": "Graph for Poem Survey",
+    "imagegraphtitle": "Graph for Image Recognition",
     "poemSurveyResult": "POEM SURVEY RESULT",
     "medication":  "Medication",
     "titleloading": "Tracker",
@@ -370,11 +372,13 @@
     "no_last_name": "No Last Name Available",
     "no_phone_number": "No Phone Number Available",
     "poem_score_trend": "POEM Score Trend",
+    "image_score_trend": "Image Recognition Score Trend",
     "poem_score_refresh": "Refresh Trend",
     "medications_and_treatment": "Results",
     "treatment": "Prescribed Medications & Skincare",
     "medication": "View your list",
     "previous_survey_info": "Previous Survey Info",
+    "previous_image_info": "Previous Skin Analysis",
     "no_previous_survey": "No Previous Survey",
     "score": "Score",
     "severity_level": "Severity Level",
