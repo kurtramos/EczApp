@@ -7,12 +7,11 @@ import {
   Modal,
   FlatList,
   ScrollView,
+  Dimensions,
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
-import { Dimensions } from "react-native";
 import BackArrow from "../components/BackArrow";
-import { useRouter } from "expo-router";
-import { useFocusEffect } from "expo-router";
+import { useRouter, useFocusEffect } from "expo-router";
 import BottomNav from "../components/BottomNav";
 import { firestore } from "../firebaseConfig";
 import { getAuth } from "firebase/auth";
@@ -28,18 +27,8 @@ const chartConfig = {
 };
 
 const months = [
-  "JAN",
-  "FEB",
-  "MAR",
-  "APR",
-  "MAY",
-  "JUN",
-  "JUL",
-  "AUG",
-  "SEP",
-  "OCT",
-  "NOV",
-  "DEC",
+  "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+  "JUL", "AUG", "SEP", "OCT", "NOV", "DEC",
 ];
 
 interface ScoreData {
@@ -60,7 +49,7 @@ const TrackerScreen = () => {
   const [yearModalVisible, setYearModalVisible] = useState(false);
   const router = useRouter();
   const { t } = useTranslation();
-  const [loading, setLoading] = useState(true); // Loading state
+  const [loading, setLoading] = useState(true);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -90,17 +79,15 @@ const TrackerScreen = () => {
             fetchedScores.push(data.totalScore);
           });
 
-          // Sort descending and update state
           setScores(fetchedScores.reverse());
         } catch (error) {
           console.error("Error fetching scores: ", error);
         } finally {
-          setLoading(false); // Set loading to false after fetching data
+          setLoading(false);
         }
       };
 
       fetchScores();
-
       setMonth(currentMonth);
       setYear(currentDate.getFullYear().toString());
     }, [])
@@ -112,11 +99,7 @@ const TrackerScreen = () => {
         const user = getAuth().currentUser;
         const userEmail = user?.email;
 
-        if (!userEmail) {
-          console.error("No user is currently logged in.");
-          alert("No user is currently logged in.");
-          return;
-        }
+        if (!userEmail) return;
 
         const scoresRef = collection(
           firestore,
@@ -131,11 +114,7 @@ const TrackerScreen = () => {
           const filteredScores: number[] = [];
           querySnapshot.forEach((doc) => {
             const data = doc.data() as ScoreData;
-
-            // Convert Firestore timestamp to JavaScript Date
             const date = data.timestamp.toDate();
-
-            // Check if the year and month match the selected ones
             const dataMonth = date
               .toLocaleString("default", { month: "short" })
               .toUpperCase();
@@ -146,35 +125,22 @@ const TrackerScreen = () => {
             }
           });
 
-          setScores(filteredScores.reverse()); // Update state with filtered scores
+          setScores(filteredScores.reverse());
         } catch (error) {
           console.error("Error filtering scores: ", error);
         } finally {
-          setLoading(false); // Set loading to false after filtering data
+          setLoading(false);
         }
       };
 
       filterScores();
-    }, [month, year]) // Depend on month and year
+    }, [month, year])
   );
 
   const currentYear = currentDate.getFullYear();
   const years = Array.from({ length: currentYear - 2020 + 1 }, (_, i) =>
     (2020 + i).toString()
   );
-
-  const openMonthModal = () => setMonthModalVisible(true);
-  const openYearModal = () => setYearModalVisible(true);
-
-  const handleMonthChange = (selectedMonth: string) => {
-    setMonth(selectedMonth);
-    setMonthModalVisible(false);
-  };
-
-  const handleYearChange = (selectedYear: string) => {
-    setYear(selectedYear);
-    setYearModalVisible(false);
-  };
 
   const chartData = {
     labels:
@@ -191,88 +157,71 @@ const TrackerScreen = () => {
 
   return (
     <View style={styles.container}>
-      <BackArrow onPress={() => router.push("/home")} />
 
-      {/* Loading State */}
-      {loading ? (
-        <View style={styles.loadingContainer}>
-          <Text style={styles.titleloading}>{t("tracker.titleloading")}</Text>
-          <Text style={styles.loadingText}>{t("tracker.loading")}</Text>
-        </View>
-      ) : (
-        <>
-          <Text style={styles.header}>{t("tracker.header")}</Text>
-          <View style={styles.dateContainer}>
-            <TouchableOpacity
-              style={styles.buttonMonth}
-              onPress={openMonthModal}
-            >
-              <Text style={styles.buttonText}>{month}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonYear} onPress={openYearModal}>
-              <Text style={styles.buttonText}>{year}</Text>
-            </TouchableOpacity>
+        <BackArrow onPress={() => router.push("/home")} />
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <Text style={styles.titleloading}>{t("tracker.titleloading")}</Text>
+            <Text style={styles.loadingText}>{t("tracker.loading")}</Text>
           </View>
+        ) : (
+          <>
+            <Text style={styles.header}>{t("tracker.header")}</Text>
 
-          <Text style={styles.chartTitle}>{t("tracker.poemgraphtitle")}</Text>
-          <LineChart
-            data={chartData}
-            width={screenWidth - 30}
-            height={220}
-            chartConfig={chartConfig}
-            style={styles.chart}
-            fromZero={true}
-          />
+            <View style={styles.dateContainer}>
+              <TouchableOpacity style={styles.buttonMonth} onPress={() => setMonthModalVisible(true)}>
+                <Text style={styles.buttonText}>{month}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.buttonYear} onPress={() => setYearModalVisible(true)}>
+                <Text style={styles.buttonText}>{year}</Text>
+              </TouchableOpacity>
+            </View>
 
-          <Text style={styles.chartTitle}>{t("tracker.imagegraphtitle")}</Text>
-          <LineChart
-            data={chartData}
-            width={screenWidth - 30}
-            height={220}
-            chartConfig={chartConfig}
-            style={styles.chart}
-            fromZero={true}
-          />
+            <Text style={styles.chartTitle}>{t("tracker.poemgraphtitle")}</Text>
+            <LineChart
+              data={chartData}
+              width={screenWidth - 30}
+              height={220}
+              chartConfig={chartConfig}
+              style={styles.chart}
+              fromZero={true}
+            />
 
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              router.push("/treatment");
-            }}
-          >
-            <Text style={styles.buttonText}>
-              {t("tracker.poemSurveyResult")}
-            </Text>
-          </TouchableOpacity>
+            <Text style={styles.chartTitle}>{t("tracker.imagegraphtitle")}</Text>
+            <LineChart
+              data={chartData}
+              width={screenWidth - 30}
+              height={220}
+              chartConfig={chartConfig}
+              style={styles.chart}
+              fromZero={true}
+            />
 
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              router.push("/medication");
-            }}
-          >
-            <Text style={styles.buttonText}>{t("tracker.medication")}</Text>
-          </TouchableOpacity>
-        </>
-      )}
+            <TouchableOpacity style={styles.button} onPress={() => router.push("/treatment")}>
+              <Text style={styles.buttonText}>{t("tracker.poemSurveyResult")}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.button} onPress={() => router.push("/medication")}>
+              <Text style={styles.buttonText}>{t("tracker.medication")}</Text>
+            </TouchableOpacity>
+          </>
+        )}
+      </ScrollView>
 
       <BottomNav />
 
       {/* Month Modal */}
-      <Modal
-        visible={monthModalVisible}
-        transparent={true}
-        animationType="slide"
-      >
+      <Modal visible={monthModalVisible} transparent={true} animationType="slide">
         <View style={styles.modalContainer}>
           <FlatList
             data={months}
             keyExtractor={(item) => item}
             renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.modalItem}
-                onPress={() => handleMonthChange(item)}
-              >
+              <TouchableOpacity style={styles.modalItem} onPress={() => {
+                setMonth(item);
+                setMonthModalVisible(false);
+              }}>
                 <Text style={styles.modalText}>{item}</Text>
               </TouchableOpacity>
             )}
@@ -281,20 +230,16 @@ const TrackerScreen = () => {
       </Modal>
 
       {/* Year Modal */}
-      <Modal
-        visible={yearModalVisible}
-        transparent={true}
-        animationType="slide"
-      >
+      <Modal visible={yearModalVisible} transparent={true} animationType="slide">
         <View style={styles.modalContainer}>
           <FlatList
             data={years}
             keyExtractor={(item) => item}
             renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.modalItem}
-                onPress={() => handleYearChange(item)}
-              >
+              <TouchableOpacity style={styles.modalItem} onPress={() => {
+                setYear(item);
+                setYearModalVisible(false);
+              }}>
                 <Text style={styles.modalText}>{item}</Text>
               </TouchableOpacity>
             )}
@@ -308,21 +253,24 @@ const TrackerScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
     backgroundColor: "#fff",
-    paddingVertical: 45,
+  },
+  scrollContainer: {
+    alignItems: "center",
+    paddingTop: 50,
+    paddingBottom: 100,
   },
   header: {
     fontSize: 30,
     color: "#85D3C0",
     fontWeight: "bold",
-    marginBottom: 50,
+    marginBottom: 30,
   },
   chartTitle: {
     fontSize: 20,
     color: "#74BDB3",
     fontWeight: "600",
-    marginTop: 50,
+    marginTop: 30,
     marginBottom: 10,
   },
   chart: {
@@ -343,32 +291,27 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   dateContainer: {
-    display: "flex",
-    marginVertical: -40,
     flexDirection: "row",
-    justifyContent: "flex-end",
-    width: "80%",
-    gap: 2,
+    justifyContent: "center",
+    gap: 4,
+    marginBottom: 20,
   },
   buttonMonth: {
     backgroundColor: "#74BDB3",
-    borderTopStartRadius: 20,
-    borderBottomStartRadius: 20,
+    borderTopLeftRadius: 20,
+    borderBottomLeftRadius: 20,
     paddingVertical: 10,
-    paddingHorizontal: 10,
     width: 70,
     alignItems: "center",
   },
   buttonYear: {
     backgroundColor: "#74BDB3",
-    borderTopEndRadius: 20,
-    borderBottomEndRadius: 20,
+    borderTopRightRadius: 20,
+    borderBottomRightRadius: 20,
     paddingVertical: 10,
-    paddingHorizontal: 10,
     width: 70,
     alignItems: "center",
   },
-
   modalContainer: {
     flex: 1,
     justifyContent: "center",
@@ -377,8 +320,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   modalItem: {
-    paddingHorizontal: 15,
-    paddingVertical: 15,
+    padding: 15,
     backgroundColor: "#74BDB3",
     marginVertical: 5,
     borderRadius: 20,
