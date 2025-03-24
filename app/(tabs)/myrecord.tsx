@@ -129,11 +129,7 @@ const MyRecordScreen = () => {
 
         if (monthName === month && yearStr === year) {
           return {
-            date: date?.toLocaleDateString("en-US", {
-              month: "short",
-              day: "numeric",
-              year: "numeric",
-            }),
+            date: date ? `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}` : "",
             score: data.totalScore,
             severity: getSeverityLevel(data.totalScore),
           };
