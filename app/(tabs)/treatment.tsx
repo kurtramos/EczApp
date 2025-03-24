@@ -209,13 +209,13 @@ const Treatment = () => {
             </Text>
             <Text style={styles.severityValue}>{level}</Text>
             <Text style={styles.message}>
-              {t("poem_result.severity_level")}
+              {t("poem_result.imagemessage")}
             </Text>
           </View>
         </View>
 
-        {/* Block for Skin Analysis
-        <View style={styles.sectionContainer}>
+        {/* Block for Skin Analysis */}
+        {/* <View style={styles.sectionContainer}>
           <View style={styles.squareBackground}>
             <Text style={styles.sectionHeading}>
               {t("poem_result.heading2")}

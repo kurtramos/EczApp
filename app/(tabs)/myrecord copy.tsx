@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   ScrollView,
   StyleSheet,
   Dimensions,
+  ActivityIndicator,
   TouchableOpacity,
-  Modal,
-  FlatList,
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import BackArrow from "../components/BackArrow";
@@ -20,36 +19,16 @@ import {
   query,
   orderBy,
   getDocs,
+  limit,
 } from "firebase/firestore";
 import { firestore } from "../firebaseConfig";
 import { FontAwesome } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 
-const screenWidth = Dimensions.get("window").width;
-const months = [
-  "JAN",
-  "FEB",
-  "MAR",
-  "APR",
-  "MAY",
-  "JUN",
-  "JUL",
-  "AUG",
-  "SEP",
-  "OCT",
-  "NOV",
-  "DEC",
-];
-const currentDate = new Date();
-const currentMonth = currentDate
-  .toLocaleString("default", { month: "short" })
-  .toUpperCase();
-
 const MyRecordScreen = () => {
   const { t } = useTranslation();
   const router = useRouter();
-  const scrollRef = useRef(null);
-  const chartRefY = useRef(0);
+  const screenWidth = Dimensions.get("window").width;
 
   const [profile, setProfile] = useState({
     firstName: "",
@@ -60,34 +39,33 @@ const MyRecordScreen = () => {
     isVerified: false,
   });
   const [poemScores, setPoemScores] = useState([]);
-  const [selectedSurvey, setSelectedSurvey] = useState(null);
+  const [selectedSurvey, setSelectedSurvey] = useState(null); // State for selected survey
   const [loading, setLoading] = useState(true);
-  const [month, setMonth] = useState(currentMonth);
-  const [year, setYear] = useState(currentDate.getFullYear().toString());
-  const [monthModalVisible, setMonthModalVisible] = useState(false);
-  const [yearModalVisible, setYearModalVisible] = useState(false);
   const [analysisLabel, setAnalysisLabel] = useState(null);
-  const [analysisDate, setAnalysisDate] = useState("");
+  const [analysisDate, setAnalysisDate] = useState(""); // State to hold Skin Analysis date
   const [refresh, setRefresh] = useState(false);
 
   const user = getAuth().currentUser;
 
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: currentYear - 2020 + 1 }, (_, i) =>
-    (2020 + i).toString()
-  );
-
   useEffect(() => {
-    if (user) {
-      fetchUserProfile();
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (user) {
-      fetchPoemScores();
-    }
-  }, [month, year, refresh]);
+    const fetchData = async () => {
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+      try {
+        setLoading(true);
+        await fetchUserProfile();
+        await fetchPoemScores();
+        await fetchAnalysis();
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [user, refresh]); // Add `refresh` as a dependency
 
   const fetchUserProfile = async () => {
     const userDocRef = doc(firestore, "users", user.email);
@@ -113,79 +91,107 @@ const MyRecordScreen = () => {
   };
 
   const fetchPoemScores = async () => {
-    setLoading(true);
     const scoresRef = collection(firestore, "users", user.email, "POEMScores");
     const scoresQuery = query(scoresRef, orderBy("timestamp", "desc"));
     const querySnapshot = await getDocs(scoresQuery);
 
-    const scoresData = querySnapshot.docs
-      .map((doc) => {
-        const data = doc.data();
-        const date = data.timestamp?.toDate();
-        const monthName = date
-          ?.toLocaleString("default", { month: "short" })
-          .toUpperCase();
-        const yearStr = date?.getFullYear().toString();
-
-        if (monthName === month && yearStr === year) {
-          return {
-            date: date?.toLocaleDateString("en-US", {
-              month: "short",
-              day: "numeric",
-              year: "numeric",
-            }),
-            score: data.totalScore,
-            severity: getSeverityLevel(data.totalScore),
-          };
-        }
-        return null;
-      })
-      .filter(Boolean);
+    const scoresData = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        date: data.timestamp?.toDate()?.toLocaleDateString() || "N/A",
+        score: data.totalScore,
+        severity: getSeverityLevel(data.totalScore),
+      };
+    });
 
     setPoemScores(scoresData.reverse());
-    setLoading(false);
-
-    setTimeout(() => {
-      scrollRef.current?.scrollTo({
-        y: chartRefY.current - 60,
-        animated: true,
-      });
-    }, 300);
+    console.log("Fetched POEM Scores:", scoresData); // Debugging step
   };
 
   const getSeverityLevel = (score) => {
-    if (score <= 2)
-      return { level: t("account.clear"), message: t("account.clear_message") };
-    if (score <= 7)
-      return { level: t("account.mild"), message: t("account.mild_message") };
-    if (score <= 16)
-      return {
-        level: t("account.moderate"),
-        message: t("account.moderate_message"),
-      };
-    if (score <= 24)
-      return {
-        level: t("account.severe"),
-        message: t("account.severe_message"),
-      };
-    if (score >= 25)
-      return {
-        level: t("account.very_severe"),
-        message: t("account.very_severe_message"),
-      };
-    return {
-      level: t("account.unknown"),
-      message: t("account.unknown_message"),
-    };
+    switch (true) {
+      case score <= 2:
+        return {
+          level: t("account.clear"),
+          message: t("account.clear_message"),
+        };
+      case score >= 3 && score <= 7:
+        return {
+          level: t("account.mild"),
+          message: t("account.mild_message"),
+        };
+      case score >= 8 && score <= 16:
+        return {
+          level: t("account.moderate"),
+          message: t("account.moderate_message"),
+        };
+      case score >= 17 && score <= 24:
+        return {
+          level: t("account.severe"),
+          message: t("account.severe_message"),
+        };
+      case score >= 25:
+        return {
+          level: t("account.very_severe"),
+          message: t("account.very_severe_message"),
+        };
+      default:
+        return {
+          level: t("account.unknown"),
+          message: t("account.unknown_message"),
+        };
+    }
+  };
+
+  const fetchAnalysis = async () => {
+    const analysisRef = collection(
+      firestore,
+      "users",
+      user.email,
+      "skinAnalysis"
+    );
+    try {
+      const analysisQuery = query(
+        analysisRef,
+        orderBy("timestamp", "desc"),
+        limit(1)
+      );
+      const querySnapshot = await getDocs(analysisQuery);
+
+      if (!querySnapshot.empty) {
+        const latestDoc = querySnapshot.docs[0];
+        const { result, timestamp } = latestDoc.data();
+
+        // Extract the severity label from the result
+        const label = result?.predictions?.[0]?.label
+          ? result.predictions[0].label
+              .replace(/_/g, " ")
+              .replace(/\b\w/g, (char) => char.toUpperCase())
+          : "No result available";
+
+        setAnalysisLabel(label); // Set severity level
+
+        // Format the date of analysis
+        setAnalysisDate(
+          timestamp
+            ? new Date(timestamp.seconds * 1000).toLocaleDateString()
+            : "Unknown"
+        );
+      } else {
+        console.log("No analysis result found.");
+      }
+    } catch (error) {
+      console.error("Error fetching analysis: ", error);
+    }
   };
 
   const data = {
     labels: poemScores.length
-      ? poemScores.map((s, i) => (i + 1).toString())
-      : ["0"],
+      ? poemScores.map((score) => score.date)
+      : [t("account.no_data")],
     datasets: [
       {
-        data: poemScores.length ? poemScores.map((s) => s.score) : [0],
+        data: poemScores.length ? poemScores.map((score) => score.score) : [0],
         color: (opacity = 1) => `rgba(133, 211, 192, ${opacity})`,
         strokeWidth: 2,
       },
@@ -199,29 +205,27 @@ const MyRecordScreen = () => {
     labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
     style: { borderRadius: 16 },
     propsForDots: { r: "6", strokeWidth: "2", stroke: "#ffa726" },
-    propsForLabels: {
-      fontSize: 10,
-      rotation: 0,
-    },
   };
 
   const handleDataPointClick = (data) => {
     const index = data.index;
     const selectedData = poemScores[index];
-    if (selectedData) setSelectedSurvey(selectedData);
+    if (selectedData) {
+      setSelectedSurvey(selectedData); // Update selected survey
+    }
   };
 
-  const handleRefresh = () => setRefresh((prev) => !prev);
+  const handleRefresh = () => {
+    setRefresh((prev) => !prev);
+  };
 
   return (
     <View style={styles.container}>
       <BackArrow onPress={() => router.push("/myaccount")} />
-      <ScrollView
-        ref={scrollRef}
-        contentContainerStyle={styles.scrollContainer}
-      >
+      <ScrollView>
         <Text style={styles.header}>{t("account.my_record")}</Text>
 
+        {/* Personal Information */}
         <Text style={styles.name}>
           {profile.firstName} {profile.lastName}
         </Text>
@@ -229,6 +233,7 @@ const MyRecordScreen = () => {
           {t("account.age")}: {profile.age} {t("account.taon")}
         </Text>
 
+        {/* Verified Badge */}
         <View style={styles.badgeContainer}>
           {profile.isVerified ? (
             <View style={styles.verifiedBadge}>
@@ -257,37 +262,19 @@ const MyRecordScreen = () => {
           </View>
         </View>
 
-        <View style={styles.dateContainer}>
-          <TouchableOpacity
-            style={styles.buttonMonth}
-            onPress={() => setMonthModalVisible(true)}
-          >
-            <Text style={styles.buttonText}>{month}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.buttonYear}
-            onPress={() => setYearModalVisible(true)}
-          >
-            <Text style={styles.buttonText}>{year}</Text>
-          </TouchableOpacity>
-        </View>
+        {/* Line Chart with Clickable Dots */}
+        <Text style={styles.sectionTitle}>{t("account.poem_score_trend")}</Text>
+        <LineChart
+          data={data}
+          width={screenWidth - 32}
+          height={220}
+          chartConfig={chartConfig}
+          bezier
+          style={styles.chart}
+          onDataPointClick={handleDataPointClick}
+        />
 
-        <View onLayout={(e) => (chartRefY.current = e.nativeEvent.layout.y)}>
-          <Text style={styles.sectionTitle}>
-            {t("account.poem_score_trend")}
-          </Text>
-          <LineChart
-            data={data}
-            width={screenWidth - 32}
-            height={220}
-            chartConfig={chartConfig}
-            bezier
-            style={styles.chart}
-            onDataPointClick={handleDataPointClick}
-            formatXLabel={(label) => label}
-          />
-        </View>
-
+        {/* Line Chart with Clickable Dots */}
         <Text style={styles.sectionTitle}>
           {t("account.image_score_trend")}
         </Text>
@@ -301,7 +288,7 @@ const MyRecordScreen = () => {
           onDataPointClick={handleDataPointClick}
         />
 
-        <TouchableOpacity style={styles.button} onPress={handleRefresh}>
+        <TouchableOpacity style={styles.button2} onPress={handleRefresh}>
           <Text style={styles.buttonText}>
             {t("account.poem_score_refresh")}
           </Text>
@@ -311,35 +298,33 @@ const MyRecordScreen = () => {
         <Text style={styles.sectionTitle}>
           {t("account.medications_and_treatment")}
         </Text>
-
         {selectedSurvey ? (
-          <>
-            <View style={styles.treatmentContainer}>
-              <Text style={styles.treatmentHeader}>
-                {t("account.previous_survey_info")}
-              </Text>
-              <Text style={styles.treatmentText}>
-                {t("poem_result.date_taken")}: {selectedSurvey.date}
-              </Text>
-              <Text style={styles.treatmentText}>
-                {t("account.score")}: {selectedSurvey.score}
-              </Text>
-              <Text style={styles.treatmentText}>
-                {t("account.severity_level")}: {selectedSurvey.severity.level}
-              </Text>
-              <Text style={styles.treatmentMessage}>
-                {selectedSurvey.severity.message}
-              </Text>
-            </View>
-            </>
+          <View style={styles.treatmentContainer}>
+            <Text style={styles.treatmentHeader}>
+              {t("account.previous_survey_info")}
+            </Text>
+            <Text style={styles.treatmentText}>
+              {t("poem_result.date_taken")}: {selectedSurvey.date}
+            </Text>
+            <Text style={styles.treatmentText}>
+              {t("account.score")}: {selectedSurvey.score}
+            </Text>
+            <Text style={styles.treatmentText}>
+              {t("account.severity_level")}: {selectedSurvey.severity.level}
+            </Text>
+            <Text style={styles.treatmentMessage}>
+              {selectedSurvey.severity.message}
+            </Text>
+          </View>
         ) : (
           <Text style={styles.noSurveyText}>
             {t("account.select_data_point")}
           </Text>
         )}
 
+        {/* Block for Skin Analysis */}
         {selectedSurvey ? (
-          <>
+          <View style={styles.sectionTitle}>
             <View style={styles.treatmentContainer}>
               <Text style={styles.treatmentHeader}>
                 {t("poem_result.heading3")}
@@ -357,17 +342,19 @@ const MyRecordScreen = () => {
                 {t("poem_result.imagemessage")}
               </Text>
             </View>
-          </>
+          </View>
         ) : (
           <Text style={styles.noSurveyText}>
-            {t("account.select_data_point2")}
+            {t("account.select_data_point")}
           </Text>
         )}
 
         <Text style={styles.sectionTitle}>{t("account.treatment")}</Text>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => router.push("/medicationhistory")}
+          onPress={() => {
+            router.push("/medicationhistory");
+          }}
         >
           <Text style={styles.buttonText}>{t("account.medication")}</Text>
         </TouchableOpacity>
@@ -375,116 +362,40 @@ const MyRecordScreen = () => {
         <Text style={styles.sectionTitle}>{t("account.gallery")}</Text>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => router.push("/gallery")}
+          onPress={() => {
+            router.push("/gallery");
+          }}
         >
           <Text style={styles.buttonText}>{t("account.gallerybtn")}</Text>
         </TouchableOpacity>
-
-        <Modal visible={monthModalVisible} transparent animationType="slide">
-          <View style={styles.modalContainer}>
-            <FlatList
-              data={months}
-              keyExtractor={(item) => item}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={styles.modalItem}
-                  onPress={() => {
-                    setMonth(item);
-                    setMonthModalVisible(false);
-                  }}
-                >
-                  <Text style={styles.modalText}>{item}</Text>
-                </TouchableOpacity>
-              )}
-            />
-          </View>
-        </Modal>
-
-        <Modal visible={yearModalVisible} transparent animationType="slide">
-          <View style={styles.modalContainer}>
-            <FlatList
-              data={years}
-              keyExtractor={(item) => item}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={styles.modalItem}
-                  onPress={() => {
-                    setYear(item);
-                    setYearModalVisible(false);
-                  }}
-                >
-                  <Text style={styles.modalText}>{item}</Text>
-                </TouchableOpacity>
-              )}
-            />
-          </View>
-        </Modal>
       </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
-  scrollContainer: { paddingBottom: 100, paddingHorizontal: 20 },
+  container: {
+    flex: 1,
+    paddingLeft: 30, // Left padding
+    paddingRight: 30, // Right padding
+    // paddingBottom: 30, // Bottom padding
+    paddingTop: 0, // No top padding
+    backgroundColor: "white",
+  },
   header: {
-    fontSize: 30,
+    fontSize: 24,
     color: "#85D3C0",
-    fontWeight: "bold",
-    marginTop: 40,
+    fontWeight: "600",
     textAlign: "center",
+    marginVertical: 20,
+    marginTop: 50,
   },
-  name: {
-    fontSize: 22,
-    textAlign: "center",
-    fontWeight: "bold",
-    marginTop: 10,
-  },
-  age: { fontSize: 18, textAlign: "center", marginBottom: 20, marginTop: 10 },
   badgeContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 20,
+    marginTop: -5,
   },
-  verifiedBadge: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#E8F5E9",
-    padding: 6,
-    borderRadius: 20,
-  },
-  notVerifiedBadge: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#FFEBEE",
-    padding: 6,
-    borderRadius: 20,
-  },
-  badgeText: { marginLeft: 5, fontSize: 16, color: "#333" },
-  dateContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: 4,
-    marginBottom: 20,
-  },
-  buttonMonth: {
-    backgroundColor: "#74BDB3",
-    borderTopLeftRadius: 20,
-    borderBottomLeftRadius: 20,
-    paddingVertical: 10,
-    width: 70,
-    alignItems: "center",
-  },
-  buttonYear: {
-    backgroundColor: "#74BDB3",
-    borderTopRightRadius: 20,
-    borderBottomRightRadius: 20,
-    paddingVertical: 10,
-    width: 70,
-    alignItems: "center",
-  },
-  buttonText: { color: "#fff", fontSize: 16, fontWeight: "600" },
   button: {
     backgroundColor: "#74BDB3",
     borderRadius: 20,
@@ -500,15 +411,61 @@ const styles = StyleSheet.create({
   button2: {
     backgroundColor: "#74BDB3",
     borderRadius: 20,
-    paddingVertical: 12,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    width: "70%", // Keeps the button size consistent
+    alignItems: "center", // Centers the text inside the button
+    justifyContent: "center", // Ensures the button text is vertically centered
+    marginTop: 5, // Space above the button
+    marginBottom: 20,
+    alignSelf: "center", // Centers the button horizontally
+  },
+
+  buttonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "600",
+  },
+
+  verifiedBadge: {
+    flexDirection: "row",
     alignItems: "center",
+    backgroundColor: "#E8F5E9",
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 20,
+  },
+  notVerifiedBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#FFEBEE",
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 20,
+  },
+  badgeText: {
+    marginLeft: 5,
+    fontSize: 16,
+    color: "#333",
+  },
+  name: {
+    fontSize: 22,
+    textAlign: "center",
+    fontWeight: "bold",
+    marginTop: 10,
+  },
+  age: {
+    fontSize: 18,
+    textAlign: "center",
+    marginBottom: 20,
     marginTop: 10,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
-    color: "#74BDB3",
-    marginTop: 20,
+    color: "black",
+    marginBottom: 8,
+    marginTop: 24,
   },
   infoContainer: {
     flexDirection: "row",
@@ -537,46 +494,35 @@ const styles = StyleSheet.create({
     color: "black",
     textAlign: "justify", // Center align the info text
   },
-  chart: { marginVertical: 8, borderRadius: 16 },
+  chart: {
+    marginVertical: 8,
+    borderRadius: 16,
+  },
   treatmentContainer: {
     backgroundColor: "#E8F4F2",
     padding: 15,
     borderRadius: 10,
-    marginTop: 10,
+    marginVertical: 5,
+    marginBottom: -10,
   },
   treatmentHeader: {
     fontSize: 18,
     fontWeight: "bold",
     color: "#74BDB3",
-    textAlign: "center",
     marginBottom: 10,
+    textAlign: "center",
   },
-  treatmentText: { fontSize: 16, color: "black", textAlign: "center" },
+  treatmentText: {
+    fontSize: 16,
+    color: "black",
+    marginBottom: 5,
+    textAlign: "center",
+  },
   treatmentMessage: {
     fontSize: 14,
     color: "#555",
     textAlign: "center",
     marginTop: 10,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff",
-  },
-  modalItem: {
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    backgroundColor: "#74BDB3",
-    marginVertical: 5,
-    borderRadius: 20,
-    width: 150,
-  },
-  modalText: {
-    fontSize: 18,
-    textAlign: "center",
-    fontWeight: "600",
-    color: "#fff",
   },
   noSurveyText: {
     fontSize: 16,

@@ -399,8 +399,9 @@
     "taon": "years old",
     "date_of_birth": "Date Of Birth",
     "select_data_point": "Point what survey you like to view",
+    "select_data_point2": "Point what image recognition analysis you like to view",
 
-    "gallery": "Images of Your Atopic Dermatits" ,
+    "gallery": "Images of Your Atopic Dermatitis" ,
     "gallerybtn": "View Your Gallery" 
   },
 
