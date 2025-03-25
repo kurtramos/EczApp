@@ -42,7 +42,7 @@ const currentMonth = currentDate
   .toUpperCase();
 
 const TrackerScreen = () => {
-  const [scores, setScores] = useState<number[]>([]);
+  const [scores, setScores] = useState<number[]>([]); // For POEM Scores
   const [month, setMonth] = useState(currentMonth);
   const [year, setYear] = useState(currentDate.getFullYear().toString());
   const [monthModalVisible, setMonthModalVisible] = useState(false);
@@ -51,6 +51,43 @@ const TrackerScreen = () => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
 
+  // Function to determine severity level based on the score
+  const getSeverityLevel = (score: number) => {
+    switch (true) {
+      case score <= 2:
+        return {
+          level: t("account.clear"),
+          message: t("account.clear_message"),
+        };
+      case score >= 3 && score <= 7:
+        return {
+          level: t("account.mild"),
+          message: t("account.mild_message"),
+        };
+      case score >= 8 && score <= 16:
+        return {
+          level: t("account.moderate"),
+          message: t("account.moderate_message"),
+        };
+      case score >= 17 && score <= 24:
+        return {
+          level: t("account.severe"),
+          message: t("account.severe_message"),
+        };
+      case score >= 25:
+        return {
+          level: t("account.very_severe"),
+          message: t("account.very_severe_message"),
+        };
+      default:
+        return {
+          level: t("account.unknown"),
+          message: t("account.unknown_message"),
+        };
+    }
+  };
+
+  // Fetching scores from the database
   useFocusEffect(
     React.useCallback(() => {
       const fetchScores = async () => {
@@ -93,6 +130,7 @@ const TrackerScreen = () => {
     }, [])
   );
 
+  // Filtering scores based on selected month and year
   useFocusEffect(
     React.useCallback(() => {
       const filterScores = async () => {
@@ -142,6 +180,7 @@ const TrackerScreen = () => {
     (2020 + i).toString()
   );
 
+  // chartData for POEM Survey Scores (used for both charts)
   const chartData = {
     labels:
       scores.length > 0
@@ -155,11 +194,24 @@ const TrackerScreen = () => {
     ],
   };
 
+  // chartData2 for Image Recognition Severity Levels based on POEM Scores
+  const chartData2 = {
+    labels:
+      scores.length > 0
+        ? scores.map((score) => getSeverityLevel(score).level)
+        : ["Clear"], // Default to Clear if no scores
+    datasets: [
+      {
+        data: scores.length > 0 ? scores : [0], // Use the POEM survey scores for the data
+        strokeWidth: 2,
+      },
+    ],
+  };
+
   return (
     <View style={styles.container}>
-
-        <BackArrow onPress={() => router.push("/home")} />
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <BackArrow onPress={() => router.push("/home")} />
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         {loading ? (
           <View style={styles.loadingContainer}>
             <Text style={styles.titleloading}>{t("tracker.titleloading")}</Text>
@@ -190,7 +242,7 @@ const TrackerScreen = () => {
 
             <Text style={styles.chartTitle}>{t("tracker.imagegraphtitle")}</Text>
             <LineChart
-              data={chartData}
+              data={chartData2}
               width={screenWidth - 30}
               height={220}
               chartConfig={chartConfig}

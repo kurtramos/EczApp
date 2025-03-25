@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Eczema Care",
-    "slug": "eczemacare",
+    "slug": "EczApp",
     "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/logos/EczemaCareLogoG.png",
@@ -21,6 +21,8 @@
         "NSLocationWhenInUseUsageDescription": "This app requires location access",
         "UIBackgroundModes": [
           "fetch",
+          "remote-notification",
+          "fetch",
           "remote-notification"
         ]
       }
@@ -31,6 +33,7 @@
         "backgroundColor": "#85D3C0"
       },
       "permissions": [
+        "RECEIVE_BOOT_COMPLETED",
         "RECEIVE_BOOT_COMPLETED"
       ],
       "googleServicesFile": "./google-services.json",
@@ -58,9 +61,15 @@
         "origin": false
       },
       "eas": {
-        "projectId": "e0a04fc6-132c-41d6-ab11-f308828a8bde"
+        "projectId": "c8ae5e8c-235a-4fd1-82d6-bbf021da5355"
       }
     },
-    "owner": "popie"
+    "owner": "ustkurtramos",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/c8ae5e8c-235a-4fd1-82d6-bbf021da5355"
+    }
   }
 }
