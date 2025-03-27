@@ -281,6 +281,8 @@ const MyRecordScreen = () => {
           </TouchableOpacity>
         </View>
 
+        {poemScores.length > 0 ? (
+      <>
         <View onLayout={(e) => (chartRefY.current = e.nativeEvent.layout.y)}>
           <Text style={styles.sectionTitle}>
             {t("account.poem_score_trend")}
@@ -372,6 +374,12 @@ const MyRecordScreen = () => {
             {t("account.select_data_point2")}
           </Text>
         )}
+        </>
+         ) : (
+          // Show message if no data
+        <Text style={styles.noDataText}>{t("tracker.no_data_found")}</Text>
+      )}
+        
 
         <Text style={styles.sectionTitle}>{t("account.treatment")}</Text>
         <TouchableOpacity
@@ -523,6 +531,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
+    marginTop: 20,
     marginBottom: 20,
   },
   infoBlock: {
@@ -588,6 +597,12 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   noSurveyText: {
+    fontSize: 16,
+    color: "#888",
+    textAlign: "center",
+    marginVertical: 20,
+  },
+  noDataText: {
     fontSize: 16,
     color: "#888",
     textAlign: "center",
