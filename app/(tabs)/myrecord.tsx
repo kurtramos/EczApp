@@ -601,12 +601,14 @@ const styles = StyleSheet.create({
     color: "#888",
     textAlign: "center",
     marginVertical: 20,
+    width: "80%",
   },
   noDataText: {
     fontSize: 16,
     color: "#888",
     textAlign: "center",
     marginVertical: 20,
+    width: "80%",
   },
 });
 
