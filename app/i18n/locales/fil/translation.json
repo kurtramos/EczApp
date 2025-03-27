@@ -145,7 +145,15 @@
     "heading3": "Ang Nakaraang Pagsusuri ng Balat",
     "imagemessage": "Ang resulta na ito ay batay sa pinakabagong pagsusuri ng balat.",
     "consult_allergist": "Kumonsulta sa Allergist",
-    "date_taken": "Petsa ng Pagkuha"
+    "date_taken": "Petsa ng Pagkuha",
+
+   "graph_guide": "Graph Guide:",
+    "clear": "Clear",
+    "mild": "Mild",
+    "moderate": "Moderate",
+    "severe": "Severe",
+    "very_severe": "Very Severe",
+    "week_numbers": "The numbers below represent the weeks"
   },
 
   "camera": {

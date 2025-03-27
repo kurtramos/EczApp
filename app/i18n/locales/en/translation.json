@@ -149,7 +149,15 @@
     "heading3": "Previous Skin Analysis",
     "imagemessage": "This result is based on the latest skin analysis.",
     "consult_allergist": "Consult an Allergist",
-    "date_taken": "Date Taken"
+    "date_taken": "Date Taken",
+
+    "graph_guide": "Graph Guide:",
+    "clear": "Clear",
+    "mild": "Mild",
+    "moderate": "Moderate",
+    "severe": "Severe",
+    "very_severe": "Very Severe",
+    "week_numbers": "The numbers below represent the weeks"
 
 
   },

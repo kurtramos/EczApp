@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -43,6 +43,8 @@ const currentMonth = currentDate
 
 const TrackerScreen = () => {
   const [scores, setScores] = useState<number[]>([]); // For POEM Scores
+    const [poemScores, setPoemScores] = useState([]);
+  const [selectedSurvey, setSelectedSurvey] = useState(null);
   const [month, setMonth] = useState(currentMonth);
   const [year, setYear] = useState(currentDate.getFullYear().toString());
   const [monthModalVisible, setMonthModalVisible] = useState(false);
@@ -50,6 +52,8 @@ const TrackerScreen = () => {
   const router = useRouter();
   const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
+    const chartRefY = useRef(0);
+  
 
   // Function to determine severity level based on the score
   const getSeverityLevel = (score: number) => {
@@ -133,80 +137,147 @@ const TrackerScreen = () => {
   // Filtering scores based on selected month and year
   useFocusEffect(
     React.useCallback(() => {
-      const filterScores = async () => {
+      const fetchScores = async () => {
+        setLoading(true);
         const user = getAuth().currentUser;
         const userEmail = user?.email;
-
-        if (!userEmail) return;
-
-        const scoresRef = collection(
-          firestore,
-          "users",
-          userEmail,
-          "POEMScores"
-        );
+  
+        if (!userEmail) {
+          console.error("No user is currently logged in.");
+          alert("No user is currently logged in.");
+          return;
+        }
+  
+        const scoresRef = collection(firestore, "users", userEmail, "POEMScores");
         const scoresQuery = query(scoresRef, orderBy("timestamp", "desc"));
-
+        
         try {
           const querySnapshot = await getDocs(scoresQuery);
           const filteredScores: number[] = [];
-          querySnapshot.forEach((doc) => {
-            const data = doc.data() as ScoreData;
-            const date = data.timestamp.toDate();
-            const dataMonth = date
-              .toLocaleString("default", { month: "short" })
-              .toUpperCase();
-            const dataYear = date.getFullYear().toString();
-
-            if (dataMonth === month && dataYear === year) {
-              filteredScores.push(data.totalScore);
-            }
-          });
-
+          const scoresData = querySnapshot.docs
+            .map((doc) => {
+              const data = doc.data();
+              const date = data.timestamp.toDate();
+              const dataMonth = date
+                .toLocaleString("default", { month: "short" })
+                .toUpperCase();
+              const dataYear = date.getFullYear().toString();
+  
+              if (dataMonth === month && dataYear === year) {
+                filteredScores.push(data.totalScore);
+                return {
+                  date: date ? `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}` : "",
+                  score: data.totalScore,
+                  severity: getSeverityLevel(data.totalScore),
+                };
+              }
+              return null;
+            })
+            .filter(Boolean);
+          
           setScores(filteredScores.reverse());
+          setPoemScores(scoresData.reverse());
         } catch (error) {
-          console.error("Error filtering scores: ", error);
+          console.error("Error fetching and filtering scores: ", error);
         } finally {
           setLoading(false);
         }
       };
-
-      filterScores();
+  
+      fetchScores();
     }, [month, year])
   );
+  
 
   const currentYear = currentDate.getFullYear();
   const years = Array.from({ length: currentYear - 2020 + 1 }, (_, i) =>
     (2020 + i).toString()
   );
 
-  // chartData for POEM Survey Scores (used for both charts)
-  const chartData = {
-    labels:
-      scores.length > 0
-        ? scores.map((_, index) => (index + 1).toString())
-        : ["0"],
+  const fetchPoemScores = async () => {
+    setLoading(true);
+    const user = getAuth().currentUser;
+    if (!user) return; // Guard clause if user is not found
+  
+    const scoresRef = collection(firestore, "users", user.email, "POEMScores");
+    const scoresQuery = query(scoresRef, orderBy("timestamp", "desc"));
+    
+    try {
+      const querySnapshot = await getDocs(scoresQuery);
+      const scoresData = querySnapshot.docs
+        .map((doc) => {
+          const data = doc.data();
+          const date = data.timestamp?.toDate();
+          const monthName = date
+            ?.toLocaleString("default", { month: "short" })
+            .toUpperCase();
+          const yearStr = date?.getFullYear().toString();
+  
+          if (monthName === month && yearStr === year) {
+            return {
+              date: date ? `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}` : "",
+              score: data.totalScore,
+              severity: getSeverityLevel(data.totalScore),
+            };
+          }
+          return null;
+        })
+        .filter(Boolean);
+  
+      setPoemScores(scoresData.reverse());
+    } catch (error) {
+      console.error("Error fetching POEM scores: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+
+  const data = {
+    labels: poemScores.length
+      ? poemScores.map((s, i) => (i + 1).toString())
+      : ["0"],
     datasets: [
       {
-        data: scores.length > 0 ? scores : [0],
+        data: poemScores.length ? poemScores.map((s) => s.score) : [0],
+        color: (opacity = 1) => `rgba(133, 211, 192, ${opacity})`,
         strokeWidth: 2,
       },
     ],
   };
 
-  // chartData2 for Image Recognition Severity Levels based on POEM Scores
-  const chartData2 = {
-    labels:
-      scores.length > 0
-        ? scores.map((score) => getSeverityLevel(score).level)
-        : ["Clear"], // Default to Clear if no scores
-    datasets: [
-      {
-        data: scores.length > 0 ? scores : [0], // Use the POEM survey scores for the data
-        strokeWidth: 2,
-      },
-    ],
+  const chartConfig = {
+    backgroundGradientFrom: "#fff",
+    backgroundGradientTo: "#fff",
+    color: (opacity = 1) => `rgba(133, 211, 192, ${opacity})`,
+    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+    style: { borderRadius: 16 },
+    propsForDots: { r: "6", strokeWidth: "2", stroke: "#ffa726" },
+    propsForLabels: {
+      fontSize: 10,
+      rotation: 0,
+    },
   };
+
+  const chartConfig2 = {
+    backgroundGradientFrom: "#fff",
+    backgroundGradientTo: "#fff",
+    color: (opacity = 1) => `rgba(133, 211, 192, ${opacity})`,
+    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+    style: { borderRadius: 16 },
+    propsForDots: { r: "6", strokeWidth: "2", stroke: "#ffa726" },
+    propsForLabels: {
+      fontSize: 10,
+      rotation: 0,
+    },
+  };
+
+  const handleDataPointClick = (data) => {
+    const index = data.index;
+    const selectedData = poemScores[index];
+    if (selectedData) setSelectedSurvey(selectedData);
+  };
+
 
   return (
     <View style={styles.container}>
@@ -221,6 +292,16 @@ const TrackerScreen = () => {
           <>
             <Text style={styles.header}>{t("tracker.header")}</Text>
 
+            <Text style={styles.poemresultguide}>
+            {t("poem_result.graph_guide")} {"\n"}{"\n"}
+              0 to 2 = {t("poem_result.clear")} {"\n"}
+              3 to 7 = {t("poem_result.mild")} {"\n"}
+              8 to 16 = {t("poem_result.moderate")} {"\n"}
+              17 to 24 = {t("poem_result.severe")} {"\n"}
+              25 to 28 = {t("poem_result.very_severe")} {"\n"} {"\n"}
+              {t("poem_result.week_numbers")}
+            </Text>
+
             <View style={styles.dateContainer}>
               <TouchableOpacity style={styles.buttonMonth} onPress={() => setMonthModalVisible(true)}>
                 <Text style={styles.buttonText}>{month}</Text>
@@ -230,39 +311,87 @@ const TrackerScreen = () => {
               </TouchableOpacity>
             </View>
 
-            <Text style={styles.chartTitle}>{t("tracker.poemgraphtitle")}</Text>
-            <LineChart
-              data={chartData}
-              width={screenWidth - 30}
-              height={220}
-              chartConfig={chartConfig}
-              style={styles.chart}
-              fromZero={true}
-            />
+           <View onLayout={(e) => (chartRefY.current = e.nativeEvent.layout.y)}>
+                    <Text style={styles.sectionTitle}>
+                      {t("account.poem_score_trend")}
+                    </Text>
+                    <LineChart
+                      data={data}
+                      width={screenWidth - 32}
+                      height={220}
+                      chartConfig={chartConfig}
+                      bezier
+                      style={styles.chart}
+                      onDataPointClick={handleDataPointClick}
+                      formatXLabel={(label) => label}
+                    />
+                  </View>
+          
+                  <Text style={styles.sectionTitle}>
+                    {t("account.image_score_trend")}
+                  </Text>
+                  <LineChart
+                    data={data}
+                    width={screenWidth - 32}
+                    height={220}
+                    chartConfig={chartConfig2}
+                    bezier
+                    style={styles.chart}
+                    onDataPointClick={handleDataPointClick}
+                  />
 
-            <Text style={styles.chartTitle}>{t("tracker.imagegraphtitle")}</Text>
-            <View style={styles.graphContainer}>
-  {/* Graph on the left */}
-  <LineChart
-    data={{
-      labels: scores.map((_, index) => (index + 1).toString()), // X-axis labels
-      datasets: [{ data: scores }],
-    }}
-    width={screenWidth * 0.7} // Slightly reduced width
-    height={200}
-    chartConfig={chartConfig}
-    bezier
-  />
-
-  {/* Severity Labels on the Right */}
-  <View style={styles.severityLabels}>
-    {scores.map((score, index) => (
-      <Text key={index} style={styles.severityText}>
-        {getSeverityLevel(score).level} {/* Matches severity to score */}
-      </Text>
-    ))}
-  </View>
-</View>
+                  {selectedSurvey ? (
+                            <>
+                              <View style={styles.treatmentContainer}>
+                                <Text style={styles.treatmentHeader}>
+                                  {t("account.previous_survey_info")}
+                                </Text>
+                                <Text style={styles.treatmentText}>
+                                  {t("poem_result.date_taken")}: {selectedSurvey.date}
+                                </Text>
+                                <Text style={styles.treatmentText}>
+                                  {t("account.score")}: {selectedSurvey.score}
+                                </Text>
+                                <Text style={styles.treatmentText}>
+                                  {t("account.severity_level")}: {selectedSurvey.severity.level}
+                                </Text>
+                                <Text style={styles.treatmentMessage}>
+                                  {selectedSurvey.severity.message}
+                                </Text>
+                              </View>
+                              </>
+                          ) : (
+                            <Text style={styles.noSurveyText}>
+                              {t("account.select_data_point")}
+                            </Text>
+                          )}
+                  
+                          {selectedSurvey ? (
+                            <>
+                              <View style={styles.treatmentContainer}>
+                                <Text style={styles.treatmentHeader}>
+                                  {t("poem_result.heading3")}
+                                </Text>
+                                <Text style={styles.treatmentText}>
+                                  {t("poem_result.date_taken")}: {selectedSurvey.date}
+                                </Text>
+                                {/* <Text style={styles.treatmentText}>
+                                  {t("account.score")}: {selectedSurvey.score}
+                                </Text> */}
+                                <Text style={styles.treatmentText}>
+                                  {t("account.severity_level")}: {selectedSurvey.severity.level}
+                                </Text>
+                                <Text style={styles.treatmentMessage}>
+                                  {t("poem_result.imagemessage")}
+                                </Text>
+                              </View>
+                            </>
+                          ) : (
+                            <Text style={styles.noSurveyText}>
+                              {t("account.select_data_point2")}
+                            </Text>
+                          )}
+                  
 
 
             <TouchableOpacity style={styles.button} onPress={() => router.push("/treatment")}>
@@ -326,6 +455,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 50,
     paddingBottom: 100,
+    // paddingHorizontal: 20
   },
   header: {
     fontSize: 30,
@@ -340,9 +470,9 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginBottom: 10,
   },
-  chart: {
-    marginVertical: 8,
-  },
+  // chart: {
+  //   marginVertical: 8,
+  // },
   button: {
     backgroundColor: "#74BDB3",
     borderRadius: 20,
@@ -362,6 +492,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 4,
     marginBottom: 20,
+    marginTop: 20,
   },
   buttonMonth: {
     backgroundColor: "#74BDB3",
@@ -429,6 +560,48 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#85D3C0",
     textAlign: "left",
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#74BDB3",
+    marginTop: 20,
+    textAlign: "center",
+  },
+  chart: { marginVertical: 8, borderRadius: 16 },
+  treatmentContainer: {
+    backgroundColor: "#E8F4F2",
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 10,
+    width: "80%",  // Ensures it matches the full width of the parent container
+    alignSelf: "center", // Centers it horizontally if there’s extra space
+  },
+  treatmentHeader: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#74BDB3",
+    textAlign: "center",
+    marginBottom: 10,
+  },
+  treatmentText: { fontSize: 16, color: "black", textAlign: "center" },
+  treatmentMessage: {
+    fontSize: 14,
+    color: "#555",
+    textAlign: "center",
+    marginTop: 10,
+  },
+  poemresultguide: {
+    fontSize: 14,
+    color: "#555",
+    textAlign: "center",
+    marginTop: -20,
+  },
+  noSurveyText: {
+    fontSize: 16,
+    color: "#888",
+    textAlign: "center",
+    marginVertical: 20,
   },
 });
 

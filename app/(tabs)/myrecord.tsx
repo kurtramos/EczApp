@@ -356,9 +356,9 @@ const MyRecordScreen = () => {
               <Text style={styles.treatmentText}>
                 {t("poem_result.date_taken")}: {selectedSurvey.date}
               </Text>
-              <Text style={styles.treatmentText}>
+              {/* <Text style={styles.treatmentText}>
                 {t("account.score")}: {selectedSurvey.score}
-              </Text>
+              </Text> */}
               <Text style={styles.treatmentText}>
                 {t("account.severity_level")}: {selectedSurvey.severity.level}
               </Text>
