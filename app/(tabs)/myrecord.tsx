@@ -201,6 +201,19 @@ const MyRecordScreen = () => {
     },
   };
 
+  const chartConfig2 = {
+    backgroundGradientFrom: "#fff",
+    backgroundGradientTo: "#fff",
+    color: (opacity = 1) => `rgba(133, 211, 192, ${opacity})`,
+    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+    style: { borderRadius: 16 },
+    propsForDots: { r: "6", strokeWidth: "2", stroke: "#ffa726" },
+    propsForLabels: {
+      fontSize: 10,
+      rotation: 0,
+    },
+  };
+
   const handleDataPointClick = (data) => {
     const index = data.index;
     const selectedData = poemScores[index];
@@ -291,7 +304,7 @@ const MyRecordScreen = () => {
           data={data}
           width={screenWidth - 32}
           height={220}
-          chartConfig={chartConfig}
+          chartConfig={chartConfig2}
           bezier
           style={styles.chart}
           onDataPointClick={handleDataPointClick}

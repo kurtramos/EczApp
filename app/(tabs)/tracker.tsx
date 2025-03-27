@@ -241,14 +241,29 @@ const TrackerScreen = () => {
             />
 
             <Text style={styles.chartTitle}>{t("tracker.imagegraphtitle")}</Text>
-            <LineChart
-              data={chartData2}
-              width={screenWidth - 30}
-              height={220}
-              chartConfig={chartConfig}
-              style={styles.chart}
-              fromZero={true}
-            />
+            <View style={styles.graphContainer}>
+  {/* Graph on the left */}
+  <LineChart
+    data={{
+      labels: scores.map((_, index) => (index + 1).toString()), // X-axis labels
+      datasets: [{ data: scores }],
+    }}
+    width={screenWidth * 0.7} // Slightly reduced width
+    height={200}
+    chartConfig={chartConfig}
+    bezier
+  />
+
+  {/* Severity Labels on the Right */}
+  <View style={styles.severityLabels}>
+    {scores.map((score, index) => (
+      <Text key={index} style={styles.severityText}>
+        {getSeverityLevel(score).level} {/* Matches severity to score */}
+      </Text>
+    ))}
+  </View>
+</View>
+
 
             <TouchableOpacity style={styles.button} onPress={() => router.push("/treatment")}>
               <Text style={styles.buttonText}>{t("tracker.poemSurveyResult")}</Text>
@@ -400,6 +415,20 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     padding: 5,
     textAlign: "center",
+  },
+  graphContainer: {
+    flexDirection: "row", // Places graph on the left, labels on the right
+    alignItems: "center",
+  },
+  severityLabels: {
+    justifyContent: "space-between",
+    height: 200, // Matches graph height
+    marginLeft: 10, // Creates space between graph and labels
+  },
+  severityText: {
+    fontSize: 14,
+    color: "#85D3C0",
+    textAlign: "left",
   },
 });
 
