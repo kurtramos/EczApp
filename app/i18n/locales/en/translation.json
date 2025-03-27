@@ -248,7 +248,8 @@
     "poemSurveyResult": "POEM SURVEY RESULT",
     "medication":  "Medication",
     "titleloading": "Tracker",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "no_data_found": "No Data Found. Please answer the poem survey and use the camera for image recognition."
   },
 
   "gallery": {

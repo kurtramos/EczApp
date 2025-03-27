@@ -311,6 +311,9 @@ const TrackerScreen = () => {
               </TouchableOpacity>
             </View>
 
+            
+            {poemScores.length > 0 ? (
+      <>
            <View onLayout={(e) => (chartRefY.current = e.nativeEvent.layout.y)}>
                     <Text style={styles.sectionTitle}>
                       {t("account.poem_score_trend")}
@@ -338,7 +341,12 @@ const TrackerScreen = () => {
                     bezier
                     style={styles.chart}
                     onDataPointClick={handleDataPointClick}
-                  />
+                    />
+                    </>
+                  ) : (
+                    // Show message if no data
+                    <Text style={styles.noDataText}>{t("tracker.no_data_found")}</Text>
+                  )}
 
                   {selectedSurvey ? (
                             <>
@@ -598,6 +606,12 @@ const styles = StyleSheet.create({
     marginTop: -20,
   },
   noSurveyText: {
+    fontSize: 16,
+    color: "#888",
+    textAlign: "center",
+    marginVertical: 20,
+  },
+  noDataText: {
     fontSize: 16,
     color: "#888",
     textAlign: "center",

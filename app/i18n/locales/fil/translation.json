@@ -240,7 +240,8 @@
     "poemSurveyResult": "RESULTA NG POEM SURVEY",
     "medication": "Medikasyon",
     "titleloading": "Poem Survey",
-    "loading": "Naglo-load..."
+    "loading": "Naglo-load...",
+     "no_data_found": "Walang Data na Ipapakita, mangyaring sagutan ang poem survey at gamitin ang camera para sa image recognition."
   },
   "gallery": {
     "captures": "Mga Nakuhang Imahe",

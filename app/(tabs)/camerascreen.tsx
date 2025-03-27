@@ -217,8 +217,16 @@ const CameraScreen = () => {
 
       setModalVisible(true);
       setModalTitle(t("camera.modal.processing"));
-      setCloseButtonVisible(false);
+  
+      // Step 1: Analyzing image
+      setModalMessage(t("camera.modal.analyzing_image"));
+      
+      // Simulate image analysis process
+      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulating analysis delay
+  
+      // Step 2: Saving image to Firebase Storage
       setModalMessage(t("camera.modal.saving_image"));
+      
 
       // Create a unique path for each image
       const imageName = `images/${userEmail}/${Date.now()}_image.jpg`;
@@ -248,101 +256,124 @@ const CameraScreen = () => {
 
       Alert.alert(t("camera.alerts.image_saved"));
 
-      // Now analyze the severity by sending the image to Vertex AI
-      const base64Image = await getBase64FromUri(imageUri);
-      analyzeSeverity(base64Image);
-    } catch (error) {
-      console.error("Error saving image:", error);
-      Alert.alert(t("camera.alerts.image_save_failed"));
-    }
-  };
+         // Step 3: Final success message
+    setModalTitle(t("camera.modal.success"));
+    setModalMessage(t("camera.modal.saved_and_analyzed"));
 
-  const analyzeSeverity = async (base64Image) => {
-    setModalMessage(t("camera.modal.analyzing_image"));
-    const BACKEND_URL =
-      "https://us-central1-eczemacare-1195e.cloudfunctions.net/predictImage";
-
-    const body = {
-      base64Image: base64Image,
-    };
-
-    try {
-      const token = await getAccessToken(); // Firebase Auth token
-
-      const response = await fetch(BACKEND_URL, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
-
-      if (!response.ok) {
-        setModalTitle(t("camera.modal.error"));
-        setModalMessage(t("camera.modal.cloud_run_error"));
-        setCloseButtonVisible(true);
-        throw new Error(t("camera.modal.cloud_run_error"))
-      }
-
-      const result = await response.json();
-
-      setModalTitle(t("camera.modal.success"));
-      setModalMessage(t("camera.modal.saved_and_analyzed"));
-      saveAnalysis(result);
-      console.log("Cloud Run results:", result);
-    } catch (error) {
-      setModalTitle(t("camera.modal.error"));
-      setModalMessage(t("camera.modal.cloud_run_connect_error"))
-      setCloseButtonVisible(true);
-      console.error("Something went wrong in connecting to Cloud Run:", error);
-      Alert.alert(t("camera.alerts.prediction_error"), t("camera.alerts.analyze_failed"))
-    }
-  };
-
-  const saveAnalysis = async (analysisResult) => {
-    try {
-      const user = getAuth().currentUser;
-      const userEmail = user?.email;
-
-      if (!userEmail) {
-        console.error("No user is logged in.");
-        Alert.alert(t("camera.alerts.error"), t("camera.alerts.user_not_logged_in"))
-        return;
-      }
-
-      const timestamp = new Date();
-      const timestampString = timestamp.toISOString();
-
-      const docRef = doc(
-        firestore,
-        "users",
-        userEmail,
-        "skinAnalysis",
-        timestampString
-      );
-
-      // Save analysis result to Firestore
-      await setDoc(docRef, {
-        result: analysisResult,
-        timestamp: timestamp,
-      });
-
-      console.log("Analysis saved successfully:", analysisResult);
-
-      // Update modal and navigate
-      setModalTitle(t("camera.modal.success"));
-      setModalMessage(t("camera.modal.analysis_saved"))
+    // After saving, navigate to the treatment page
+    setTimeout(() => {
       setModalVisible(false);
       router.push("/treatment");
-    } catch (error) {
-      console.error("Error saving analysis to Firestore:", error);
-      setModalTitle(t("camera.modal.error"));
-      setModalMessage(t("camera.modal.analysis_save_failed"))
-      setCloseButtonVisible(true);
-      Alert.alert(t("camera.alerts.error"), t("camera.alerts.analysis_save_failed"))
-    }
-  };
+    }, 2000);
+
+  } catch (error) {
+    console.error("Error saving image:", error);
+    setModalTitle(t("camera.modal.error"));
+    setModalMessage(t("camera.modal.image_save_failed"));
+    setCloseButtonVisible(true);
+    Alert.alert(t("camera.alerts.error"), t("camera.alerts.image_save_failed"));
+  }
+};
+
+      // Now analyze the severity by sending the image to Vertex AI
+  //     const base64Image = await getBase64FromUri(imageUri);
+  //     analyzeSeverity(base64Image);
+  //   } catch (error) {
+  //     console.error("Error saving image:", error);
+  //     Alert.alert(t("camera.alerts.image_save_failed"));
+  //   }
+  // };
+
+  // const analyzeSeverity = async (base64Image) => {
+  //   setModalMessage(t("camera.modal.analyzing_image"));
+  //   const BACKEND_URL =
+  //     "https://us-central1-eczemacare-1195e.cloudfunctions.net/predictImage";
+
+  //   const body = {
+  //     base64Image: base64Image,
+  //   };
+
+  //   try {
+  //     const token = await getAccessToken(); // Firebase Auth token
+
+  //     const response = await fetch(BACKEND_URL, {
+  //       method: "POST",
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(body),
+  //     });
+
+  //     if (!response.ok) {
+  //       setModalTitle(t("camera.modal.error"));
+  //       setModalMessage(t("camera.modal.cloud_run_error"));
+  //       setCloseButtonVisible(true);
+  //       throw new Error(t("camera.modal.cloud_run_error"))
+  //     }
+
+  //     const result = await response.json();
+
+  //     setModalTitle(t("camera.modal.success"));
+  //     setModalMessage(t("camera.modal.saved_and_analyzed"));
+  //     saveAnalysis(result);
+  //     console.log("Cloud Run results:", result);
+  //   } catch (error) {
+  //     setModalTitle(t("camera.modal.error"));
+  //     setModalMessage(t("camera.modal.cloud_run_connect_error"))
+  //     setCloseButtonVisible(true);
+  //     console.error("Something went wrong in connecting to Cloud Run:", error);
+  //     Alert.alert(t("camera.alerts.prediction_error"), t("camera.alerts.analyze_failed"))
+  //   }
+  // };
+
+  // const saveAnalysis = async (analysisResult) => {
+  //   try {
+  //     const user = getAuth().currentUser;
+  //     const userEmail = user?.email;
+
+  //     if (!userEmail) {
+  //       console.error("No user is logged in.");
+  //       Alert.alert(t("camera.alerts.error"), t("camera.alerts.user_not_logged_in"))
+  //       return;
+  //     }
+
+  //     const timestamp = new Date();
+  //     const timestampString = timestamp.toISOString();
+
+  //     const docRef = doc(
+  //       firestore,
+  //       "users",
+  //       userEmail,
+  //       "skinAnalysis",
+  //       timestampString
+  //     );
+
+  //     // Save analysis result to Firestore
+  //     await setDoc(docRef, {
+  //       result: analysisResult,
+  //       timestamp: timestamp,
+  //     });
+
+  //     console.log("Analysis saved successfully:", analysisResult);
+
+      // Update modal and navigate
+  //     setModalTitle(t("camera.modal.success"));
+  //     // setModalMessage(t("camera.modal.analyzing_image"));
+  //     // setModalMessage(t("camera.modal.analysis_saved"))
+  //     setModalTitle(t("camera.modal.processing"));
+  //     setModalMessage(t("camera.modal.analyzing_image"));
+  //     setModalMessage(t("camera.modal.saving_image"));
+  //     setModalVisible(false);
+  //     router.push("/treatment");
+  //   } catch (error) {
+  //     console.error("Error saving analysis to Firestore:", error);
+  //     setModalTitle(t("camera.modal.error"));
+  //     setModalMessage(t("camera.modal.analysis_save_failed"))
+  //     setCloseButtonVisible(true);
+  //     Alert.alert(t("camera.alerts.error"), t("camera.alerts.analysis_save_failed"))
+  //   }
+  // };
 
   const getBase64FromUri = async (uri) => {
     try {
