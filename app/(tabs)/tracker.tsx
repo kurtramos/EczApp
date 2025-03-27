@@ -342,11 +342,7 @@ const TrackerScreen = () => {
                     style={styles.chart}
                     onDataPointClick={handleDataPointClick}
                     />
-                    </>
-                  ) : (
-                    // Show message if no data
-                    <Text style={styles.noDataText}>{t("tracker.no_data_found")}</Text>
-                  )}
+                  
 
                   {selectedSurvey ? (
                             <>
@@ -399,6 +395,11 @@ const TrackerScreen = () => {
                               {t("account.select_data_point2")}
                             </Text>
                           )}
+                            </>
+                  ) : (
+                    // Show message if no data
+                    <Text style={styles.noDataText}>{t("tracker.no_data_found")}</Text>
+                  )}
                   
 
 
